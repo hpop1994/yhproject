@@ -1,0 +1,11 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea/
+bin/
+gen/
+out/
+
+yhservecar.iml
+
+ant.properties
+local.properties
+project.properties

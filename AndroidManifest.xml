@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="cn.yhsh.yhservecar"
+          android:versionCode="1"
+          android:versionName="1.0">
+    <uses-sdk android:minSdkVersion="14"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="getui.permission.GetuiService.me.xujc.cartest"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <!--自定义权限-->
+    <permission
+            android:name="getui.permission.GetuiService.cn.yhsh.yhtruckclient"
+            android:protectionLevel="normal">
+    </permission>
+     
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
+    <application android:label="@string/app_name"
+                 android:icon="@drawable/ic_launcher"
+                 android:theme="@android:style/Theme.Holo.Light">
+        <meta-data
+                android:name="com.amap.api.v2.apikey"
+                android:value="ac4fb8c3fa3d04352682ab7876c4365f"/>
+
+        <!--个推SDK配置开始-->
+        <!--配置第三方应用参数属性-->
+        <meta-data
+                android:name="PUSH_APPID"
+                android:value="Q1cOf5LtOj6lNa3h3Rsxy2"/><!--替换为第三方应用的APPID-->
+        <meta-data
+                android:name="PUSH_APPKEY"
+                android:value="KPmTQBKAUF9WeLvxXWkjU1"/><!--替换为第三方应用的APPKEY-->
+        <meta-data
+                android:name="PUSH_APPSECRET"
+                android:value="nkYetIKYzx8ojSdJ49YIt"/><!--替换为第三方应用的APPSECRET-->
+        <meta-data
+                android:name="PUSH_GROUPID"
+                android:value=""/>
+
+        <!--配置SDK核心服务-->
+        <service
+                android:name="com.igexin.sdk.PushService"
+                android:exported="true"
+                android:label="NotificationCenter"
+                android:process=":pushservice">
+        </service>
+        <receiver
+                android:name="com.igexin.sdk.PushReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <action android:name="android.intent.action.USER_PRESENT"/>
+                <action android:name="com.igexin.sdk.action.refreshls"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+                android:name="com.igexin.sdk.PushManagerReceiver"
+                android:exported="false" >
+            <intent-filter>
+                <action android:name="com.igexin.sdk.action.pushmanager" />
+            </intent-filter>
+        </receiver>
+        <activity
+                android:name="com.igexin.sdk.PushActivity"
+                android:excludeFromRecents="true"
+                android:exported="false"
+                android:process=":pushservice"
+                android:taskAffinity="com.igexin.sdk.PushActivityTask"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar">
+        </activity>
+        <!--配置弹框activity-->
+        <activity
+                android:name="com.igexin.getuiext.activity.GetuiExtActivity"
+                android:configChanges="orientation|keyboard|keyboardHidden"
+                android:excludeFromRecents="true"
+                android:process=":pushservice"
+                android:taskAffinity="android.task.myServicetask"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar"
+                android:exported="false"/>
+        <receiver
+                android:name="com.igexin.getuiext.service.PayloadReceiver"
+                android:exported="false">
+            <intent-filter>
+                <!--这个com.igexin.sdk.action.7fjUl2Z3LH6xYy7NQK4ni4固定，不能修改-->
+                <action android:name="com.igexin.sdk.action.7fjUl2Z3LH6xYy7NQK4ni4"/>
+                <!--替换为android:name="com.igexin.sdk.action.第三方的appId"-->
+                <action android:name="com.igexin.sdk.action.Q1cOf5LtOj6lNa3h3Rsxy2"/>
+            </intent-filter>
+        </receiver>
+        <service
+                android:name="com.igexin.getuiext.service.GetuiExtService"
+                android:process=":pushservice"/>
+        <!--个推download模块配置-->
+        <service
+                android:name="com.igexin.download.DownloadService"
+                android:process=":pushservice"/>
+        <receiver
+                android:name="com.igexin.download.DownloadReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
+
+        <provider
+                android:name="com.igexin.download.DownloadProvider"
+                android:process=":pushservice"
+                android:authorities="downloads.cn.yhsh.yhservecar"/>
+
+        <activity android:name="MyActivity"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
