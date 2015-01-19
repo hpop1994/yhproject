@@ -1,0 +1,86 @@
+package cn.yhsh.yhservecar.Core;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
+/**
+ * Created by Xujc on 2015/1/19.
+ */
+public class Account {
+    private static Account instance=null;
+    public static Account getInstance(Context context) {
+        if (instance==null){
+            instance=new Account(context);
+        }
+        return instance;
+    }
+    private Account(Context context){
+        this.context=context;
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        logined = sp.getBoolean("logined", false);
+        if (logined) {
+            id = sp.getString("id", "");
+            name = sp.getString("phone", "");
+            password = sp.getString("password", "");
+        }
+    }
+
+    private Context context;
+
+    private boolean logined=false;
+    private String id;
+    private String name;
+    private String password;
+
+
+    private void login(String id,String name,String password){
+        logined=true;
+        this.id=id;
+        this.name=name;
+        this.password=password;
+        saveStatus();
+    }
+
+    private void logout(){
+        logined=false;
+        id="";
+        name="";
+        password="";
+        saveStatus();
+    }
+
+    public void saveStatus(){
+        SharedPreferences sp= PreferenceManager.getDefaultSharedPreferences(context);
+        sp.edit().putBoolean("logined", logined)
+                .putString("id", id)
+                .putString("name", name)
+                .putString("password", password)
+                .apply();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+}
