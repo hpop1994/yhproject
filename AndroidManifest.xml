@@ -21,7 +21,7 @@
     <uses-permission android:name="android.permission.GET_TASKS"/>
     <!--自定义权限-->
     <permission
-            android:name="getui.permission.GetuiService.cn.yhsh.yhtruckclient"
+            android:name="getui.permission.GetuiService.cn.yhsh.yhservecar"
             android:protectionLevel="normal">
     </permission>
      
@@ -106,10 +106,18 @@
         <service
                 android:name="com.igexin.download.DownloadService"
                 android:process=":pushservice"/>
+        <service android:name=".Core.StatusService"/>
         <receiver
                 android:name="com.igexin.download.DownloadReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".Core.GetuiReciever"
+            android:exported="false">
+            <intent-filter>
+                <!-- 替换为action android:name="com.igexin.sdk.action.第三方应用APPID" -->
+                <action android:name="com.igexin.sdk.action.Q1cOf5LtOj6lNa3h3Rsxy2" />
             </intent-filter>
         </receiver>
 
@@ -118,12 +126,26 @@
                 android:process=":pushservice"
                 android:authorities="downloads.cn.yhsh.yhservecar"/>
 
-        <activity android:name="MyActivity"
+        <activity android:name=".UI.activity.StartActivity"
+                  android:label="@string/app_name"
+                  android:launchMode="singleTask">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN"/>-->
+                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity android:name=".UI.activity.TestActivity"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".UI.activity.LoginActivity" android:theme="@android:style/Theme.Holo.Light.NoActionBar"/>
+        <activity android:name=".UI.activity.UserInfoActivity"/>
+        <activity android:name=".UI.activity.MainActivity" android:launchMode="singleTask"/>
+        <activity android:name=".UI.activity.AskingActivity"/>
+        <activity android:name=".UI.activity.ChangePasswordAcivity"/>
+        <activity android:name=".UI.activity.FinishActivity"/>
     </application>
 </manifest>

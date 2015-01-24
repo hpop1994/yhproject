@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="60dp"
+                    android:background="@drawable/card_back">
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:paddingLeft="10dp" android:paddingTop="3dp"
+                android:paddingBottom="3dp" android:paddingRight="10dp" android:focusable="true"
+                android:id="@+id/my_action_bar" android:layout_toRightOf="@+id/refresh">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="账户名:"
+                    android:id="@+id/item" android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="姓名:"
+                    android:id="@+id/textView12" android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Medium Text"
+                    android:id="@+id/name" android:layout_alignTop="@+id/item"
+                    android:layout_toRightOf="@+id/item"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Medium Text"
+                    android:id="@+id/realname" android:layout_alignTop="@+id/textView12"
+                    android:layout_toRightOf="@+id/textView12"/>
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView4" android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true" android:src="@drawable/arrows"
+                    android:layout_alignTop="@+id/name"/>
+        </RelativeLayout>
+        <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:id="@+id/refresh" android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true" android:src="@drawable/refresh"
+                android:layout_alignParentBottom="true" android:adjustViewBounds="true" android:cropToPadding="true"
+                android:scaleType="fitCenter" android:background="@drawable/btn_transparent" android:padding="3dp"/>
+    </RelativeLayout>
+
+    <LinearLayout
+            android:id="@+id/fragment"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent">
+    </LinearLayout>
+</LinearLayout>

@@ -13,12 +13,14 @@ public class ReplyStatus {
 
     public static final int PASSWORD_FAILED = 3;
     public static final int USER_NOT_EXIST = 4;
-    public static final int INPUT_FORMAT_ERROR = 5;
+    public static final int INPUT_FORMAT_ERROR = 6;
+    public static final int NEW_ORDER = 9;
 
 
     public static void check(JSONObject object,NetworkCallback viewCallback) {
         try {
             int status_code = object.getInt("status_code");
+            viewCallback.onStatusCode(status_code,object);
             switch (status_code) {
                 case SUCCESS:
                     viewCallback.onSuccess(object);
@@ -35,6 +37,10 @@ public class ReplyStatus {
                 case INPUT_FORMAT_ERROR:
                     viewCallback.dealClientFormatError();
                     break;
+                case NEW_ORDER:
+                    break;
+                default:
+                    viewCallback.dealUnexpectedError();
             }
 
         } catch (JSONException e) {

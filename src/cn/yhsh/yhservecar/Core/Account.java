@@ -19,23 +19,23 @@ public class Account {
         this.context=context;
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        logined = sp.getBoolean("logined", false);
+        logined = sp.getBoolean("ACCOUNT_logined", false);
         if (logined) {
-            id = sp.getString("id", "");
-            name = sp.getString("phone", "");
-            password = sp.getString("password", "");
+            id = sp.getString("ACCOUNT_id", "");
+            name = sp.getString("ACCOUNT_name", "");
+            password = sp.getString("ACCOUNT_password", "");
         }
     }
 
     private Context context;
 
     private boolean logined=false;
-    private String id;
+    private String  id;
     private String name;
     private String password;
 
 
-    private void login(String id,String name,String password){
+    public void login(String id,String name,String password){
         logined=true;
         this.id=id;
         this.name=name;
@@ -43,7 +43,7 @@ public class Account {
         saveStatus();
     }
 
-    private void logout(){
+    public void logout(){
         logined=false;
         id="";
         name="";
@@ -53,11 +53,15 @@ public class Account {
 
     public void saveStatus(){
         SharedPreferences sp= PreferenceManager.getDefaultSharedPreferences(context);
-        sp.edit().putBoolean("logined", logined)
-                .putString("id", id)
-                .putString("name", name)
-                .putString("password", password)
+        sp.edit().putBoolean("ACCOUNT_logined", logined)
+                .putString("ACCOUNT_id", id)
+                .putString("ACCOUNT_name", name)
+                .putString("ACCOUNT_password", password)
                 .apply();
+    }
+
+    public boolean isLogined() {
+        return logined;
     }
 
     public String getId() {

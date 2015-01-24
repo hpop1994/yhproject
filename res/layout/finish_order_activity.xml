@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" style="@style/background" android:id="@+id/finish_order_layout">
+
+    <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" style="@style/card_list">
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:id="@+id/info_layout"
+                >
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp" android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp" android:background="@drawable/card_back"
+                    >
+                <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="60dp" android:padding="4dp">
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="用户姓名"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true" />
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="正在等待接单"
+                            android:id="@+id/client_name"
+                            android:textColor="@color/darkgray" android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"/>
+                </RelativeLayout>
+                <View android:layout_width="fill_parent" android:layout_height="1dp"
+                      android:background="@color/lightgray"></View>
+                <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="60dp" android:padding="4dp">
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="用户电话"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true" />
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="正在等待接单"
+                            android:id="@+id/client_phone"
+                            android:textColor="@color/darkgray" android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"/>
+                </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp" android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp" android:background="@drawable/card_back"
+                    >
+                <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="60dp" android:padding="4dp">
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="位置"
+                            android:id="@+id/textView5" android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"/>
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="正在获取"
+                            android:id="@+id/position_text"
+                            android:textColor="@color/darkgray" android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"/>
+                </RelativeLayout>
+                <View android:layout_width="fill_parent" android:layout_height="1dp"
+                      android:background="@color/lightgray"></View>
+                <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="60dp" android:padding="4dp">
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="下单时间"
+                            android:id="@+id/textView3" android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"/>
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="正在获取"
+                            android:id="@+id/time" android:textColor="@color/darkgray"
+                            android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+                </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" android:background="@drawable/card_back"
+                    android:layout_marginTop="5dp" android:layout_marginBottom="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp">
+                <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="60dp" android:padding="4dp">
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="保养项目"
+                            android:id="@+id/textView14" android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"/>
+                </RelativeLayout>
+                <View android:layout_width="fill_parent" android:layout_height="1dp"
+                      android:background="@color/lightgray"></View>
+                <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="60dp" android:padding="4dp">
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="正在获取"
+                            android:id="@+id/items" android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true" android:textColor="#ff0080bd"/>
+                </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" style="@style/card">
+                <RelativeLayout
+                         style="@style/card_item">
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="实际保养详单"
+                            android:id="@+id/textView11" android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"/>
+                </RelativeLayout>
+                <ListView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:id="@+id/itemList" android:divider="@color/lightgray"
+                        android:dividerHeight="1dp"/>
+                <RelativeLayout style="@style/card_item">
+                    <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/addItemBtn"
+                            android:layout_alignParentLeft="true" android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true" android:layout_alignParentBottom="true"
+                            android:src="@android:drawable/ic_input_add"
+                            android:background="@android:color/transparent"/>
+                </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" style="@style/card">
+                <RelativeLayout
+                        style="@style/card_item">
+                    <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="New Button"
+                            android:id="@+id/selectCarBtn" android:layout_alignParentTop="true"
+                            android:layout_alignParentLeft="true" android:layout_alignParentBottom="true"
+                            android:layout_toLeftOf="@+id/addCarBtn"
+                            android:background="@android:drawable/list_selector_background"/>
+                    <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/addCarBtn" android:layout_alignParentRight="true"
+                            android:layout_alignParentBottom="true" android:layout_alignParentTop="true"
+                            android:src="@android:drawable/ic_input_add"/>
+                </RelativeLayout>
+            </LinearLayout>
+            <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="60dp" style="@style/card">
+                <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/price" android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="false" android:layout_centerVertical="true"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="总价"
+                        android:id="@+id/textView15" android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"/>
+            </RelativeLayout>
+            <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="60dp" style="@style/card">
+                <Space
+                        android:layout_width="20px"
+                        android:layout_height="20px"
+                        android:layout_centerVertical="true" android:layout_centerHorizontal="true"
+                        android:id="@+id/space2"/>
+                <Button
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:text="放弃"
+                        android:id="@+id/give_up" android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@+id/space2" android:layout_marginRight="30dp"
+                        android:background="@drawable/btn_gray" android:textColor="@color/white"/>
+                <Button
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:text="确认"
+                        android:id="@+id/confirm" android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/space2" android:layout_marginLeft="30dp"
+                        android:background="@drawable/btn_green" android:textColor="@color/white"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

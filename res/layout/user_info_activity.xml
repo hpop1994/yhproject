@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" style="@style/background">
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" android:background="@drawable/back_ground" android:layout_weight="5">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="正在获取"
+                android:id="@+id/name"
+                android:textColor="@color/white" android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="账户名: "
+                android:id="@+id/textView7"
+                android:textColor="@color/white" android:layout_alignTop="@+id/name"
+                android:layout_alignParentLeft="true" android:layout_marginLeft="71dp"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="登出"
+                android:id="@+id/logout" android:layout_alignParentTop="true" android:layout_alignParentRight="true"
+                style="@style/stroke_btn"/>
+    </RelativeLayout>
+    <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/scrollView" android:layout_weight="2"
+            android:layout_marginTop="5dp" android:layout_marginBottom="5dp">
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                style="@style/card">
+            <RelativeLayout
+                    android:background="@color/blue"
+                    style="@style/card_item">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="基本信息"
+                        android:id="@+id/textView4" android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true" android:textColor="@color/white"/>
+                <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edit" android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true" android:src="@android:drawable/ic_menu_edit"
+                        android:background="@android:color/transparent"/>
+            </RelativeLayout>
+            <RelativeLayout
+                    style="@style/card_item">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="姓名"
+                        android:id="@+id/textView6" android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true" android:layout_marginLeft="10dp"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="正在获取"
+                        android:id="@+id/realname" android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true" android:layout_marginRight="10dp"/>
+                <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/name_edit" android:layout_centerVertical="true"
+                        android:layout_alignLeft="@+id/space5"
+                        android:singleLine="true" android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp" android:visibility="gone"/>
+                <Space
+                        android:layout_width="40dp"
+                        android:layout_height="20px"
+                        android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+                        android:id="@+id/space5"/>
+            </RelativeLayout>
+            <RelativeLayout
+                    style="@style/card_item">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="电话"
+                        android:id="@+id/textView9" android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true" android:layout_marginLeft="10dp"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="正在获取"
+                        android:id="@+id/phone" android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true" android:layout_marginRight="10dp"/>
+                <Space
+                        android:layout_width="40dp"
+                        android:layout_height="20px"
+                        android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+                        android:id="@+id/space6"/>
+                <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone"
+                        android:ems="10"
+                        android:id="@+id/phone_edit" android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true" android:layout_alignLeft="@+id/space6"
+                        android:singleLine="true" android:visibility="gone"/>
+            </RelativeLayout>
+            <RelativeLayout
+                    style="@style/card_item">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="更改密码"
+                        android:id="@+id/change_password"
+                        android:layout_alignParentLeft="true" android:textColor="@color/blue"
+                        android:layout_marginLeft="10dp" android:layout_alignParentTop="true"
+                        android:layout_alignParentBottom="true" android:gravity="fill_vertical"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

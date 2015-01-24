@@ -14,7 +14,7 @@ import org.json.JSONObject;
  * Created by Xujc on 2015/1/19.
  */
 public class Http {
-    private  static HttpUtils utils = new HttpUtils();
+    private  static HttpUtils utils = new HttpUtils(5000);
     public static void get(String url, final NetworkCallback viewCallback) {
         utils.send(HttpRequest.HttpMethod.GET, url, getCallback(viewCallback));
     }
@@ -29,8 +29,7 @@ public class Http {
     }
 
     public static void postLogined(String url, RequestParams params, Account account, final NetworkCallback viewCallback) {
-        HttpUtils utils = new HttpUtils();
-        params.addBodyParameter("id", String.valueOf(account.getId()));
+        params.addBodyParameter("id", account.getId());
         params.addBodyParameter("name", account.getName());
         params.addBodyParameter("password", account.getPassword());
 
@@ -38,7 +37,6 @@ public class Http {
     }
 
     public static void postLogined(String url, Account account, final NetworkCallback viewCallback) {
-        HttpUtils utils = new HttpUtils();
         RequestParams params = new RequestParams();
         postLogined(url, params, account, viewCallback);
     }
@@ -48,7 +46,8 @@ public class Http {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 //todo : delete;
-                Log.i("POST", responseInfo.result);
+
+                Log.i("POST_BACK","RETURN: "+ responseInfo.result);
                 try {
                     JSONObject object = new JSONObject(responseInfo.result);
                     ReplyStatus.check(object, viewCallback);
@@ -60,6 +59,7 @@ public class Http {
 
             @Override
             public void onFailure(HttpException e, String s) {
+                Log.i("POST_BACK", "FAILED:  "+s);
                 viewCallback.dealNetworkError();
             }
         };

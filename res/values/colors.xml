@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="darkgray">#808080</color>
+    <color name="white">#FFFFFF</color>
+    <color name="yh_blue">#0000FF</color>
+    <color name="lightred">#90FF0000</color>
+    <color name="lightgray">#20505050</color>
+    <color name="green">#12c700</color>
+    <color name="green_grayed">#ff108a00</color>
+    <color name="blue">#ff00b2ff</color>
+    <color name="blue_grayed">#ff006ea2</color>
+    <color name="gray">#ff7294a2</color>
+    <color name="gray_grayed">#ff2e3f4c</color>
+    <color name="orange">#ffffaa36</color>
+    <color name="orange_grayed">#ff90671d</color>
+    <color name="yellow">#ffd600</color>
+    <color name="yellow_grayed">#ff866d00</color>
+    <color name="lightgreen">#00bfa5</color>
+    <color name="lightgreen_grayed">#ff00584d</color>
+    <color name="purple">#AA66CC</color>
+    <color name="purple_grayed">#ff4e3061</color>
+    <color name="logo_blue">#ff00408A</color>
+    <color name="logo_yellow">#ffe9a100</color>
+
+    <color name="disable">#ff696969</color>
+    <drawable name="trans_gray_drawable">#a33d3d3d</drawable>
+</resources>
