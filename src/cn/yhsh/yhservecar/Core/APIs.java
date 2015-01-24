@@ -2,7 +2,7 @@ package cn.yhsh.yhservecar.Core;
 
 import android.util.Log;
 import com.lidroid.xutils.http.RequestParams;
-import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Created by Xujc on 2015/1/19.
@@ -137,7 +137,7 @@ public class APIs {
     }
 
     //12
-    public static void finishOrder(int orderID,int carID,JSONArray goods,double price
+    public static void finishOrder(int orderID,int carID,JSONObject goods,double price
             ,Account account,NetworkCallback callback){
         Log.i("POST_BACK","USING 12 : finishOrder()");
         RequestParams params=new RequestParams();

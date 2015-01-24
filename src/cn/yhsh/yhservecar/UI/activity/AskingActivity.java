@@ -55,6 +55,7 @@ public class AskingActivity extends BindActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.asking_activity);
         ViewUtils.inject(this);
+        getActionBar().setTitle("新订单");
 
         mapView.onCreate(savedInstanceState);
         if (aMap == null) {

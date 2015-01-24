@@ -2,6 +2,7 @@ package cn.yhsh.yhservecar.Core;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -361,11 +362,17 @@ public class StatusService extends Service implements AMapLocationListener {
                         ongoing.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(ongoing);
 
+                        Intent pandent= new Intent(StatusService.this, MainActivity.class);
+                        pandent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        PendingIntent intent=PendingIntent.getActivity(StatusService.this,
+                                0, pandent, 0);
+
                         Notification.Builder mBuilder =
                                 new Notification.Builder(StatusService.this)
-                                        .setSmallIcon(R.drawable.ic_launcher)
+                                        .setSmallIcon(R.drawable.app_logo)
                                         .setContentTitle("有新订单正在等待")
                                         .setAutoCancel(true)
+                                        .setContentIntent(intent)
                                         .setDefaults(Notification.DEFAULT_ALL);
 
                         NotificationManager mNotificationManager =
@@ -611,7 +618,7 @@ public class StatusService extends Service implements AMapLocationListener {
         });
     }
 
-    public void finishOrder(int orderID, int carID, JSONArray goods, double price, final BackgroundJobListener listener) {
+    public void finishOrder(int orderID, int carID, JSONObject goods, double price, final BackgroundJobListener listener) {
         Log.i("POST_BACK", "USING Local : finishOrder()");
         APIs.finishOrder(orderID, carID, goods, price, account, new NetworkCallback(this) {
             @Override

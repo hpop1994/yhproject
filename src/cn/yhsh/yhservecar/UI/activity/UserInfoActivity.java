@@ -51,6 +51,7 @@ public class UserInfoActivity extends BindActivity {
         setContentView(R.layout.user_info_activity);
         ViewUtils.inject(this);
         getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setTitle("用户信息");
 
         APIs.getAccountInfo(Account.getInstance(this), new NetworkCallback(this) {
             @Override

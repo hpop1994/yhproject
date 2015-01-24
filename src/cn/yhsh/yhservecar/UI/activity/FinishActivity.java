@@ -84,6 +84,7 @@ public class FinishActivity extends BindActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.finish_order_activity);
         ViewUtils.inject(this);
+        getActionBar().setTitle("完成订单");
         selectCarBtn.setText("尚未选择");
         inflater = getLayoutInflater();
         loadLocker = new LoadLocker(this);
@@ -439,18 +440,15 @@ public class FinishActivity extends BindActivity {
             return;
         }
 
-        JSONArray array = null;
+        JSONObject goodsObj = new JSONObject();
         try {
-            array = new JSONArray();
             for (int i = 0; i < itemListData.size(); i++) {
-                JSONObject object = new JSONObject();
                 double num = Double.parseDouble(((EditText) listView.getChildAt(i).findViewById(R.id.number)).getText().toString().trim());
                 try {
-                    object.put(String.valueOf(itemListData.get(i).getId()), num);
+                    goodsObj.put(String.valueOf(itemListData.get(i).getId()), num);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                array.put(object);
             }
         } catch (NumberFormatException e) {
             Toast.makeText(this, "项目价格不正确", Toast.LENGTH_SHORT).show();
@@ -459,7 +457,7 @@ public class FinishActivity extends BindActivity {
         }
         loadLocker.start("正在完成");
         getService().finishOrder(getService().getOrderID()
-                , selectedcarid, array, price, new StatusService.BackgroundJobListener() {
+                , selectedcarid, goodsObj, price, new StatusService.BackgroundJobListener() {
             @Override
             public void jobSuccess() {
                 Toast.makeText(FinishActivity.this, "完成订单成功", Toast.LENGTH_SHORT).show();
