@@ -33,7 +33,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/scrollView" android:layout_weight="2"
-            android:layout_marginTop="5dp" android:layout_marginBottom="5dp">
+            >
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
@@ -91,7 +91,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="电话"
+                        android:text="联系方式"
                         android:id="@+id/textView9" android:layout_centerVertical="true"
                         android:layout_alignParentLeft="true" android:layout_marginLeft="10dp"/>
                 <TextView
@@ -113,7 +113,7 @@
                         android:ems="10"
                         android:id="@+id/phone_edit" android:layout_centerVertical="true"
                         android:layout_alignParentRight="true" android:layout_alignLeft="@+id/space6"
-                        android:singleLine="true" android:visibility="gone"/>
+                        android:singleLine="true" android:visibility="gone" android:maxLength="11"/>
             </RelativeLayout>
             <RelativeLayout
                     style="@style/card_item">

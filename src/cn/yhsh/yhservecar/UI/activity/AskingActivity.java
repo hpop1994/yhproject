@@ -1,6 +1,7 @@
 package cn.yhsh.yhservecar.UI.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -148,6 +149,14 @@ public class AskingActivity extends BindActivity {
 
             }
         });
+    }
+
+    @OnClick(R.id.client_phone)
+    private void phoneClicked(View v){
+        if (!clientPhoneText.getText().equals("正在等待接单")){
+            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + clientPhoneText.getText()));
+            startActivity(intent);
+        }
     }
 
     @Override

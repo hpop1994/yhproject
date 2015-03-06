@@ -85,7 +85,7 @@ public class FinishActivity extends BindActivity {
         setContentView(R.layout.finish_order_activity);
         ViewUtils.inject(this);
         getActionBar().setTitle("完成订单");
-        selectCarBtn.setText("尚未选择");
+        selectCarBtn.setText("选择用户车辆");
         inflater = getLayoutInflater();
         loadLocker = new LoadLocker(this);
         adapter = new MyAdapter();
@@ -380,20 +380,20 @@ public class FinishActivity extends BindActivity {
     private void addItemBtnClicked(View v) {
         layout = (RelativeLayout) findViewById(R.id.finish_order_layout);
         popupWindow.setHeight(layout.getHeight());
-        popupWindow.setWidth(layout.getWidth() * 3 / 4);
+        popupWindow.setWidth(layout.getWidth());
         itemSelector.startWithRootLayer(new ListItem(true, 0, "root", null));
         popupWindow.setContentView(itemSelector);
-        popupWindow.showAtLocation(layout, Gravity.NO_GRAVITY, layout.getWidth() / 4, getActionBar().getHeight());
+        popupWindow.showAtLocation(layout, Gravity.NO_GRAVITY, 0, getActionBar().getHeight());
     }
 
     @OnClick(R.id.addCarBtn)
     private void addCarBtnClicked(View v) {
         layout = (RelativeLayout) findViewById(R.id.finish_order_layout);
         popupWindow.setHeight(layout.getHeight());
-        popupWindow.setWidth(layout.getWidth() * 3 / 4);
+        popupWindow.setWidth(layout.getWidth());
         carAdder.startWithRootLayer(new ListItem(true, 0, "root", null));
         popupWindow.setContentView(carAdder);
-        popupWindow.showAtLocation(carAdder, Gravity.NO_GRAVITY, layout.getWidth() / 4, getActionBar().getHeight());
+        popupWindow.showAtLocation(carAdder, Gravity.NO_GRAVITY, 0, getActionBar().getHeight());
     }
 
     @OnClick(R.id.selectCarBtn)

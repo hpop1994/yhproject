@@ -2,6 +2,7 @@ package cn.yhsh.yhservecar.UI.activity;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -167,6 +168,14 @@ public class ServingFragment extends Fragment implements ServiceFragment {
     @OnClick(R.id.finish)
     private void finishClicked(View v){
         startActivity(new Intent(getActivity(), FinishActivity.class));
+    }
+
+    @OnClick(R.id.client_phone)
+    private void phoneClicked(View v){
+        if (!clientPhoneText.getText().equals("正在等待接单")){
+            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + clientPhoneText.getText()));
+            startActivity(intent);
+        }
     }
 
     @Override

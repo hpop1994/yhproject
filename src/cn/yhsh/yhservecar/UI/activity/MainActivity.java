@@ -138,6 +138,8 @@ public class MainActivity extends BindActivity implements StatusService.StatusLi
                 public void jobSuccess() {
                     if (getService().getStatus()==StatusService.WAITING){
                         getService().getAndNotifyOrders();
+                    } else if(getService().getStatus()==StatusService.SERVING){
+                        servingFragment.reFresh();
                     }
                 }
 
