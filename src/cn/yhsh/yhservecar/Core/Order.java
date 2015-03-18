@@ -13,6 +13,7 @@ public class Order {
     public double lat;
     public double lon;
     public String item;
+    public String appointmentTime;
 
     public int inTime =0;
 

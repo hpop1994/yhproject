@@ -29,9 +29,6 @@ public class WaitingFragment extends Fragment implements ServiceFragment {
     @ViewInject(R.id.change_status_btn)
     private Button changeStatusBtn;
 
-    @ViewInject(R.id.status_text)
-    private TextView statusText;
-
     @ViewInject(R.id.connection_view)
     private ImageView connectionView;
 
@@ -50,6 +47,10 @@ public class WaitingFragment extends Fragment implements ServiceFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (list.get(position).inTime>120){
+                    Toast.makeText(statusService, "已超时，无法接单",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 int orderID= list.get(position).orderID;
                 Intent intent=new Intent(getActivity(),AskingActivity.class);
                 intent.putExtra("order_id",orderID);
@@ -74,12 +75,10 @@ public class WaitingFragment extends Fragment implements ServiceFragment {
         statusService.getAndNotifyOrders();
         if (statusService.getStatus()==StatusService.OFF_SERVICE){
             changeStatusBtn.setText("进入等待接单状态");
-            statusText.setText("停止服务状态");
             changeStatusBtn.setBackgroundResource(R.drawable.btn_yellow);
             connectionView.setImageResource(android.R.drawable.presence_offline);
         } else {
             changeStatusBtn.setText("进入停止服务状态");
-            statusText.setText("等待接单状态");
             changeStatusBtn.setBackgroundResource(R.drawable.btn_green);
             if (statusService.isDisconnected()){
                 connectionView.setImageResource(android.R.drawable.presence_offline);
@@ -115,7 +114,6 @@ public class WaitingFragment extends Fragment implements ServiceFragment {
                 public void jobSuccess() {
                     loadLocker.jobFinished();
                     changeStatusBtn.setText("进入停止服务状态");
-                    statusText.setText("等待接单状态");
                     changeStatusBtn.setBackgroundResource(R.drawable.btn_green);
                     connectionChanged();
                 }
@@ -143,7 +141,6 @@ public class WaitingFragment extends Fragment implements ServiceFragment {
                 @Override
                 public void jobSuccess() {
                     changeStatusBtn.setText("进入等待接单状态");
-                    statusText.setText("停止服务状态");
                     changeStatusBtn.setBackgroundResource(R.drawable.btn_yellow);
                     loadLocker.jobFinished();
                 }
@@ -154,6 +151,11 @@ public class WaitingFragment extends Fragment implements ServiceFragment {
                 }
             });
         }
+    }
+
+    @OnClick(R.id.accout)
+    private void onAccountBtnClicked(View v){
+        startActivity(new Intent(getActivity(), UserInfoActivity.class));
     }
 
     public void orderChanged() {

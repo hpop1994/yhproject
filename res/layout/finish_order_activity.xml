@@ -28,13 +28,10 @@
                             android:text="用户姓名"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true" />
-                    <TextView
-                            android:layout_width="wrap_content"
+                    <EditText
+                            android:layout_width="200dp"
                             android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="正在等待接单"
-                            android:id="@+id/client_name"
-                            android:textColor="@color/darkgray" android:layout_centerVertical="true"
+                            android:id="@+id/client_name" android:layout_centerVertical="true"
                             android:layout_alignParentRight="true"/>
                 </RelativeLayout>
                 <View android:layout_width="fill_parent" android:layout_height="1dp"
@@ -49,14 +46,25 @@
                             android:text="用户电话"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true" />
+                    <EditText android:layout_width="200dp" android:layout_height="wrap_content"
+                              android:id="@+id/client_phone"
+                              android:layout_centerVertical="true" android:layout_alignParentRight="true"/>
+                </RelativeLayout>
+                <View android:layout_width="fill_parent" android:layout_height="1dp"
+                      android:background="@color/lightgray"></View>
+                <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="60dp" android:padding="10dp">
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="正在等待接单"
-                            android:id="@+id/client_phone"
-                            android:textColor="@color/darkgray" android:layout_centerVertical="true"
-                            android:layout_alignParentRight="true"/>
+                            android:text="客户类型"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true" />
+                    <EditText android:layout_width="200dp" android:layout_height="wrap_content"
+                              android:id="@+id/client_type"
+                              android:layout_centerVertical="true" android:layout_alignParentRight="true"/>
                 </RelativeLayout>
             </LinearLayout>
             <LinearLayout
@@ -81,10 +89,8 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="正在获取"
-                            android:id="@+id/position_text"
-                            android:textColor="@color/darkgray" android:layout_centerVertical="true"
-                            android:layout_alignParentRight="true" android:layout_toRightOf="@+id/textView5"
-                            android:gravity="right"/>
+                            android:id="@+id/position" android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"/>
                 </RelativeLayout>
                 <View android:layout_width="fill_parent" android:layout_height="1dp"
                       android:background="@color/lightgray"></View>
@@ -103,8 +109,28 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="正在获取"
-                            android:id="@+id/time" android:textColor="@color/darkgray"
-                            android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+                            android:id="@+id/order_time" android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"/>
+                </RelativeLayout>
+                <View android:layout_width="fill_parent" android:layout_height="1dp"
+                      android:background="@color/lightgray"></View>
+                <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="60dp" android:padding="10dp">
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="预约时间"
+                            android:id="@+id/textView33" android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"/>
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="正在获取"
+                            android:id="@+id/appointment_time" android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"/>
                 </RelativeLayout>
             </LinearLayout>
             <LinearLayout
@@ -171,7 +197,7 @@
             <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent" style="@style/card">
+                    android:layout_height="match_parent" style="@style/card">
                 <RelativeLayout
                         style="@style/card_item">
                     <Button
@@ -196,10 +222,47 @@
                 <EditText
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:id="@+id/distance" android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="false" android:layout_centerVertical="true"
+                        android:hint="输入里程数(单位公里)" android:inputType="number"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="里程数(公里)"
+                        android:id="@+id/textView1115" android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"/>
+            </RelativeLayout>
+            <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="60dp" style="@style/card">
+                <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:id="@+id/remark" android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="false" android:layout_centerVertical="true"
+                        android:hint="输入备注"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="备注"
+                        android:id="@+id/textView115" android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"/>
+            </RelativeLayout>
+            <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="60dp" style="@style/card">
+                <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:inputType="number"
                         android:ems="10"
                         android:id="@+id/price" android:layout_alignParentRight="true"
-                        android:layout_alignParentBottom="false" android:layout_centerVertical="true"/>
+                        android:layout_alignParentBottom="false" android:layout_centerVertical="true"
+                        android:hint="输入总价"/>
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

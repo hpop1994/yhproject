@@ -345,7 +345,7 @@ public class TestActivity extends Activity {
                 APIs.getGoodClass(Integer.parseInt(s1), account, getCallback());
                 break;
             case FINISH_ORDER:
-                APIs.finishOrder(Integer.parseInt(s1), Integer.parseInt(s2), new JSONObject(), Integer.parseInt(s3), account, getCallback());
+//                APIs.finishOrder(Integer.parseInt(s1), Integer.parseInt(s2), new JSONObject(), Integer.parseInt(s3), account, getCallback());
                 break;
             case CANCEL_ORDER:
                 APIs.cancelOrder(Integer.parseInt(s1), account, getCallback());

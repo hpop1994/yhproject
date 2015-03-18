@@ -140,5 +140,10 @@
         <activity android:name=".UI.activity.AskingActivity"/>
         <activity android:name=".UI.activity.ChangePasswordAcivity"/>
         <activity android:name=".UI.activity.FinishActivity"/>
+        <activity android:name=".UI.activity.TakenOrderListActivity"/>
+        <activity android:name=".UI.activity.ServingOrders"/>
+        <activity android:name=".UI.activity.TakenOrderDetailActivity"/>
+        <activity android:name=".UI.activity.ServingOrderListActivity"/>
+        <activity android:name=".UI.activity.ServingOrderDetailActivity"/>
     </application>
 </manifest>

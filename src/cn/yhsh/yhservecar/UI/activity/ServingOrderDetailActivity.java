@@ -1,17 +1,15 @@
 package cn.yhsh.yhservecar.UI.activity;
 
-import android.app.Fragment;
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import cn.yhsh.yhservecar.Core.APIs;
+import cn.yhsh.yhservecar.Core.Account;
 import cn.yhsh.yhservecar.Core.NetworkCallback;
 import cn.yhsh.yhservecar.Core.Order;
-import cn.yhsh.yhservecar.Core.StatusService;
 import cn.yhsh.yhservecar.R;
 import cn.yhsh.yhservecar.UI.component.LoadLocker;
 import com.amap.api.maps2d.AMap;
@@ -26,9 +24,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by Xujc on 2015/1/22.
+ * Created by Xujc on 2015/3/7 007.
  */
-public class ServingFragment extends Fragment implements ServiceFragment {
+public class ServingOrderDetailActivity extends Activity {
     @ViewInject(R.id.client_name)
     private TextView clientNameText;
 
@@ -44,6 +42,9 @@ public class ServingFragment extends Fragment implements ServiceFragment {
     @ViewInject(R.id.items)
     private TextView itemsText;
 
+    @ViewInject(R.id.appointment_time)
+    private TextView appointmentText;
+
     @ViewInject(R.id.map)
     private MapView mapView;
 
@@ -52,88 +53,57 @@ public class ServingFragment extends Fragment implements ServiceFragment {
     private AMap aMap;
     private int orderID;
 
-    private boolean firstTime=true;
-
     private LoadLocker loadLocker;
-    private StatusService statusService;
+    private Order order;
+
+    private boolean infoDone = false;
+
+    private String dateStr;
+    private String timeStr;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v=inflater.inflate(R.layout.serving_fragment,container,false);
-        ViewUtils.inject(this,v);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.serving_order_detail);
+        ViewUtils.inject(this);
         mapView.onCreate(savedInstanceState);
         if (aMap == null) {
             aMap = mapView.getMap();
         }
-        loadLocker=new LoadLocker(getActivity());
+        loadLocker = new LoadLocker(this);
         loadLocker.setCancalable(false);
-        return v;
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mapView.onResume();
-
-    }
-
-    @Override
-    public void onConnected(final StatusService service) {
-        statusService = service;
-        orderID = service.getOrderID();
-        if (!firstTime){
-            return;
-        }
-        firstTime=false;
-        final Order servingOrder = service.getServingOrder();
-        if (servingOrder !=null&& servingOrder.orderID==orderID){
-            setOrderInfoWith(servingOrder);
-            return;
-        }
-        reFresh();
-    }
-
-    public void reFresh() {
-        if (statusService==null){
-            return;
-        }
-        APIs.getOrderDetail(orderID, statusService.getAccount(), new NetworkCallback(statusService) {
+        orderID = getIntent().getIntExtra("orderID", 0);
+        APIs.getOrderDetail(orderID, Account.getInstance(this), new NetworkCallback(this) {
             @Override
             protected void onSuccess(JSONObject data) {
                 try {
-                    Order order = new Order();
+                    order = new Order();
                     order.orderID = orderID;
-                    order.uid=data.getInt("uid");
+                    order.uid = data.getInt("uid");
                     order.name = data.getString("realname");
                     order.phone = data.getString("phonenum");
                     order.address = data.getString("address");
-                    order.time = data.getString("time");
+                    order.time = data.getString("ordertime");
+                    order.appointmentTime = data.getString("time");
                     order.lat = data.getDouble("lat");
                     order.lon = data.getDouble("lon");
-                    order.item=data.getString("item");
-                    statusService.setServingOrder(order);
-                    statusService.saveServeStatus();
+                    order.item = data.getString("item");
                     setOrderInfoWith(order);
+                    infoDone = true;
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    dealServerFormatError();
                 }
             }
-
         });
     }
-
-    @Override
-    public void onDisconnected(StatusService service) {
-        statusService=null;
-    }
-
 
     private void setOrderInfoWith(Order servingOrder) {
         clientNameText.setText(servingOrder.name);
         clientPhoneText.setText(servingOrder.phone);
         positionText.setText(servingOrder.address);
         timeText.setText(servingOrder.time);
+        appointmentText.setText(servingOrder.appointmentTime);
         itemsText.setText(servingOrder.item);
         lat = servingOrder.lat;
         lon = servingOrder.lon;
@@ -148,27 +118,30 @@ public class ServingFragment extends Fragment implements ServiceFragment {
     }
 
     @OnClick(R.id.cancel)
-    private void cnacelClicked(View v){
-        BindActivity activity=(BindActivity) getActivity();
-        StatusService service=activity.getService();
+    private void cancelClicked(View v) {
         loadLocker.start("正在取消订单");
-        service.cancelOrder(orderID, new StatusService.BackgroundJobListener() {
+        APIs.cancelOrder(orderID, Account.getInstance(this), new NetworkCallback(this) {
             @Override
-            public void jobSuccess() {
+            protected void onSuccess(JSONObject data) {
                 loadLocker.jobFinished();
+                finish();
+                makeText("取消成功");
             }
 
             @Override
-            public void jobFailed() {
+            protected void onFailed() {
                 loadLocker.jobFinished();
             }
         });
     }
 
-    @OnClick(R.id.finish)
-    private void finishClicked(View v){
-        startActivity(new Intent(getActivity(), FinishActivity.class));
+    @OnClick(R.id.finish_btn)
+    private void finishClicked(View v) {
+        Intent intent = new Intent(this, FinishActivity.class);
+        intent.putExtra("orderID",orderID);
+        startActivityForResult(intent,1);
     }
+
 
     @OnClick(R.id.client_phone)
     private void phoneClicked(View v){
@@ -179,20 +152,10 @@ public class ServingFragment extends Fragment implements ServiceFragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        mapView.onPause();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mapView.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mapView.onDestroy();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==1 && resultCode==1){
+            finish();
+        }
     }
 }

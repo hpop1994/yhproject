@@ -1,21 +1,14 @@
 package cn.yhsh.yhservecar.UI.activity;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
-import cn.yhsh.yhservecar.Core.APIs;
-import cn.yhsh.yhservecar.Core.NetworkCallback;
 import cn.yhsh.yhservecar.Core.StatusService;
 import cn.yhsh.yhservecar.R;
 import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -25,15 +18,6 @@ import java.util.TimerTask;
  */
 public class MainActivity extends BindActivity implements StatusService.StatusListener {
     final private WaitingFragment waitingFragment=new WaitingFragment();
-    final private ServingFragment servingFragment=new ServingFragment();
-    private ServiceFragment nowFragment;
-
-    @ViewInject(R.id.name)
-    private TextView nameText;
-
-    @ViewInject(R.id.realname)
-    private TextView realNameText;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,112 +27,33 @@ public class MainActivity extends BindActivity implements StatusService.StatusLi
 
         getFragmentManager().beginTransaction()
                 .add(R.id.fragment, waitingFragment)
-                .add(R.id.fragment, servingFragment)
                 .commit();
-        getFragmentManager().beginTransaction()
-                .hide(waitingFragment)
-                .hide(servingFragment)
-                .commit();
-
     }
 
     @Override
     protected void onServiceConnected(StatusService myService) {
         myService.setListener(this);
-        nameText.setText(myService.getAccount().getName());
-        APIs.getAccountInfo(myService.getAccount(), new NetworkCallback(this) {
-            @Override
-            protected void onSuccess(JSONObject data) {
-                try {
-                    realNameText.setText(data.getString("realname"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    dealServerFormatError();
-                }
-            }
-        });
-        nowFragment=null;
-        getFragmentManager().beginTransaction()
-                .hide(waitingFragment)
-                .hide(servingFragment)
-                .commit();
-        goToStatus(myService.getStatus());
-        nowFragment.onConnected(myService);
+        waitingFragment.onConnected(myService);
     }
 
     @Override
     protected void onServiceDisconnected(StatusService myService) {
         myService.setListener(null);
-        nowFragment.onDisconnected(myService);
+        waitingFragment.onDisconnected(myService);
     }
 
     @Override
     public void connectionChanged() {
-        if (nowFragment!=waitingFragment){
-            return;
-        }
         waitingFragment.connectionChanged();
     }
 
     @Override
     public void orderListChanged() {
-        if (nowFragment!=waitingFragment){
-            return;
-        }
         waitingFragment.orderChanged();
     }
 
     @Override
     public void statusChanged() {
-        goToStatus(getService().getStatus());
-    }
-
-    private void goToStatus(int status){
-        if (status==StatusService.OFF_SERVICE && nowFragment!=waitingFragment){
-            if (nowFragment!=null){
-                getFragmentManager().beginTransaction().hide((Fragment)  nowFragment).commit();
-            }
-            nowFragment=waitingFragment;
-            getFragmentManager().beginTransaction().show(waitingFragment).commit();
-        } else if (status==StatusService.WAITING && nowFragment!=waitingFragment){
-            if (nowFragment!=null){
-                getFragmentManager().beginTransaction().hide((Fragment) nowFragment).commit();
-            }
-            nowFragment=waitingFragment;
-            getFragmentManager().beginTransaction().show(waitingFragment).commit();
-        } else if (status==StatusService.SERVING && nowFragment!=servingFragment){
-            if (nowFragment!=null){
-                getFragmentManager().beginTransaction().hide((Fragment)  nowFragment).commit();
-            }
-            nowFragment=servingFragment;
-            getFragmentManager().beginTransaction().show(servingFragment).commit();
-        }
-    }
-
-    @OnClick(R.id.my_action_bar)
-    private void myActionBarClicked(View v){
-        Intent intent=new Intent(this, UserInfoActivity.class);
-        startActivity(intent);
-    }
-    @OnClick(R.id.refresh)
-    private void refreshClicked(View v){
-        if (isBind()){
-            getService().getNewestStatus(new StatusService.BackgroundJobListener() {
-                @Override
-                public void jobSuccess() {
-                    if (getService().getStatus()==StatusService.WAITING){
-                        getService().getAndNotifyOrders();
-                    } else if(getService().getStatus()==StatusService.SERVING){
-                        servingFragment.reFresh();
-                    }
-                }
-
-                @Override
-                public void jobFailed() {
-
-                }
-            });
-        }
     }
 
     @Override
@@ -181,5 +86,15 @@ public class MainActivity extends BindActivity implements StatusService.StatusLi
         } else {
             finish();
         }
+    }
+
+    @OnClick(R.id.taken_orders)
+    private void takenOrdersClicked(View v){
+        startActivity(new Intent(this, TakenOrderListActivity.class));
+    }
+
+    @OnClick(R.id.serving_orders)
+    private void servingOrdersClicked(View v){
+        startActivity(new Intent(this,ServingOrderListActivity.class));
     }
 }

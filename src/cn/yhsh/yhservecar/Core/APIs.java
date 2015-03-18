@@ -8,7 +8,8 @@ import org.json.JSONObject;
  * Created by Xujc on 2015/1/19.
  */
 public class APIs {
-    private static final String SERVER = "http://222.170.86.83:88/index.php/Server/";
+    private static final String SERVER = "http://app.lhkb.cn:88/index.php/Server/";
+//    private static final String SERVER = "http://192.168.1.99/www/index.php/Server/";
 
     //01
     private static final String LOGIN = "Sget/login";
@@ -41,10 +42,17 @@ public class APIs {
     //15
     private static final String ADD_USER_CAR="Sverify/addusercar";
     //16
-    private static final String GET_ORDER_FOR_ME="Sverify/checkindent";
+    private static final String GET_ORDER_FOR_ME="Sverify/checkreqindent";
     //17
     private static final String UPDATE_GETUI_ID="Sverify/updategetuicid";
-
+    //18
+    private static final String GET_TAKEN_ORDERS="Sverify/checkansindent";
+    //19
+    private static final String SERVE_ORDER="Sverify/serveorder";
+    //20
+    private static final String CHANGE_APPOINTMENT_TIME="Sverify/changeordertime";
+    //21
+    private static final String GET_SERVING_ORDERS = "Sverify/checkservingindent";
 
     private static String getUrl(String subUrl) {
         return SERVER+subUrl;
@@ -137,7 +145,10 @@ public class APIs {
     }
 
     //12
-    public static void finishOrder(int orderID,int carID,JSONObject goods,double price
+    public static void finishOrder(
+            int orderID,int carID,JSONObject goods
+            ,double price,String name,String phone
+            ,String type,String remark,String distance
             ,Account account,NetworkCallback callback){
         Log.i("POST_BACK","USING 12 : finishOrder()");
         RequestParams params=new RequestParams();
@@ -145,6 +156,11 @@ public class APIs {
         params.addBodyParameter("carid", String.valueOf(carID));
         params.addBodyParameter("goods",goods.toString());
         params.addBodyParameter("price", String.valueOf(price));
+        params.addBodyParameter("client_name",name);
+        params.addBodyParameter("client_phone",phone);
+        params.addBodyParameter("client_type",type);
+        params.addBodyParameter("remark",remark);
+        params.addBodyParameter("distance",distance);
         Http.postLogined(getUrl(FINISH_ORDER),params,account,callback);
     }
 
@@ -188,5 +204,34 @@ public class APIs {
         RequestParams params=new RequestParams();
         params.addBodyParameter("getuicid",getuiID);
         Http.postLogined(getUrl(UPDATE_GETUI_ID),params,account,callback);
+    }
+
+    //18
+    public static void getTakenOrders(Account account,NetworkCallback callback){
+        Log.i("POST_BACK","USING 18 : getTakenOrders()");
+        Http.postLogined(getUrl(GET_TAKEN_ORDERS),account,callback);
+    }
+
+    //19
+    public static void serveOrder(int orderID,Account account,NetworkCallback callback){
+        Log.i("POST_BACK","USING 19 : serveOrder()");
+        RequestParams params=new RequestParams();
+        params.addBodyParameter("order_id", String.valueOf(orderID));
+        Http.postLogined(getUrl(SERVE_ORDER),params,account,callback);
+    }
+
+    //20
+    public static void changeAppointmentTime(int orderID,String newTime,Account account,NetworkCallback callback){
+        Log.i("POST_BACK","USING 20 : changeAppointmentTime()");
+        RequestParams params=new RequestParams();
+        params.addBodyParameter("order_id", String.valueOf(orderID));
+        params.addBodyParameter("appointment_time", newTime);
+        Http.postLogined(getUrl(CHANGE_APPOINTMENT_TIME),params,account,callback);
+    }
+
+    //21
+    public static void getServingOrders(Account account, NetworkCallback callback) {
+        Log.i("POST_BACK","USING 21 : getServingOrders()");
+        Http.postLogined(getUrl(GET_SERVING_ORDERS),account,callback);
     }
 }

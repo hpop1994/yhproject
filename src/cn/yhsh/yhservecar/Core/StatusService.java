@@ -6,11 +6,9 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.*;
 import android.os.Process;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 import cn.yhsh.yhservecar.R;
@@ -32,7 +30,6 @@ import java.util.ArrayList;
 public class StatusService extends Service implements AMapLocationListener {
     public static final int OFF_SERVICE = 0;
     public static final int WAITING = 1;
-    public static final int SERVING = 2;
 
     private boolean sending = false;
     private boolean locating = false;
@@ -45,23 +42,21 @@ public class StatusService extends Service implements AMapLocationListener {
     private double lon = 0;
 
     private final ArrayList<Order> ordersAsked = new ArrayList<Order>();//order time
-    private int mOrderID = 0;
-    private Order servingOrder;
     private final Handler countdownHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == COUNTDOWN) {
                 for (int i = ordersAsked.size() - 1; i >= 0; i--) {
+                    final int index=i;
                     Order o = ordersAsked.get(i);
                     o.inTime++;
-                    if (o.inTime > 120) {
+                    if (o.inTime == 120 || o.inTime==130) {
                         APIs.replyOrderRequest(o.orderID, false, account, new NetworkCallback(StatusService.this) {
                             @Override
                             protected void onSuccess(JSONObject data) {
-
+                                getAndNotifyOrders();
                             }
                         });
-                        ordersAsked.remove(i);
                     }
                 }
                 notifyOrderListChanged();
@@ -225,7 +220,7 @@ public class StatusService extends Service implements AMapLocationListener {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case LOST_CONNECTION:
-                    stopSending();
+                    stopLocating();
                     break;
                 case RECONNECTED:
                     startLocating();
@@ -310,19 +305,6 @@ public class StatusService extends Service implements AMapLocationListener {
 
     }
 
-    private void becomeServing(int orderID) {
-        Log.i("POST_BACK", "USING Local : becomeServing()");
-        status = SERVING;
-        if (locating == false) {
-            startLocating();
-        }
-        if (sending == false) {
-            startSending();
-        }
-        this.mOrderID = orderID;
-        notifyStatusListener();
-    }
-
     public void getAndNotifyOrders() {
         Log.i("POST_BACK", "USING Local : getAndNotifyOrders()");
         APIs.getOrderForMe(account, new NetworkCallback(this) {
@@ -340,7 +322,8 @@ public class StatusService extends Service implements AMapLocationListener {
                         order.name = object.getString("realname");
                         order.phone = object.getString("phonenum");
                         order.address = object.getString("address");
-                        order.time = object.getString("time");
+//                        order.time = object.getString("ordertime");
+                        order.appointmentTime = object.getString("time");
                         order.lat = object.getDouble("lat");
                         order.lon = object.getDouble("lon");
                         order.item = object.getString("item");
@@ -417,8 +400,6 @@ public class StatusService extends Service implements AMapLocationListener {
                         becomeWaiting();
                     } else if (newStatus == OFF_SERVICE) {
                         becomeOffService();
-                    } else {
-                        becomeServing(data.getInt("order_id"));
                     }
                 } catch (JSONException e) {
                     dealServerFormatError();
@@ -454,8 +435,6 @@ public class StatusService extends Service implements AMapLocationListener {
                         becomeWaiting();
                     } else if (newStatus == OFF_SERVICE) {
                         becomeOffService();
-                    } else {
-                        becomeServing(data.getInt("order_id"));
                     }
                     backgroundJobListener.jobSuccess();
                 } catch (JSONException e) {
@@ -531,6 +510,14 @@ public class StatusService extends Service implements AMapLocationListener {
                 double lon = aMapLocation.getLongitude();
                 APIs.sendLocation(lat, lon, account, new NetworkCallback(StatusService.this) {
                     @Override
+                    protected void onStatusCode(int code, JSONObject object) {
+                        if (code==ReplyStatus.NEW_ORDER){
+                            listener.jobSuccess();
+                            mStatusHandler.sendMessage(mStatusHandler.obtainMessage(NEW_ORDER));
+                        }
+                    }
+
+                    @Override
                     protected void onSuccess(JSONObject data) {
                         becomeWaiting();
                         listener.jobSuccess();
@@ -593,22 +580,10 @@ public class StatusService extends Service implements AMapLocationListener {
             listener.jobFailed();
             return;
         }
-        order = tmp;
         APIs.replyOrderRequest(orderID, taken, account, new NetworkCallback(this) {
             @Override
             protected void onSuccess(JSONObject data) {
-
-                if (taken) {
-                    mOrderID = orderID;
-                    startLocating();//防止离线接单
-                    startSending();
-                    servingOrder = order;
-                    ordersAsked.clear();
-                    becomeServing(orderID);
-                    saveServeStatus();
-                }
                 listener.jobSuccess();
-
             }
 
             @Override
@@ -618,41 +593,23 @@ public class StatusService extends Service implements AMapLocationListener {
         });
     }
 
-    public void finishOrder(int orderID, int carID, JSONObject goods, double price, final BackgroundJobListener listener) {
-        Log.i("POST_BACK", "USING Local : finishOrder()");
-        APIs.finishOrder(orderID, carID, goods, price, account, new NetworkCallback(this) {
-            @Override
-            protected void onSuccess(JSONObject data) {
-                becomeWaiting();
-                listener.jobSuccess();
-                getAndNotifyOrders();
-                saveServeStatus();
-            }
+//    public void finishOrder(int orderID, int carID, JSONObject goods, double price, final BackgroundJobListener listener) {
+//        Log.i("POST_BACK", "USING Local : finishOrder()");
+//        APIs.finishOrder(orderID, carID, goods, price, account, new NetworkCallback(this) {
+//            @Override
+//            protected void onSuccess(JSONObject data) {
+//                listener.jobSuccess();
+//                getAndNotifyOrders();
+//            }
+//
+//            @Override
+//            protected void onFailed() {
+//                listener.jobFailed();
+//            }
+//        });
+//    }
 
-            @Override
-            protected void onFailed() {
-                listener.jobFailed();
-            }
-        });
-    }
 
-    public void cancelOrder(int orderID, final BackgroundJobListener listener) {
-        Log.i("POST_BACK", "USING Local : cancelOrder()");
-        APIs.cancelOrder(orderID, account, new NetworkCallback(this) {
-            @Override
-            protected void onSuccess(JSONObject data) {
-                becomeWaiting();
-                listener.jobSuccess();
-                getAndNotifyOrders();
-                saveServeStatus();
-            }
-
-            @Override
-            protected void onFailed() {
-                listener.jobFailed();
-            }
-        });
-    }
 
     @Override
     public void onCreate() {
@@ -685,7 +642,7 @@ public class StatusService extends Service implements AMapLocationListener {
 
                 @Override
                 public void jobFailed() {
-                    retrieveStatus();
+
                 }
             });
             startGetuiPush();
@@ -701,53 +658,53 @@ public class StatusService extends Service implements AMapLocationListener {
     }
 
 
-    public void saveServeStatus() {
-        Log.i("POST_BACK", "USING Local : saveServeStatus()");
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = sp.edit();
-        if (status != SERVING) {
-            editor.putBoolean("serving", false);
-            editor.apply();
-            return;
-        } else {
-            editor.putBoolean("serving", true)
-                    .putInt("id", servingOrder.orderID)
-                    .putInt("uid", servingOrder.uid)
-                    .putString("name", servingOrder.name)
-                    .putString("phone", servingOrder.phone)
-                    .putString("address", servingOrder.address)
-                    .putString("time", servingOrder.time)
-                    .putFloat("lat", (float) servingOrder.lat)
-                    .putFloat("lon", (float) servingOrder.lon)
-                    .putString("item", servingOrder.item)
-                    .apply();
-
-        }
-
-    }
-
-    private void retrieveStatus() {
-        Log.i("POST_BACK", "USING Local : retrieveStatus()");
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        if (sp.getBoolean("serving", false)) {
-            Order order = new Order();
-            order.orderID = sp.getInt("id", 0);
-            order.uid = sp.getInt("uid", 0);
-            order.name = sp.getString("name", "");
-            order.phone = sp.getString("phone", "");
-            order.address = sp.getString("address", "");
-            order.time = sp.getString("time", "");
-            order.lat = sp.getFloat("lat", 0);
-            order.lon = sp.getFloat("lon", 0);
-            order.item = sp.getString("item", "");
-            mOrderID = order.orderID;
-            servingOrder = order;
-            status = SERVING;
-        } else {
-            status = OFF_SERVICE;
-        }
-        notifyStatusListener();
-    }
+//    public void saveServeStatus() {
+//        Log.i("POST_BACK", "USING Local : saveServeStatus()");
+//        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+//        SharedPreferences.Editor editor = sp.edit();
+//        if (status != SERVING) {
+//            editor.putBoolean("serving", false);
+//            editor.apply();
+//            return;
+//        } else {
+//            editor.putBoolean("serving", true)
+//                    .putInt("id", servingOrder.orderID)
+//                    .putInt("uid", servingOrder.uid)
+//                    .putString("name", servingOrder.name)
+//                    .putString("phone", servingOrder.phone)
+//                    .putString("address", servingOrder.address)
+//                    .putString("time", servingOrder.time)
+//                    .putFloat("lat", (float) servingOrder.lat)
+//                    .putFloat("lon", (float) servingOrder.lon)
+//                    .putString("item", servingOrder.item)
+//                    .apply();
+//
+//        }
+//
+//    }
+//
+//    private void retrieveStatus() {
+//        Log.i("POST_BACK", "USING Local : retrieveStatus()");
+//        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+//        if (sp.getBoolean("serving", false)) {
+//            Order order = new Order();
+//            order.orderID = sp.getInt("id", 0);
+//            order.uid = sp.getInt("uid", 0);
+//            order.name = sp.getString("name", "");
+//            order.phone = sp.getString("phone", "");
+//            order.address = sp.getString("address", "");
+//            order.time = sp.getString("time", "");
+//            order.lat = sp.getFloat("lat", 0);
+//            order.lon = sp.getFloat("lon", 0);
+//            order.item = sp.getString("item", "");
+//            mOrderID = order.orderID;
+//            servingOrder = order;
+//            status = SERVING;
+//        } else {
+//            status = OFF_SERVICE;
+//        }
+//        notifyStatusListener();
+//    }
 
     private final IBinder mBinder = new LocalBinder();
 
@@ -783,23 +740,11 @@ public class StatusService extends Service implements AMapLocationListener {
         return disconnected;
     }
 
-    public int getOrderID() {
-        return mOrderID;
-    }
-
     public ArrayList<Order> getOrdersAsked() {
         return ordersAsked;
     }
 
     public Account getAccount() {
         return account;
-    }
-
-    public Order getServingOrder() {
-        return servingOrder;
-    }
-
-    public void setServingOrder(Order servingOrder) {
-        this.servingOrder = servingOrder;
     }
 }

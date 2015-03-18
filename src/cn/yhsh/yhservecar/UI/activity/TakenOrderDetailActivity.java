@@ -11,8 +11,10 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
-import cn.yhsh.yhservecar.Core.*;
+import cn.yhsh.yhservecar.Core.APIs;
+import cn.yhsh.yhservecar.Core.Account;
+import cn.yhsh.yhservecar.Core.NetworkCallback;
+import cn.yhsh.yhservecar.Core.Order;
 import cn.yhsh.yhservecar.R;
 import cn.yhsh.yhservecar.UI.component.LoadLocker;
 import com.amap.api.maps2d.AMap;
@@ -32,9 +34,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Created by Xujc on 2015/1/22.
+ * Created by Xujc on 2015/3/6 006.
  */
-public class AskingActivity extends Activity {
+public class TakenOrderDetailActivity extends Activity {
     @ViewInject(R.id.client_name)
     private TextView clientNameText;
 
@@ -50,46 +52,45 @@ public class AskingActivity extends Activity {
     @ViewInject(R.id.items)
     private TextView itemsText;
 
+    @ViewInject(R.id.appointment_time)
+    private TextView appointmentText;
+
     @ViewInject(R.id.map)
     private MapView mapView;
-
-    @ViewInject(R.id.appointment_time)
-    private TextView appointmentTime;
 
     private double lat;
     private double lon;
     private AMap aMap;
     private int orderID;
-    private Order order;
+
     private LoadLocker loadLocker;
+    private Order order;
+
+    private boolean infoDone = false;
 
     private String dateStr;
     private String timeStr;
-    private String newAppointmentTime;
+    private String newAppointmentStr;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.asking_activity);
+        setContentView(R.layout.taken_order_detail);
         ViewUtils.inject(this);
-        getActionBar().setTitle("新订单");
-
         mapView.onCreate(savedInstanceState);
         if (aMap == null) {
             aMap = mapView.getMap();
         }
-
-        Intent intent=getIntent();
-        orderID = intent.getIntExtra("order_id",0);
         loadLocker = new LoadLocker(this);
         loadLocker.setCancalable(false);
 
+        orderID = getIntent().getIntExtra("orderID", 0);
         APIs.getOrderDetail(orderID, Account.getInstance(this), new NetworkCallback(this) {
             @Override
             protected void onSuccess(JSONObject data) {
                 try {
                     order = new Order();
-                    order.orderID = data.getInt("id");
+                    order.orderID = orderID;
                     order.uid = data.getInt("uid");
                     order.name = data.getString("realname");
                     order.phone = data.getString("phonenum");
@@ -99,68 +100,82 @@ public class AskingActivity extends Activity {
                     order.lat = data.getDouble("lat");
                     order.lon = data.getDouble("lon");
                     order.item = data.getString("item");
-
-                    clientNameText.setText(data.getString("realname"));
-                    clientPhoneText.setText(data.getString("phonenum"));
-                    positionText.setText(data.getString("address"));
-                    timeText.setText(data.getString("ordertime"));
-                    appointmentTime.setText(data.getString("time"));
-                    itemsText.setText(data.getString("item"));
-                    lat = data.getDouble("lat");
-                    lon = data.getDouble("lon");
-
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    LatLng latLng = new LatLng(lat, lon);
-                    markerOptions.position(latLng);
-                    markerOptions.snippet("用户");
-                    aMap.addMarker(markerOptions);
-                    aMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
-                    aMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+                    setOrderInfoWith(order);
+                    infoDone = true;
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    dealServerFormatError();
                 }
             }
-
-            @Override
-            protected void onFailed() {
-                Toast.makeText(AskingActivity.this, "获取信息失败",Toast.LENGTH_SHORT).show();
-                finish();
-            }
         });
-
     }
 
+    private void setOrderInfoWith(Order servingOrder) {
+        clientNameText.setText(servingOrder.name);
+        clientPhoneText.setText(servingOrder.phone);
+        positionText.setText(servingOrder.address);
+        timeText.setText(servingOrder.time);
+        itemsText.setText(servingOrder.item);
+        appointmentText.setText(servingOrder.appointmentTime);
+        lat = servingOrder.lat;
+        lon = servingOrder.lon;
 
-    @OnClick(R.id.refuse)
-    private void refuseClicked(View v){
-        loadLocker.start("正在拒绝");
-        APIs.replyOrderRequest(orderID, false, Account.getInstance(this), new NetworkCallback(this) {
+        MarkerOptions markerOptions = new MarkerOptions();
+        LatLng latLng = new LatLng(lat, lon);
+        markerOptions.position(latLng);
+        markerOptions.snippet("用户");
+        aMap.addMarker(markerOptions);
+        aMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
+        aMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+    }
+
+    @OnClick(R.id.cancel)
+    private void cancelClicked(View v) {
+        loadLocker.start("正在取消订单");
+        APIs.cancelOrder(orderID, Account.getInstance(this), new NetworkCallback(this) {
             @Override
             protected void onSuccess(JSONObject data) {
                 loadLocker.jobFinished();
-                Toast.makeText(AskingActivity.this, "拒绝成功", Toast.LENGTH_SHORT).show();
                 finish();
+                makeText("取消成功");
             }
 
             @Override
             protected void onFailed() {
                 loadLocker.jobFinished();
-                Toast.makeText(AskingActivity.this, "拒绝失败", Toast.LENGTH_SHORT).show();
-                finish();
             }
         });
-
     }
 
-    @OnClick(R.id.take)
-    private void takeClicked(View v){
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    @OnClick(R.id.serve_now_btn)
+    private void serveClicked(View v) {
+        loadLocker.start("正在开始服务此订单");
+        APIs.serveOrder(orderID, Account.getInstance(this), new NetworkCallback(this) {
+            @Override
+            protected void onSuccess(JSONObject data) {
+                loadLocker.jobFinished();
+                finish();
+                makeText("操作成功，请到正在服务的订单中查看");
+            }
+
+            @Override
+            protected void onFailed() {
+                loadLocker.jobFinished();
+            }
+        });
+    }
+
+    @OnClick(R.id.appointment_time)
+    private void appointmentTimeClicked(View v) {
+        if (!infoDone) {
+            return;
+        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date date = null;
         int tYear;
         int tMonth;
         int tDay;
-
+        int tHour;
+        int tMinutes;
         try {
             date = format.parse(order.appointmentTime);
             Calendar c = Calendar.getInstance();
@@ -168,23 +183,25 @@ public class AskingActivity extends Activity {
             tYear = c.get(Calendar.YEAR);
             tMonth = c.get(Calendar.MONTH);
             tDay = c.get(Calendar.DAY_OF_MONTH);
-
+            tHour = c.get(Calendar.HOUR_OF_DAY);
+            tMinutes = c.get(Calendar.MINUTE);
         } catch (ParseException e) {
             e.printStackTrace();
             Calendar c = Calendar.getInstance();
             tYear = c.get(Calendar.YEAR);
             tMonth = c.get(Calendar.MONTH);
             tDay = c.get(Calendar.DAY_OF_MONTH);
+            tHour = c.get(Calendar.HOUR_OF_DAY);
+            tMinutes = c.get(Calendar.MINUTE);
         }
-        Calendar today=Calendar.getInstance();
         final int year=tYear;
         final int month=tMonth;
         final int day=tDay;
-        final int hour=today.get(Calendar.HOUR_OF_DAY);
-        final int minutes=today.get(Calendar.MINUTE);
+        final int hour=tHour;
+        final int minutes=tMinutes;
 
         dateStr=null;
-        newAppointmentTime=null;
+        newAppointmentStr=null;
         DatePickerDialog datePicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -194,45 +211,27 @@ public class AskingActivity extends Activity {
         datePicker.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                TimePickerDialog timePickerDialog = new TimePickerDialog(AskingActivity.this,  new TimePickerDialog.OnTimeSetListener() {
+                if (dateStr==null){
+                    return;
+                }
+                TimePickerDialog timePickerDialog = new TimePickerDialog(TakenOrderDetailActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        if (dateStr==null){
-                            return;
-                        }
                         timeStr=""+hourOfDay+":"+minute;
-                        newAppointmentTime = dateStr + " " + timeStr;
+                        newAppointmentStr = dateStr + " " + timeStr;
+                        appointmentText.setText(newAppointmentStr);
 
                     }
                 }, hour,minutes,true);
                 timePickerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        if (timeStr==null){
-                            return;
-                        }
-                        loadLocker.start("正在接受");
-                        APIs.changeAppointmentTime(orderID, newAppointmentTime
-                                , Account.getInstance(AskingActivity.this)
-                                , new NetworkCallback(AskingActivity.this) {
+                        APIs.changeAppointmentTime(orderID, newAppointmentStr
+                                , Account.getInstance(TakenOrderDetailActivity.this)
+                                , new NetworkCallback(TakenOrderDetailActivity.this) {
                             @Override
                             protected void onSuccess(JSONObject data) {
-                                makeText("预约时间设定成功");
-                            }
-                        });
-                        APIs.replyOrderRequest(orderID, true, Account.getInstance(AskingActivity.this), new NetworkCallback(AskingActivity.this) {
-                            @Override
-                            protected void onSuccess(JSONObject data) {
-                                loadLocker.jobFinished();
-                                Toast.makeText(AskingActivity.this, "接受成功",Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
-
-                            @Override
-                            protected void onFailed() {
-                                loadLocker.jobFinished();
-                                Toast.makeText(AskingActivity.this, "接受失败",Toast.LENGTH_SHORT).show();
-                                finish();
+                                makeText("预约时间修改成功");
                             }
                         });
                     }
@@ -241,8 +240,6 @@ public class AskingActivity extends Activity {
             }
         });
         datePicker.show();
-
-
     }
 
     @OnClick(R.id.client_phone)
@@ -253,27 +250,4 @@ public class AskingActivity extends Activity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mapView.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mapView.onPause();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mapView.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mapView.onDestroy();
-    }
 }

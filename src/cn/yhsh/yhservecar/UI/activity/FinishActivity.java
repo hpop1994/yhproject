@@ -1,7 +1,9 @@
 package cn.yhsh.yhservecar.UI.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -26,18 +28,24 @@ import java.util.ArrayList;
 /**
  * Created by Xujc on 2015/1/23.
  */
-public class FinishActivity extends BindActivity {
+public class FinishActivity extends Activity {
     @ViewInject(R.id.client_name)
     private TextView clientNameText;
 
     @ViewInject(R.id.client_phone)
     private TextView clientPhoneText;
 
-    @ViewInject(R.id.position_text)
+    @ViewInject(R.id.client_type)
+    private TextView clientTypeText;
+
+    @ViewInject(R.id.position)
     private TextView positionText;
 
-    @ViewInject(R.id.time)
+    @ViewInject(R.id.order_time)
     private TextView timeText;
+
+    @ViewInject(R.id.appointment_time)
+    private TextView appointmentText;
 
     @ViewInject(R.id.items)
     private TextView itemsText;
@@ -51,6 +59,12 @@ public class FinishActivity extends BindActivity {
     @ViewInject(R.id.price)
     private EditText priceEditText;
 
+    @ViewInject(R.id.remark)
+    private EditText remarkText;
+
+    @ViewInject(R.id.distance)
+    private EditText distanceEditText;
+
     private LayerSelectorView itemSelector;
     private LayerSelectorView carAdder;
     private PopupWindow popupWindow;
@@ -62,9 +76,12 @@ public class FinishActivity extends BindActivity {
     private LoadLocker loadLocker;
 
     private ArrayList<Car> cars = new ArrayList<Car>();
-    private int selectedcarid = 0;
+    private int selectedcarid = -1;
     private LayoutInflater inflater;
     private RelativeLayout layout;
+
+    private int orderID;
+    private Order order;
 
 
     class Car {
@@ -84,10 +101,14 @@ public class FinishActivity extends BindActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.finish_order_activity);
         ViewUtils.inject(this);
+
+        orderID=getIntent().getIntExtra("orderID",0);
+
         getActionBar().setTitle("完成订单");
         selectCarBtn.setText("选择用户车辆");
         inflater = getLayoutInflater();
         loadLocker = new LoadLocker(this);
+        loadLocker.setCancalable(false);
         adapter = new MyAdapter();
         listView.setAdapter(adapter);
 
@@ -208,13 +229,13 @@ public class FinishActivity extends BindActivity {
                         EditText descText = (EditText) dialogView.findViewById(R.id.desc);
                         String carID = caridText.getText().toString().trim();
                         String desc = descText.getText().toString().trim();
-                        APIs.addUserCar(getService().getServingOrder().uid, item.getId(), carID, desc, getService().getAccount(), new NetworkCallback(FinishActivity.this) {
+                        APIs.addUserCar(order.uid, item.getId(), carID, desc,Account.getInstance(FinishActivity.this ), new NetworkCallback(FinishActivity.this) {
                             @Override
                             protected void onSuccess(JSONObject data) {
 
                             }
                         });
-                        APIs.getUserCars(getService().getServingOrder().uid, getService().getAccount(), new NetworkCallback(FinishActivity.this) {
+                        APIs.getUserCars(order.uid, Account.getInstance(FinishActivity.this), new NetworkCallback(FinishActivity.this) {
                             @Override
                             protected void onSuccess(JSONObject data) {
                                 try {
@@ -257,53 +278,49 @@ public class FinishActivity extends BindActivity {
         popupWindow.setBackgroundDrawable(new ColorDrawable(0xa33d3d3d));
         popupWindow.setOutsideTouchable(true);
         popupWindow.setFocusable(true);
-    }
-    public void reFresh(final StatusService statusService) {
-        if (statusService==null){
-            return;
-        }
-        APIs.getOrderDetail(statusService.getOrderID(), statusService.getAccount(), new NetworkCallback(statusService) {
+
+        loadLocker.start("正在加载");
+        APIs.getOrderDetail(orderID, Account.getInstance(this), new NetworkCallback(this) {
             @Override
             protected void onSuccess(JSONObject data) {
                 try {
-                    Order order = new Order();
-                    order.orderID = statusService.getOrderID();
-                    order.uid=data.getInt("uid");
+                    order = new Order();
+                    order.orderID = orderID;
+                    order.uid = data.getInt("uid");
                     order.name = data.getString("realname");
                     order.phone = data.getString("phonenum");
                     order.address = data.getString("address");
-                    order.time = data.getString("time");
+                    order.time = data.getString("ordertime");
+                    order.appointmentTime = data.getString("time");
                     order.lat = data.getDouble("lat");
                     order.lon = data.getDouble("lon");
-                    order.item=data.getString("item");
-                    statusService.setServingOrder(order);
-                    statusService.saveServeStatus();
-                    setInfo(statusService);
+                    order.item = data.getString("item");
+                    setInfo(order);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    dealServerFormatError();
                 }
+                loadLocker.jobFinished();
+                makeText("加载成功");
             }
 
+            @Override
+            protected void onFailed() {
+                loadLocker.jobFinished();
+                finish();
+                makeText("加载失败");
+            }
         });
     }
 
-    @Override
-    protected void onServiceConnected(StatusService myService) {
-        if (myService.getServingOrder()==null){
-            reFresh(myService);
-        }
-        setInfo(myService);
-    }
+    private void setInfo(Order order) {
+        clientNameText.setText(order.name);
+        clientPhoneText.setText(order.phone);
+        positionText.setText(order.address);
+        timeText.setText(order.time);
+        itemsText.setText(order.item);
+        appointmentText.setText(order.appointmentTime);
 
-    private void setInfo(StatusService myService) {
-        clientNameText.setText(myService.getServingOrder().name);
-        clientPhoneText.setText(myService.getServingOrder().phone);
-        positionText.setText(myService.getServingOrder().address);
-        timeText.setText(myService.getServingOrder().time);
-        itemsText.setText(myService.getServingOrder().item);
-
-        APIs.getUserCars(getService().getServingOrder().uid, getService().getAccount(), new NetworkCallback(FinishActivity.this) {
+        APIs.getUserCars(order.uid, Account.getInstance(this), new NetworkCallback(FinishActivity.this) {
             @Override
             protected void onSuccess(JSONObject data) {
                 try {
@@ -330,10 +347,6 @@ public class FinishActivity extends BindActivity {
         });
     }
 
-    @Override
-    protected void onServiceDisconnected(StatusService myService) {
-
-    }
 
     class MyAdapter extends BaseAdapter {
         @Override
@@ -379,21 +392,29 @@ public class FinishActivity extends BindActivity {
     @OnClick(R.id.addItemBtn)
     private void addItemBtnClicked(View v) {
         layout = (RelativeLayout) findViewById(R.id.finish_order_layout);
-        popupWindow.setHeight(layout.getHeight());
+        Rect frame = new Rect();
+        getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
+        int statusBarHeight = frame.top;
+        int height=getWindowManager().getDefaultDisplay().getHeight()-statusBarHeight;
+        popupWindow.setHeight(height);
         popupWindow.setWidth(layout.getWidth());
         itemSelector.startWithRootLayer(new ListItem(true, 0, "root", null));
         popupWindow.setContentView(itemSelector);
-        popupWindow.showAtLocation(layout, Gravity.NO_GRAVITY, 0, getActionBar().getHeight());
+        popupWindow.showAtLocation(layout, Gravity.NO_GRAVITY, 0, statusBarHeight);
     }
 
     @OnClick(R.id.addCarBtn)
     private void addCarBtnClicked(View v) {
         layout = (RelativeLayout) findViewById(R.id.finish_order_layout);
-        popupWindow.setHeight(layout.getHeight());
+        Rect frame = new Rect();
+        getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
+        int statusBarHeight = frame.top;
+        int height=getWindowManager().getDefaultDisplay().getHeight()-statusBarHeight;
+        popupWindow.setHeight(height);
         popupWindow.setWidth(layout.getWidth());
         carAdder.startWithRootLayer(new ListItem(true, 0, "root", null));
         popupWindow.setContentView(carAdder);
-        popupWindow.showAtLocation(carAdder, Gravity.NO_GRAVITY, 0, getActionBar().getHeight());
+        popupWindow.showAtLocation(carAdder, Gravity.NO_GRAVITY, 0, statusBarHeight);
     }
 
     @OnClick(R.id.selectCarBtn)
@@ -439,6 +460,15 @@ public class FinishActivity extends BindActivity {
             Toast.makeText(this, "价格不能为负", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (selectedcarid==-1){
+            Toast.makeText(this, "请选择用户车辆", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String distanc=distanceEditText.getText().toString().trim();
+        if (distanc.length()==0){
+            Toast.makeText(this, "里程数没有填写", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         JSONObject goodsObj = new JSONObject();
         try {
@@ -456,21 +486,29 @@ public class FinishActivity extends BindActivity {
             return;
         }
         loadLocker.start("正在完成");
-        getService().finishOrder(getService().getOrderID()
-                , selectedcarid, goodsObj, price, new StatusService.BackgroundJobListener() {
+
+        APIs.finishOrder(orderID, selectedcarid, goodsObj, price
+                ,clientNameText.getText().toString().trim()
+                ,clientPhoneText.getText().toString().trim()
+                ,clientTypeText.getText().toString().trim()
+                ,remarkText.getText().toString().trim()
+                ,distanc
+                , Account.getInstance(this), new NetworkCallback(this) {
             @Override
-            public void jobSuccess() {
+            protected void onSuccess(JSONObject data) {
                 Toast.makeText(FinishActivity.this, "完成订单成功", Toast.LENGTH_SHORT).show();
                 loadLocker.jobFinished();
+                setResult(1);
                 finish();
             }
 
             @Override
-            public void jobFailed() {
+            protected void onFailed() {
                 loadLocker.jobFinished();
             }
         });
     }
+
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         if(listView == null) return;
 
