@@ -54,9 +54,26 @@ public class TakenOrderListActivity extends Activity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent=new Intent(TakenOrderListActivity.this, TakenOrderDetailActivity.class);
-                intent.putExtra("orderID", list.get(position).orderID);
-                startActivity(intent);
+                Order order=adapter.getItem(position);
+                Intent intent=null;
+                switch (order.status){
+                    case 1:
+                        intent=new Intent(TakenOrderListActivity.this, TakenOrderDetailActivity.class);
+                        break;
+                    case 2:
+                        intent=new Intent(TakenOrderListActivity.this,FinishedOrderActivity.class);
+                        break;
+                    case 3:
+                        intent=new Intent(TakenOrderListActivity.this,FinishedOrderActivity.class);
+                        break;
+                    case 5:
+                        intent=new Intent(TakenOrderListActivity.this, ServingOrderDetailActivity.class);
+                        break;
+                }
+                if (intent!=null) {
+                    intent.putExtra("orderID", list.get(position).orderID);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -72,24 +89,26 @@ public class TakenOrderListActivity extends Activity {
         list.clear();
         progressWheel.setVisibility(View.VISIBLE);
         progressWheel.spin();
-        APIs.getTakenOrders(Account.getInstance(this), new NetworkCallback(this) {
+        APIs.getAllOrders(Account.getInstance(this), new NetworkCallback(this) {
             @Override
             protected void onSuccess(JSONObject data) {
                 try {
-                    JSONArray array = data.getJSONArray("orders");
-                    for (int i = 0; i < array.length(); i++) {
+                    JSONArray array = data.getJSONArray("indent");
+                    for (int i = array.length()-1; i >=0; i--) {
                         JSONObject object = array.getJSONObject(i);
+                        if (object.getInt("status") == 0) {
+                            continue;
+                        }
                         Order order = new Order();
                         order.orderID = object.getInt("id");
                         order.uid = object.getInt("uid");
-                        order.name = object.getString("realname");
-                        order.phone = object.getString("phonenum");
                         order.address = object.getString("address");
-                        order.time = object.getString("time");
-//                        order.appointmentTime = object.getString("appointment_time");
+                        order.time = object.getString("ordertime");
+                        order.appointmentTime = object.getString("time");
                         order.lat = object.getDouble("lat");
                         order.lon = object.getDouble("lon");
                         order.item = object.getString("item");
+                        order.status = object.getInt("status");
                         list.add(order);
                     }
                     adapter.notifyDataSetChanged();
@@ -133,8 +152,24 @@ public class TakenOrderListActivity extends Activity {
             }
             TextView idText=(TextView) convertView.findViewById(R.id.order_id);
             TextView timeText=(TextView) convertView.findViewById(R.id.time);
+            TextView statusText=(TextView) convertView.findViewById(R.id.status);
             Order order = getItem(position);
-            timeText.setText(order.appointmentTime);
+            timeText.setText(order.time);
+            switch (order.status){
+                case 1:
+                    statusText.setText("已接单");
+                    break;
+                case 2:
+                    statusText.setText("已取消");
+                    break;
+                case 3:
+                    statusText.setText("已完成");
+                    break;
+                case 5:
+                    statusText.setText("正在服务");
+                    break;
+            }
+
             int i = -1;
             try {
                 i = Integer.parseInt(idText.getText().toString());

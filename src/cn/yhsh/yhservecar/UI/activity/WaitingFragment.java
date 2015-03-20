@@ -185,6 +185,8 @@ public class WaitingFragment extends Fragment implements ServiceFragment {
             }
             TextView idText=(TextView) convertView.findViewById(R.id.order_id);
             TextView timeText=(TextView) convertView.findViewById(R.id.time);
+            TextView statusText=(TextView) convertView.findViewById(R.id.status);
+            statusText.setVisibility(View.GONE);
             Order order = getItem(position);
             timeText.setText(String.valueOf(120 - order.inTime));
             int i = -1;

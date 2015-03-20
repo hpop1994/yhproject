@@ -236,9 +236,11 @@ public class TakenOrderDetailActivity extends Activity {
                         });
                     }
                 });
+                timePickerDialog.setTitle("设定预约时间");
                 timePickerDialog.show();
             }
         });
+        datePicker.setTitle("设定预约时间");
         datePicker.show();
     }
 

@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/scrollView2" android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" android:layout_above="@+id/order_status"
+            android:fillViewport="false" android:background="@color/lightgray" android:paddingTop="5dp"
+            android:paddingBottom="5dp">
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:id="@+id/info_layout"
+                >
+            <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="60dp" android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/card_back" android:paddingLeft="10dp" android:paddingRight="10dp">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="订单状态"
+                        android:id="@+id/textView2"
+                        android:layout_centerVertical="true" android:layout_alignParentLeft="true"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                          android:textAppearance="?android:attr/textAppearanceMedium" android:text="正在读取"
+                          android:id="@+id/status" android:textColor="@color/darkgray"
+                          android:layout_centerVertical="true" android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/card_back"
+                    android:id="@+id/scar_name_layout"
+                    android:paddingRight="5dp" android:paddingLeft="5dp">
+                <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="60dp" android:padding="4dp" >
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="客户姓名"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"/>
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="正在读取"
+                            android:id="@+id/client_name"
+                            android:textColor="@color/darkgray" android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"/>
+                </RelativeLayout>
+                <View android:layout_width="fill_parent" android:layout_height="1dp"
+                      android:background="@color/lightgray"></View>
+                <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="60dp" android:padding="4dp" >
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="客户联系方式"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true" />
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="正在读取"
+                            android:id="@+id/client_phone"
+                            android:textColor="@color/darkgray" android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"/>
+                </RelativeLayout>
+                <View android:layout_width="fill_parent" android:layout_height="1dp"
+                      android:background="@color/lightgray"></View>
+                <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="60dp" android:padding="4dp" >
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="客户类型"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true" />
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="正在读取"
+                            android:id="@+id/client_type"
+                            android:textColor="@color/darkgray" android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"/>
+                </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/card_back"
+                    android:id="@+id/serve_time_layout" android:paddingLeft="5dp" android:paddingRight="5dp">
+                <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="60dp" android:padding="4dp">
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="下单时间"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true" />
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="正在读取"
+                            android:id="@+id/serve_time"
+                            android:textColor="@color/darkgray" android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"/>
+                </RelativeLayout>
+                <View android:layout_width="fill_parent" android:layout_height="1dp"
+                      android:background="@color/lightgray"></View>
+                <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="60dp" android:padding="4dp">
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="服务时间"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true" />
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="正在读取"
+                            android:id="@+id/finish_time"
+                            android:textColor="@color/darkgray" android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"/>
+                </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/card_back"
+                    android:paddingRight="5dp" android:paddingLeft="5dp">
+                <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="60dp" android:padding="4dp" >
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="服务位置"
+                            android:id="@+id/textView5" android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"/>
+                </RelativeLayout>
+                <View android:layout_width="fill_parent" android:layout_height="1dp"
+                      android:background="@color/lightgray"></View>
+                <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:padding="4dp"
+                                android:minHeight="60dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                              android:textAppearance="?android:attr/textAppearanceMedium" android:text="正在读取"
+                              android:id="@+id/position_text" android:textColor="@color/darkgray"
+                              android:layout_centerVertical="true" android:layout_alignParentRight="true"/>
+                </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/card_back"
+                    android:paddingRight="5dp" android:paddingLeft="5dp">
+                <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="60dp" android:padding="4dp" >
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="备注"
+                            android:id="@+id/textView235" android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"/>
+                </RelativeLayout>
+                <View android:layout_width="fill_parent" android:layout_height="1dp"
+                      android:background="@color/lightgray"></View>
+                <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:padding="4dp"
+                                android:minHeight="60dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                              android:textAppearance="?android:attr/textAppearanceMedium" android:text="正在读取"
+                              android:id="@+id/remark" android:textColor="@color/darkgray"
+                              android:layout_centerVertical="true" android:layout_alignParentRight="true"/>
+                </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" android:background="@drawable/card_back"
+                    android:layout_marginTop="5dp" android:layout_marginBottom="5dp"
+                    android:paddingLeft="5dp" android:paddingRight="5dp">
+                <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="60dp" android:padding="4dp">
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="保养项目"
+                            android:id="@+id/textView14" android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"/>
+                </RelativeLayout>
+                <View android:layout_width="fill_parent" android:layout_height="1dp"
+                      android:background="@color/lightgray"></View>
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent" android:id="@+id/item_list"
+                        android:showDividers="middle"
+                        android:divider="@android:drawable/divider_horizontal_dark" android:dividerPadding="3dp"
+                        android:padding="4dp">
+                </LinearLayout>
+                <View android:layout_width="fill_parent" android:layout_height="1dp"
+                      android:background="@color/lightgray"></View>
+                <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="60dp" android:padding="4dp">
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="总价"
+                            android:id="@+id/textView15" android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true" android:textColor="#ff0080bd"/>
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="0"
+                            android:id="@+id/price_text"
+                            android:layout_centerVertical="true" android:layout_alignParentRight="true"
+                            android:textColor="#ff0080bd"/>
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="￥"
+                            android:id="@+id/textView11" android:layout_alignTop="@+id/price_text"
+                            android:layout_toLeftOf="@+id/price_text" android:textColor="#ff0080bd"/>
+                </RelativeLayout>
+
+            </LinearLayout>
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/card_back"
+                android:id="@+id/car_area"
+                android:paddingLeft="5dp" android:paddingRight="5dp">
+            <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="60dp" android:padding="4dp">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="保养车辆车型"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true" />
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="正在读取"
+                        android:id="@+id/car_class"
+                        android:textColor="@color/darkgray" android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+            <View android:layout_width="fill_parent" android:layout_height="1dp"
+                  android:background="@color/lightgray"></View>
+            <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="60dp" android:padding="4dp">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="保养车辆车牌号"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true" />
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="正在读取"
+                        android:id="@+id/car_id"
+                        android:textColor="@color/darkgray" android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+            <View android:layout_width="fill_parent" android:layout_height="1dp"
+                  android:background="@color/lightgray"></View>
+            <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="60dp" android:padding="4dp">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="保养车辆里程"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true" />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="正在读取"
+                        android:id="@+id/car_km"
+                        android:textColor="@color/darkgray" android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

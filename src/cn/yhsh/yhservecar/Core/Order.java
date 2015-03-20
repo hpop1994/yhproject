@@ -16,6 +16,7 @@ public class Order {
     public String appointmentTime;
 
     public int inTime =0;
+    public int status;
 
     @Override
     public boolean equals(Object o) {

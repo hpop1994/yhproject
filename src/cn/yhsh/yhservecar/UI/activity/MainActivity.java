@@ -93,8 +93,4 @@ public class MainActivity extends BindActivity implements StatusService.StatusLi
         startActivity(new Intent(this, TakenOrderListActivity.class));
     }
 
-    @OnClick(R.id.serving_orders)
-    private void servingOrdersClicked(View v){
-        startActivity(new Intent(this,ServingOrderListActivity.class));
-    }
 }

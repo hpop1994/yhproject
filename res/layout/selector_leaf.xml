@@ -10,4 +10,25 @@
             android:text="Medium Text"
             android:id="@+id/name" android:layout_centerVertical="true" android:layout_alignParentLeft="true"
             android:layout_marginLeft="20dp"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="0"
+            android:id="@+id/price" android:layout_alignParentLeft="true"
+            android:layout_marginLeft="30dp" android:textColor="@color/blue" android:layout_alignParentBottom="true"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="/"
+            android:id="@+id/textView16" android:layout_toRightOf="@+id/price"
+            android:textColor="@color/blue" android:layout_alignParentBottom="true"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="unit"
+            android:id="@+id/unit" android:layout_toRightOf="@+id/textView16"
+            android:textColor="@color/blue" android:layout_alignParentBottom="true"/>
 </RelativeLayout>

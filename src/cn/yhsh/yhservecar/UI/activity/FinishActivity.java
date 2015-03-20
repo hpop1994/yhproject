@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,7 +59,7 @@ public class FinishActivity extends Activity {
     private Button selectCarBtn;
 
     @ViewInject(R.id.price)
-    private EditText priceEditText;
+    private TextView priceEditText;
 
     @ViewInject(R.id.remark)
     private EditText remarkText;
@@ -126,6 +128,12 @@ public class FinishActivity extends Activity {
             public View getLeafView(ListItem listItem) {
                 View v = inflater.inflate(R.layout.selector_leaf, null);
                 ((TextView) v.findViewById(R.id.name)).setText(listItem.getItemName());
+                try {
+                    ((TextView) v.findViewById(R.id.price)).setText(((JSONObject) listItem.getBaseData()).getString("price"));
+                    ((TextView) v.findViewById(R.id.unit)).setText(((JSONObject) listItem.getBaseData()).getString("unit"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 return v;
             }
         });
@@ -310,6 +318,7 @@ public class FinishActivity extends Activity {
                 makeText("加载失败");
             }
         });
+        reSum();
     }
 
     private void setInfo(Order order) {
@@ -367,13 +376,19 @@ public class FinishActivity extends Activity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             final int iposition=position;
-            View v = inflater.inflate(R.layout.item_selected_item, null);
+            View v=inflater.inflate(R.layout.item_selected_item, null);;
             TextView nameText = (TextView) v.findViewById(R.id.name);
             TextView unitText = (TextView) v.findViewById(R.id.unit);
+            TextView unitText2 = (TextView) v.findViewById(R.id.unit2);
+            TextView price = (TextView) v.findViewById(R.id.price);
+            EditText numEdit=(EditText) v.findViewById(R.id.number);
+            EditText discount=(EditText) v.findViewById(R.id.discount);
             Button deleteBtn = (Button) v.findViewById(R.id.delete);
             nameText.setText(getItem(position).getItemName());
             try {
                 unitText.setText(((JSONObject) getItem(position).getBaseData()).getString("unit"));
+                unitText2.setText(((JSONObject) getItem(position).getBaseData()).getString("unit"));
+                price.setText(((JSONObject) getItem(position).getBaseData()).getString("price"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -385,7 +400,59 @@ public class FinishActivity extends Activity {
                     setListViewHeightBasedOnChildren(listView);
                 }
             });
+            numEdit.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    reSum();
+                }
+            });
+            discount.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    reSum();
+                }
+            });
             return v;
+        }
+    }
+
+    private void reSum(){
+        try {
+            double sum=0;
+            for (int i = 0; i < itemListData.size(); i++) {
+                double num = Double.parseDouble(((EditText) listView.getChildAt(i).findViewById(R.id.number)).getText().toString().trim());
+                double discount = Double.parseDouble(((EditText) listView.getChildAt(i).findViewById(R.id.discount)).getText().toString().trim());
+                double price= ((JSONObject) itemListData.get(i).getBaseData()).getDouble("price");
+                sum+=price * discount/10.0 * num;
+            }
+            priceEditText.setText(""+(((int) (sum * 100))/100.0));
+        } catch (NumberFormatException e) {
+            priceEditText.setText("");
+            e.printStackTrace();
+            return;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            priceEditText.setText("");
         }
     }
 
@@ -443,7 +510,7 @@ public class FinishActivity extends Activity {
 
     @OnClick(R.id.confirm)
     private void confirmClicked(View v) {
-        String s = priceEditText.getText().toString().trim();
+        String s = priceEditText.getText().toString();
         if (s.length() == 0) {
             Toast.makeText(this, "价格不能为空", Toast.LENGTH_SHORT).show();
             return;
@@ -474,8 +541,16 @@ public class FinishActivity extends Activity {
         try {
             for (int i = 0; i < itemListData.size(); i++) {
                 double num = Double.parseDouble(((EditText) listView.getChildAt(i).findViewById(R.id.number)).getText().toString().trim());
+                double discount = Double.parseDouble(((EditText) listView.getChildAt(i).findViewById(R.id.discount)).getText().toString().trim());
+                if(discount>10 || discount <=0){
+                    Toast.makeText(this, "项目价格不正确", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 try {
-                    goodsObj.put(String.valueOf(itemListData.get(i).getId()), num);
+                    JSONObject object=new JSONObject();
+                    object.put("num",num);
+                    object.put("discount",discount);
+                    goodsObj.put(String.valueOf(itemListData.get(i).getId()), object);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

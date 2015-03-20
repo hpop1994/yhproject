@@ -18,26 +18,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="已接订单"
-                    android:id="@+id/textView13" android:layout_centerVertical="true"
-                    android:layout_alignParentLeft="true"/>
-        </RelativeLayout>
-        <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent" android:layout_weight="1" android:background="@drawable/btn_white"
-                android:layout_margin="1dp" android:id="@+id/serving_orders">
-            <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/imageView6" android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true" android:src="@drawable/arrows"/>
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="正在服务的订单"
-                    android:id="@+id/textView14" android:layout_centerVertical="true"
-                    android:layout_alignParentLeft="true"/>
+                    android:text="我的订单"
+                    android:id="@+id/textView13"
+                    android:layout_alignParentLeft="false" android:layout_centerInParent="true"/>
         </RelativeLayout>
     </LinearLayout>
 

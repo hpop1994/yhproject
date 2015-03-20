@@ -53,6 +53,8 @@ public class APIs {
     private static final String CHANGE_APPOINTMENT_TIME="Sverify/changeordertime";
     //21
     private static final String GET_SERVING_ORDERS = "Sverify/checkservingindent";
+    //22
+    private static final String GET_ALL_ORDERS = "Sverify/allindent";
 
     private static String getUrl(String subUrl) {
         return SERVER+subUrl;
@@ -160,7 +162,7 @@ public class APIs {
         params.addBodyParameter("client_phone",phone);
         params.addBodyParameter("client_type",type);
         params.addBodyParameter("remark",remark);
-        params.addBodyParameter("distance",distance);
+        params.addBodyParameter("km",distance);
         Http.postLogined(getUrl(FINISH_ORDER),params,account,callback);
     }
 
@@ -233,5 +235,11 @@ public class APIs {
     public static void getServingOrders(Account account, NetworkCallback callback) {
         Log.i("POST_BACK","USING 21 : getServingOrders()");
         Http.postLogined(getUrl(GET_SERVING_ORDERS),account,callback);
+    }
+
+    //22
+    public static void getAllOrders(Account account, NetworkCallback callback){
+        Log.i("POST_BACK","USING 21 : getServingOrders()");
+        Http.postLogined(getUrl(GET_ALL_ORDERS),account,callback);
     }
 }

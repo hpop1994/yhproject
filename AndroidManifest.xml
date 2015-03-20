@@ -143,7 +143,7 @@
         <activity android:name=".UI.activity.TakenOrderListActivity"/>
         <activity android:name=".UI.activity.ServingOrders"/>
         <activity android:name=".UI.activity.TakenOrderDetailActivity"/>
-        <activity android:name=".UI.activity.ServingOrderListActivity"/>
         <activity android:name=".UI.activity.ServingOrderDetailActivity"/>
+        <activity android:name=".UI.activity.FinishedOrderActivity"/>
     </application>
 </manifest>

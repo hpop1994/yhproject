@@ -11,7 +11,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Medium Text"
                 android:id="@+id/name" android:layout_centerVertical="true" android:layout_alignParentLeft="true"
-                android:layout_toLeftOf="@+id/number" android:singleLine="false" android:maxLines="2"/>
+                android:singleLine="false" android:maxLines="2" android:layout_toLeftOf="@+id/discount"/>
         <EditText
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
@@ -30,5 +30,40 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:id="@+id/unit" android:layout_centerVertical="true" android:layout_toLeftOf="@+id/delete"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="折"
+                android:id="@+id/textView12"
+                android:layout_centerVertical="true" android:layout_toLeftOf="@+id/number"/>
+        <EditText
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:id="@+id/discount" android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/textView12" android:hint="折扣" android:text="10" android:gravity="right"
+                android:inputType="numberSigned|numberDecimal"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="0"
+                android:id="@+id/price" android:layout_below="@+id/name" android:layout_alignParentLeft="true"
+                android:layout_marginLeft="30dp" android:textColor="@color/blue"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="/"
+                android:id="@+id/textView16" android:layout_alignTop="@+id/price" android:layout_toRightOf="@+id/price"
+                android:textColor="@color/blue"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="unit"
+                android:id="@+id/unit2" android:layout_below="@+id/name" android:layout_toRightOf="@+id/textView16"
+                android:textColor="@color/blue"/>
     </RelativeLayout>
 </LinearLayout>
