@@ -14,7 +14,7 @@ import org.json.JSONObject;
  * Created by Xujc on 2015/1/19.
  */
 public class Http {
-    private  static HttpUtils utils = new HttpUtils(5000);
+    private  static HttpUtils utils = new HttpUtils();
     public static void get(String url, final NetworkCallback viewCallback) {
         utils.send(HttpRequest.HttpMethod.GET, url, getCallback(viewCallback));
     }
