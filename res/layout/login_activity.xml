@@ -51,7 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="密码"
+                    android:text="密    码"
                     android:id="@+id/textView21" android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true" android:layout_marginLeft="10dp"/>
             <Space
@@ -70,11 +70,11 @@
         <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
-            <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="确定"
+            <Button android:layout_width="100dp" android:layout_height="wrap_content" android:text="确定"
                     android:id="@+id/confirm"
                     android:layout_alignBottom="@+id/space15" android:layout_toRightOf="@+id/space15"
                     style="@style/btn" android:background="@drawable/btn_green"/>
-            <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="放弃"
+            <Button android:layout_width="100dp" android:layout_height="wrap_content" android:text="放弃"
                     android:id="@+id/give_up"
                     android:background="@drawable/btn_gray"
                     android:layout_alignBottom="@+id/space15" android:layout_toLeftOf="@+id/space15"
