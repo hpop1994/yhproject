@@ -7,7 +7,7 @@
             android:layout_height="fill_parent"
             android:id="@+id/scrollView2" android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" android:layout_above="@+id/order_status"
-            android:fillViewport="false" android:background="@color/lightgray" android:paddingTop="5dp"
+            android:fillViewport="false" android:background="@color/lightgray"
             android:paddingBottom="5dp">
         <LinearLayout
                 android:orientation="vertical"
@@ -16,7 +16,7 @@
                 >
             <RelativeLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="60dp" android:layout_marginTop="5dp"
+                    android:layout_height="60dp"
                     android:layout_marginBottom="5dp"
                     android:background="@drawable/card_back" android:paddingLeft="10dp" android:paddingRight="10dp">
                 <TextView
@@ -62,7 +62,7 @@
                       android:background="@color/lightgray"></View>
                 <RelativeLayout
                         android:layout_width="fill_parent"
-                        android:layout_height="60dp" android:padding="4dp" >
+                        android:layout_height="60dp" android:padding="4dp" android:layout_marginTop="0dp">
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -148,14 +148,8 @@
                             android:textColor="@color/darkgray" android:layout_centerVertical="true"
                             android:layout_alignParentRight="true"/>
                 </RelativeLayout>
-            </LinearLayout>
-            <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent" android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/card_back"
-                    android:paddingRight="5dp" android:paddingLeft="5dp">
+                <View android:layout_width="fill_parent" android:layout_height="1dp"
+                      android:background="@color/lightgray"></View>
                 <RelativeLayout
                         android:layout_width="fill_parent"
                         android:layout_height="60dp" android:padding="4dp" >
@@ -176,14 +170,8 @@
                               android:id="@+id/position_text" android:textColor="@color/darkgray"
                               android:layout_centerVertical="true" android:layout_alignParentRight="true"/>
                 </RelativeLayout>
-            </LinearLayout>
-            <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent" android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/card_back"
-                    android:paddingRight="5dp" android:paddingLeft="5dp">
+                <View android:layout_width="fill_parent" android:layout_height="1dp"
+                      android:background="@color/lightgray"></View>
                 <RelativeLayout
                         android:layout_width="fill_parent"
                         android:layout_height="60dp" android:padding="4dp" >

@@ -2,13 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content" android:id="@+id/relative_layout" android:paddingLeft="10dp"
-              android:background="@android:drawable/list_selector_background">
+              android:background="@android:drawable/list_selector_background" android:paddingRight="10dp">
 
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="订单号:"
             android:id="@+id/name" android:layout_alignParentTop="true" android:layout_alignParentLeft="true"/>
     <TextView
             android:layout_width="wrap_content"
@@ -16,57 +15,41 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Small Text"
             android:id="@+id/time"
-            android:layout_marginRight="42dp" android:textColor="@color/blue" android:layout_below="@+id/item"
-            android:layout_toLeftOf="@+id/imageView"/>
+            android:textColor="@color/blue"
+            android:layout_below="@+id/address" android:layout_alignParentRight="true"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Large Text"
             android:id="@+id/order_id"
             android:layout_alignParentTop="true" android:layout_toRightOf="@+id/name"/>
-    <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView"
-            android:src="@drawable/arrows"
-            android:layout_centerVertical="true" android:layout_alignParentRight="true"/>
-    <TextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="保养项目"
-            android:id="@+id/items" android:layout_below="@+id/textview1" android:layout_alignParentLeft="true"/>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="订单地址" android:layout_below="@+id/name" android:layout_alignParentLeft="true"
-            android:id="@+id/textview1"/>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Small Text" android:layout_toRightOf="@+id/textview1"
-            android:id="@+id/address" android:layout_alignTop="@+id/textview1"/>
+            android:text="Small Text"
+            android:id="@+id/item" android:layout_below="@+id/name" android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true" android:maxLines="1" android:textColor="@color/darkgray"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Small Text"
-            android:id="@+id/item" android:layout_alignTop="@+id/items" android:layout_toRightOf="@+id/items"/>
+            android:id="@+id/address" android:layout_below="@+id/item" android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true" android:maxLines="1" android:textColor="@color/darkgray"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="订单状态:"
             android:id="@+id/textView8" android:layout_alignParentTop="true" android:layout_toRightOf="@+id/order_id"
             android:layout_marginLeft="35dp"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Large Text"
-            android:id="@+id/status" android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/textView8"/>
+            android:id="@+id/status"
+            android:layout_alignParentTop="true" android:layout_alignParentLeft="false"
+            android:layout_alignParentRight="true"/>
 </RelativeLayout>

@@ -10,7 +10,6 @@ import android.location.Location;
 import android.os.*;
 import android.os.Process;
 import android.util.Log;
-import android.widget.Toast;
 import cn.yhsh.yhservecar.R;
 import cn.yhsh.yhservecar.UI.activity.MainActivity;
 import com.amap.api.location.AMapLocation;
@@ -50,13 +49,15 @@ public class StatusService extends Service implements AMapLocationListener {
                     final int index=i;
                     Order o = ordersAsked.get(i);
                     o.inTime++;
-                    if (o.inTime == 120 || o.inTime==130) {
+                    if (o.inTime == 120 || o.inTime==130 || o.inTime == 140) {
                         APIs.replyOrderRequest(o.orderID, false, account, new NetworkCallback(StatusService.this) {
                             @Override
                             protected void onSuccess(JSONObject data) {
                                 getAndNotifyOrders();
                             }
                         });
+                        notifyOrderListChanged();
+                        getAndNotifyOrders();
                     }
                 }
                 notifyOrderListChanged();
@@ -85,6 +86,7 @@ public class StatusService extends Service implements AMapLocationListener {
     private Account account;
     private StatusListener statusListener = null;
     private PushManager pushManager;
+    private HandlerThread mThread;
 
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
@@ -565,33 +567,33 @@ public class StatusService extends Service implements AMapLocationListener {
         listener.jobSuccess();
     }
 
-    public void answerOrder(final int orderID, final boolean taken, final BackgroundJobListener listener) {
-        Log.i("POST_BACK", "USING Local : answerOrder()");
-        final Order order;
-        Order tmp = null;
-        for (Order o : ordersAsked) {
-            if (o.orderID == orderID) {
-                tmp = o;
-                break;
-            }
-        }
-        if (tmp == null) {
-            Toast.makeText(this, "此单已过期", Toast.LENGTH_SHORT).show();
-            listener.jobFailed();
-            return;
-        }
-        APIs.replyOrderRequest(orderID, taken, account, new NetworkCallback(this) {
-            @Override
-            protected void onSuccess(JSONObject data) {
-                listener.jobSuccess();
-            }
-
-            @Override
-            protected void onFailed() {
-                listener.jobFailed();
-            }
-        });
-    }
+//    public void answerOrder(final int orderID, final boolean taken, final BackgroundJobListener listener) {
+//        Log.i("POST_BACK", "USING Local : answerOrder()");
+//        final Order order;
+//        Order tmp = null;
+//        for (Order o : ordersAsked) {
+//            if (o.orderID == orderID) {
+//                tmp = o;
+//                break;
+//            }
+//        }
+//        if (tmp == null) {
+//            Toast.makeText(this, "此单已过期", Toast.LENGTH_SHORT).show();
+//            listener.jobFailed();
+//            return;
+//        }
+//        APIs.replyOrderRequest(orderID, taken, account, new NetworkCallback(this) {
+//            @Override
+//            protected void onSuccess(JSONObject data) {
+//                listener.jobSuccess();
+//            }
+//
+//            @Override
+//            protected void onFailed() {
+//                listener.jobFailed();
+//            }
+//        });
+//    }
 
 //    public void finishOrder(int orderID, int carID, JSONObject goods, double price, final BackgroundJobListener listener) {
 //        Log.i("POST_BACK", "USING Local : finishOrder()");
@@ -613,11 +615,11 @@ public class StatusService extends Service implements AMapLocationListener {
 
     @Override
     public void onCreate() {
-        HandlerThread thread = new HandlerThread("ServiceStartArguments",
+        mThread = new HandlerThread("ServiceStartArguments",
                 Process.THREAD_PRIORITY_BACKGROUND);
-        thread.start();
+        mThread.start();
 
-        mServiceLooper = thread.getLooper();
+        mServiceLooper = mThread.getLooper();
         mWorkerHandler = new WorkerHandler(mServiceLooper);
         mStatusHandler = new StatusHandler();
 
@@ -629,6 +631,8 @@ public class StatusService extends Service implements AMapLocationListener {
         pushManager = PushManager.getInstance();
         pushManager.initialize(this);
         pushManager.stopService(this);
+
+
     }
 
     @Override
@@ -719,8 +723,11 @@ public class StatusService extends Service implements AMapLocationListener {
         return mBinder;
     }
 
+
+
     @Override
     public void onDestroy() {
+        mWorkerHandler.removeMessages(SEND_LOCATION);
         mLocationManagerProxy.removeUpdates(this);
     }
 

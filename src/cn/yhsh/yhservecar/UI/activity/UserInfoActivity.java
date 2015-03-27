@@ -78,7 +78,7 @@ public class UserInfoActivity extends BindActivity {
     private void editClicked(View v) {
         if (!editing) {
             editing = true;
-            editButton.setImageResource(android.R.drawable.ic_menu_save);
+            editButton.setImageResource(R.drawable.ok);
             realnameText.setVisibility(View.GONE);
             phoneText.setVisibility(View.GONE);
             nameEdit.setVisibility(View.VISIBLE);
@@ -96,7 +96,7 @@ public class UserInfoActivity extends BindActivity {
                 Toast.makeText(this, "电话不能为空", Toast.LENGTH_SHORT).show();
                 return;
             }
-            editButton.setImageResource(android.R.drawable.ic_menu_edit);
+            editButton.setImageResource(R.drawable.edit);
             final LoadLocker loadLocker = new LoadLocker(this);
             loadLocker.setCancalable(false);
             loadLocker.start("正在更改");

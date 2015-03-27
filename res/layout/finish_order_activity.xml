@@ -32,7 +32,7 @@
                             android:layout_width="200dp"
                             android:layout_height="wrap_content"
                             android:id="@+id/client_name" android:layout_centerVertical="true"
-                            android:layout_alignParentRight="true"/>
+                            android:layout_alignParentRight="true" android:background="@null" android:hint="指定用户姓名"/>
                 </RelativeLayout>
                 <View android:layout_width="fill_parent" android:layout_height="1dp"
                       android:background="@color/lightgray"></View>
@@ -48,7 +48,8 @@
                             android:layout_centerVertical="true" />
                     <EditText android:layout_width="200dp" android:layout_height="wrap_content"
                               android:id="@+id/client_phone"
-                              android:layout_centerVertical="true" android:layout_alignParentRight="true"/>
+                              android:layout_centerVertical="true" android:layout_alignParentRight="true"
+                              android:background="@null" android:hint="指定用户联系方式"/>
                 </RelativeLayout>
                 <View android:layout_width="fill_parent" android:layout_height="1dp"
                       android:background="@color/lightgray"></View>
@@ -64,7 +65,8 @@
                             android:layout_centerVertical="true" />
                     <EditText android:layout_width="200dp" android:layout_height="wrap_content"
                               android:id="@+id/client_type"
-                              android:layout_centerVertical="true" android:layout_alignParentRight="true"/>
+                              android:layout_centerVertical="true" android:layout_alignParentRight="true"
+                              android:background="@null" android:hint="指定用户类型"/>
                 </RelativeLayout>
             </LinearLayout>
             <LinearLayout
@@ -243,7 +245,7 @@
                         android:ems="10"
                         android:id="@+id/distance" android:layout_alignParentRight="true"
                         android:layout_alignParentBottom="false" android:layout_centerVertical="true"
-                        android:hint="输入里程数(单位公里)" android:inputType="number"/>
+                        android:hint="输入里程数(单位公里)" android:inputType="number" android:background="@null"/>
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -261,7 +263,7 @@
                         android:ems="10"
                         android:id="@+id/remark" android:layout_alignParentRight="true"
                         android:layout_alignParentBottom="false" android:layout_centerVertical="true"
-                        android:hint="输入备注"/>
+                        android:hint="输入备注" android:background="@null"/>
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -279,14 +281,14 @@
                         android:layout_centerVertical="true" android:layout_centerHorizontal="true"
                         android:id="@+id/space2"/>
                 <Button
-                        android:layout_width="120dp"
+                        android:layout_width="90dp"
                         android:layout_height="wrap_content"
                         android:text="放弃"
                         android:id="@+id/give_up" android:layout_centerVertical="true"
                         android:layout_toLeftOf="@+id/space2" android:layout_marginRight="30dp"
                         android:background="@drawable/btn_gray" android:textColor="@color/white"/>
                 <Button
-                        android:layout_width="120dp"
+                        android:layout_width="90dp"
                         android:layout_height="wrap_content"
                         android:text="确认"
                         android:id="@+id/confirm" android:layout_centerVertical="true"

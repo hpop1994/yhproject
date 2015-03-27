@@ -16,6 +16,9 @@ public class GetuiReciever extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Intent findService = new Intent(context, StatusService.class);
         StatusService.LocalBinder localBinder = (StatusService.LocalBinder) peekService(context, findService);
+        if (localBinder==null){
+            return;
+        }
         StatusService myService = localBinder.getService();
         Account account =myService.getAccount();
         Bundle bundle = intent.getExtras();

@@ -153,6 +153,8 @@ public class WaitingFragment extends Fragment implements ServiceFragment {
         }
     }
 
+
+
     @OnClick(R.id.accout)
     private void onAccountBtnClicked(View v){
         startActivity(new Intent(getActivity(), UserInfoActivity.class));

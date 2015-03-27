@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="false" android:drawable="@color/orange" />
-    <item android:state_pressed="true" android:drawable="@color/orange_grayed"/>
+    <item android:state_pressed="false" android:drawable="@color/orange" >
+        <shape>
+            <corners android:radius="3dp"/>
+            <solid android:color="@color/orange"/>
+        </shape>
+    </item>
+    <item android:state_pressed="true" >
+        <shape>
+            <corners android:radius="3dp"/>
+            <solid android:color="@color/orange_grayed"/>
+        </shape>
+    </item>
 </selector>

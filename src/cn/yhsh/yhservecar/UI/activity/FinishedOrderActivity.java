@@ -130,6 +130,7 @@ public class FinishedOrderActivity extends Activity  {
                         serveTimeText.setText(data.getString("time"));
                         finishTimeText.setText(data.getString("time"));
                         carArea.setVisibility(View.GONE);
+                        remarkText.setText(data.getString("remark"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

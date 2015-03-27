@@ -3,7 +3,7 @@
               android:layout_width="fill_parent" android:gravity="center_vertical">
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp" style="@style/card_item">
+                    android:layout_height="wrap_content" style="@style/card_item" android:minHeight="60dp">
 
         <TextView
                 android:layout_width="wrap_content"
@@ -18,7 +18,8 @@
                 android:ems="10"
                 android:id="@+id/number" android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/unit" android:minWidth="40dp" android:hint="数量"
-                android:gravity="right" android:numeric="decimal" android:inputType="numberDecimal"/>
+                android:gravity="right" android:numeric="decimal" android:inputType="numberDecimal"
+                android:background="@null"/>
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -43,14 +44,16 @@
                 android:ems="10"
                 android:id="@+id/discount" android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/textView12" android:hint="折扣" android:text="10" android:gravity="right"
-                android:inputType="numberSigned|numberDecimal"/>
+                android:inputType="numberSigned|numberDecimal" android:background="@null"
+                android:textColor="@color/darkgray"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="0"
-                android:id="@+id/price" android:layout_below="@+id/name" android:layout_alignParentLeft="true"
-                android:layout_marginLeft="30dp" android:textColor="@color/blue"/>
+                android:id="@+id/price"
+                android:textColor="@color/blue"
+                android:layout_alignParentLeft="true" android:layout_below="@+id/name"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -63,7 +66,8 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="unit"
-                android:id="@+id/unit2" android:layout_below="@+id/name" android:layout_toRightOf="@+id/textView16"
-                android:textColor="@color/blue"/>
+                android:id="@+id/unit2"
+                android:textColor="@color/blue"
+                android:layout_toRightOf="@+id/textView16" android:layout_alignTop="@+id/textView16"/>
     </RelativeLayout>
 </LinearLayout>

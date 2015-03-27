@@ -12,14 +12,12 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import cn.yhsh.yhservecar.Core.*;
+import cn.yhsh.yhservecar.Core.APIs;
+import cn.yhsh.yhservecar.Core.Account;
+import cn.yhsh.yhservecar.Core.NetworkCallback;
+import cn.yhsh.yhservecar.Core.Order;
 import cn.yhsh.yhservecar.R;
 import cn.yhsh.yhservecar.UI.component.LoadLocker;
-import com.amap.api.maps2d.AMap;
-import com.amap.api.maps2d.CameraUpdateFactory;
-import com.amap.api.maps2d.MapView;
-import com.amap.api.maps2d.model.LatLng;
-import com.amap.api.maps2d.model.MarkerOptions;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
@@ -49,16 +47,16 @@ public class AskingActivity extends Activity {
 
     @ViewInject(R.id.items)
     private TextView itemsText;
-
-    @ViewInject(R.id.map)
-    private MapView mapView;
+//
+//    @ViewInject(R.id.map)
+//    private MapView mapView;
 
     @ViewInject(R.id.appointment_time)
     private TextView appointmentTime;
 
     private double lat;
     private double lon;
-    private AMap aMap;
+//    private AMap aMap;
     private int orderID;
     private Order order;
     private LoadLocker loadLocker;
@@ -73,11 +71,11 @@ public class AskingActivity extends Activity {
         setContentView(R.layout.asking_activity);
         ViewUtils.inject(this);
         getActionBar().setTitle("新订单");
-
-        mapView.onCreate(savedInstanceState);
-        if (aMap == null) {
-            aMap = mapView.getMap();
-        }
+//
+//        mapView.onCreate(savedInstanceState);
+//        if (aMap == null) {
+//            aMap = mapView.getMap();
+//        }
 
         Intent intent=getIntent();
         orderID = intent.getIntExtra("order_id",0);
@@ -109,13 +107,13 @@ public class AskingActivity extends Activity {
                     lat = data.getDouble("lat");
                     lon = data.getDouble("lon");
 
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    LatLng latLng = new LatLng(lat, lon);
-                    markerOptions.position(latLng);
-                    markerOptions.snippet("用户");
-                    aMap.addMarker(markerOptions);
-                    aMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
-                    aMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+//                    MarkerOptions markerOptions = new MarkerOptions();
+//                    LatLng latLng = new LatLng(lat, lon);
+//                    markerOptions.position(latLng);
+//                    markerOptions.snippet("用户");
+//                    aMap.addMarker(markerOptions);
+//                    aMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
+//                    aMap.moveCamera(CameraUpdateFactory.zoomTo(15));
                 } catch (JSONException e) {
                     e.printStackTrace();
                     dealServerFormatError();
@@ -185,6 +183,7 @@ public class AskingActivity extends Activity {
 
         dateStr=null;
         newAppointmentTime=null;
+        Toast.makeText(this, "请设定预约的时间",Toast.LENGTH_SHORT).show();
         DatePickerDialog datePicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -237,9 +236,11 @@ public class AskingActivity extends Activity {
                         });
                     }
                 });
+                timePickerDialog.setTitle("设定预约时间");
                 timePickerDialog.show();
             }
         });
+        datePicker.setTitle("设定预约时间");
         datePicker.show();
 
 
@@ -256,24 +257,24 @@ public class AskingActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        mapView.onResume();
+//        mapView.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mapView.onPause();
+//        mapView.onPause();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mapView.onSaveInstanceState(outState);
+//        mapView.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mapView.onDestroy();
+//        mapView.onDestroy();
     }
 }

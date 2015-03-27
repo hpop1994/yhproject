@@ -17,11 +17,6 @@ import cn.yhsh.yhservecar.Core.NetworkCallback;
 import cn.yhsh.yhservecar.Core.Order;
 import cn.yhsh.yhservecar.R;
 import cn.yhsh.yhservecar.UI.component.LoadLocker;
-import com.amap.api.maps2d.AMap;
-import com.amap.api.maps2d.CameraUpdateFactory;
-import com.amap.api.maps2d.MapView;
-import com.amap.api.maps2d.model.LatLng;
-import com.amap.api.maps2d.model.MarkerOptions;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
@@ -55,12 +50,12 @@ public class TakenOrderDetailActivity extends Activity {
     @ViewInject(R.id.appointment_time)
     private TextView appointmentText;
 
-    @ViewInject(R.id.map)
-    private MapView mapView;
+//    @ViewInject(R.id.map)
+//    private MapView mapView;
 
     private double lat;
     private double lon;
-    private AMap aMap;
+//    private AMap aMap;
     private int orderID;
 
     private LoadLocker loadLocker;
@@ -77,10 +72,10 @@ public class TakenOrderDetailActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.taken_order_detail);
         ViewUtils.inject(this);
-        mapView.onCreate(savedInstanceState);
-        if (aMap == null) {
-            aMap = mapView.getMap();
-        }
+//        mapView.onCreate(savedInstanceState);
+//        if (aMap == null) {
+//            aMap = mapView.getMap();
+//        }
         loadLocker = new LoadLocker(this);
         loadLocker.setCancalable(false);
 
@@ -119,13 +114,13 @@ public class TakenOrderDetailActivity extends Activity {
         lat = servingOrder.lat;
         lon = servingOrder.lon;
 
-        MarkerOptions markerOptions = new MarkerOptions();
-        LatLng latLng = new LatLng(lat, lon);
-        markerOptions.position(latLng);
-        markerOptions.snippet("用户");
-        aMap.addMarker(markerOptions);
-        aMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
-        aMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+//        MarkerOptions markerOptions = new MarkerOptions();
+//        LatLng latLng = new LatLng(lat, lon);
+//        markerOptions.position(latLng);
+//        markerOptions.snippet("用户");
+//        aMap.addMarker(markerOptions);
+//        aMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
+//        aMap.moveCamera(CameraUpdateFactory.zoomTo(15));
     }
 
     @OnClick(R.id.cancel)

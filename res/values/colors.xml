@@ -21,8 +21,8 @@
     <color name="purple_grayed">#ff4e3061</color>
     <color name="logo_blue">#ff0168b7</color>
     <color name="logo_yellow">#ffe9a100</color>
-    <color name="red">#ffe9353a</color>
-    <color name="red_grayed">#ff701011</color>
+    <color name="red">#fff44336</color>
+    <color name="red_grayed">#ffa32d29</color>
 
     <color name="disable">#ff696969</color>
     <drawable name="trans_gray_drawable">#a33d3d3d</drawable>
