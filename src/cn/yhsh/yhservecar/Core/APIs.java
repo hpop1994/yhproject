@@ -55,6 +55,8 @@ public class APIs {
     private static final String GET_SERVING_ORDERS = "Sverify/checkservingindent";
     //22
     private static final String GET_ALL_ORDERS = "Sverify/allindent";
+    //23
+    private static final String GET_VERSION = "Sget/version";
 
     private static String getUrl(String subUrl) {
         return SERVER+subUrl;
@@ -75,12 +77,12 @@ public class APIs {
         RequestParams params=new RequestParams();
         params.addBodyParameter("realname",realname);
         params.addBodyParameter("phonenum",phone);
-        Http.postLogined(getUrl(CHANGE_ACCOUNT_INFO), params, account,callback);
+        Http.postLogined(getUrl(CHANGE_ACCOUNT_INFO), params, account, callback);
     }
 
     //03
     public static void getAccountInfo(Account account,NetworkCallback callback){
-        Log.i("POST_BACK","USING 3 : getAccountInfo()");
+        Log.i("POST_BACK", "USING 3 : getAccountInfo()");
         Http.postLogined(getUrl(GET_ACCOUNT_INFO),account, callback);
     }
 
@@ -88,7 +90,7 @@ public class APIs {
     public static void changePassword(String newpassword,Account account,NetworkCallback callback){
         Log.i("POST_BACK","USING 4 : changePassword()");
         RequestParams params=new RequestParams();
-        params.addBodyParameter("newpassword",newpassword);
+        params.addBodyParameter("newpassword", newpassword);
         Http.postLogined(getUrl(CHANGE_PASSWORD), params,account,callback);
     }
 
@@ -103,7 +105,7 @@ public class APIs {
 
     //06
     public static void getStatus(Account account,NetworkCallback callback){
-        Log.i("POST_BACK","USING 6 : getStatus()");
+        Log.i("POST_BACK", "USING 6 : getStatus()");
         Http.postLogined(getUrl(GET_STATUS),account,callback);
     }
 
@@ -132,7 +134,7 @@ public class APIs {
 
     //10
     public static void getCarClass(int pid,Account account,NetworkCallback callback){
-        Log.i("POST_BACK","USING 10 : getCarClass()");
+        Log.i("POST_BACK", "USING 10 : getCarClass()");
         RequestParams params=new RequestParams();
         params.addBodyParameter("pid",String.valueOf(pid));
         Http.postLogined(getUrl(GET_CAR_CLASS),params,account, callback);
@@ -161,14 +163,14 @@ public class APIs {
         params.addBodyParameter("client_name",name);
         params.addBodyParameter("client_phone",phone);
         params.addBodyParameter("client_type",type);
-        params.addBodyParameter("remark",remark);
+        params.addBodyParameter("remark", remark);
         params.addBodyParameter("km",distance);
         Http.postLogined(getUrl(FINISH_ORDER),params,account,callback);
     }
 
     //13
     public static void cancelOrder(int orderID,Account account,NetworkCallback callback) {
-        Log.i("POST_BACK","USING 13 : cancelOrder()");
+        Log.i("POST_BACK", "USING 13 : cancelOrder()");
         RequestParams params = new RequestParams();
         params.addBodyParameter("order_id", String.valueOf(orderID));
         Http.postLogined(getUrl(CANCEL_ORDER),params, account, callback);
@@ -196,7 +198,7 @@ public class APIs {
 
     //16
     public static void getOrderForMe(Account account,NetworkCallback callback){
-        Log.i("POST_BACK","USING 16 : getOrderForMe()");
+        Log.i("POST_BACK", "USING 16 : getOrderForMe()");
         Http.postLogined(getUrl(GET_ORDER_FOR_ME),account,callback);
     }
 
@@ -204,13 +206,13 @@ public class APIs {
     public static void updateGetuiID(String getuiID,Account account,NetworkCallback callback){
         Log.i("POST_BACK","USING 17 : updateGetuiID()");
         RequestParams params=new RequestParams();
-        params.addBodyParameter("getuicid",getuiID);
+        params.addBodyParameter("getuicid", getuiID);
         Http.postLogined(getUrl(UPDATE_GETUI_ID),params,account,callback);
     }
 
     //18
     public static void getTakenOrders(Account account,NetworkCallback callback){
-        Log.i("POST_BACK","USING 18 : getTakenOrders()");
+        Log.i("POST_BACK", "USING 18 : getTakenOrders()");
         Http.postLogined(getUrl(GET_TAKEN_ORDERS),account,callback);
     }
 
@@ -233,7 +235,7 @@ public class APIs {
 
     //21
     public static void getServingOrders(Account account, NetworkCallback callback) {
-        Log.i("POST_BACK","USING 21 : getServingOrders()");
+        Log.i("POST_BACK", "USING 21 : getServingOrders()");
         Http.postLogined(getUrl(GET_SERVING_ORDERS),account,callback);
     }
 
@@ -241,5 +243,10 @@ public class APIs {
     public static void getAllOrders(Account account, NetworkCallback callback){
         Log.i("POST_BACK","USING 21 : getServingOrders()");
         Http.postLogined(getUrl(GET_ALL_ORDERS),account,callback);
+    }
+
+    //23
+    public static void getVersion(NetworkCallback callback){
+        Http.get(getUrl(GET_VERSION), callback);
     }
 }

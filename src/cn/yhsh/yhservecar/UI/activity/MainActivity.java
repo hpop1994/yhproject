@@ -1,14 +1,21 @@
 package cn.yhsh.yhservecar.UI.activity;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
+import cn.yhsh.yhservecar.Core.APIs;
+import cn.yhsh.yhservecar.Core.NetworkCallback;
 import cn.yhsh.yhservecar.Core.StatusService;
+import cn.yhsh.yhservecar.Core.UpdateManager;
 import cn.yhsh.yhservecar.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -28,6 +35,28 @@ public class MainActivity extends BindActivity implements StatusService.StatusLi
         getFragmentManager().beginTransaction()
                 .add(R.id.fragment, waitingFragment)
                 .commit();
+
+        APIs.getVersion(new NetworkCallback(this) {
+            @Override
+            protected void onSuccess(JSONObject data) {
+                try {
+                    int version = Integer.parseInt(data.getString("version"));
+
+                    PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
+                    int nowVersion = pi.versionCode;
+
+                    if (nowVersion < version) {
+                        UpdateManager manager = new UpdateManager(MainActivity.this);
+                        manager.checkUpdateInfo();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
     }
 
     @Override
