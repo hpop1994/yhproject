@@ -127,7 +127,7 @@
             <Button
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="登出"
+                    android:text="退出"
                     android:id="@+id/logout" android:layout_alignParentTop="true" android:layout_alignParentRight="true"
                     android:background="@drawable/btn_red" android:textColor="@color/white"
                     android:layout_gravity="center_horizontal" android:layout_marginLeft="50dp"
