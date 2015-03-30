@@ -10,8 +10,9 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Medium Text"
-                android:id="@+id/name" android:layout_centerVertical="true" android:layout_alignParentLeft="true"
-                android:singleLine="false" android:maxLines="2" android:layout_toLeftOf="@+id/discount"/>
+                android:id="@+id/name"
+                android:singleLine="false" android:maxLines="2" android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true" android:layout_toLeftOf="@+id/discount"/>
         <EditText
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
@@ -20,12 +21,11 @@
                 android:layout_toLeftOf="@+id/unit" android:minWidth="40dp" android:hint="数量"
                 android:gravity="right" android:numeric="decimal" android:inputType="numberDecimal"
                 android:background="@null"/>
-        <Button
+        <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="删除"
                 android:id="@+id/delete" android:layout_centerVertical="true" android:layout_alignParentRight="true"
-                android:background="@drawable/btn_red" android:textColor="@color/white"/>
+                android:background="@drawable/delete" android:textColor="@color/white" android:maxHeight="40dp"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,14 +53,15 @@
                 android:text="0"
                 android:id="@+id/price"
                 android:textColor="@color/blue"
-                android:layout_alignParentLeft="true" android:layout_below="@+id/name"/>
+                android:layout_alignParentLeft="true" android:layout_below="@+id/name"
+                android:layout_alignParentBottom="true" android:gravity="bottom"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="/"
                 android:id="@+id/textView16" android:layout_alignTop="@+id/price" android:layout_toRightOf="@+id/price"
-                android:textColor="@color/blue"/>
+                android:textColor="@color/blue" android:layout_alignParentBottom="true" android:gravity="bottom"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -68,6 +69,7 @@
                 android:text="unit"
                 android:id="@+id/unit2"
                 android:textColor="@color/blue"
-                android:layout_toRightOf="@+id/textView16" android:layout_alignTop="@+id/textView16"/>
+                android:layout_toRightOf="@+id/textView16" android:layout_alignTop="@+id/textView16"
+                android:layout_alignParentBottom="true" android:gravity="bottom"/>
     </RelativeLayout>
 </LinearLayout>

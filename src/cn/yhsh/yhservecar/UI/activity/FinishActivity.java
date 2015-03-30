@@ -383,7 +383,7 @@ public class FinishActivity extends Activity {
             TextView price = (TextView) v.findViewById(R.id.price);
             EditText numEdit=(EditText) v.findViewById(R.id.number);
             EditText discount=(EditText) v.findViewById(R.id.discount);
-            Button deleteBtn = (Button) v.findViewById(R.id.delete);
+            ImageButton deleteBtn = (ImageButton) v.findViewById(R.id.delete);
             nameText.setText(getItem(position).getItemName());
             try {
                 unitText.setText(((JSONObject) getItem(position).getBaseData()).getString("unit"));
