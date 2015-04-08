@@ -27,7 +27,7 @@ import java.util.ArrayList;
 /**
  * Created by Xujc on 2015/3/6 006.
  */
-public class TakenOrderListActivity extends Activity {
+public class OrderListActivity extends Activity {
     @ViewInject(R.id.list)
     private ListView listView;
 
@@ -58,16 +58,16 @@ public class TakenOrderListActivity extends Activity {
                 Intent intent=null;
                 switch (order.status){
                     case 1:
-                        intent=new Intent(TakenOrderListActivity.this, TakenOrderDetailActivity.class);
+                        intent=new Intent(OrderListActivity.this, TakenOrderDetailActivity.class);
                         break;
                     case 2:
-                        intent=new Intent(TakenOrderListActivity.this,FinishedOrderActivity.class);
+                        intent=new Intent(OrderListActivity.this,FinishedOrderActivity.class);
                         break;
                     case 3:
-                        intent=new Intent(TakenOrderListActivity.this,FinishedOrderActivity.class);
+                        intent=new Intent(OrderListActivity.this,FinishedOrderActivity.class);
                         break;
                     case 5:
-                        intent=new Intent(TakenOrderListActivity.this, ServingOrderDetailActivity.class);
+                        intent=new Intent(OrderListActivity.this, ServingOrderDetailActivity.class);
                         break;
                 }
                 if (intent!=null) {
@@ -99,9 +99,54 @@ public class TakenOrderListActivity extends Activity {
                         if (object.getInt("status") == 0) {
                             continue;
                         }
-                        Order order = new Order();
+                        final Order order = new Order();
                         order.orderID = object.getInt("id");
                         order.uid = object.getInt("uid");
+                        APIs.getUserInfo(object.getString("uid"), Account.getInstance(OrderListActivity.this), new NetworkCallback(OrderListActivity.this) {
+                            @Override
+                            protected void onSuccess(JSONObject data) {
+                                try {
+                                    order.name=data.getJSONObject("user").getString("realname");
+                                    if (order.name.equals("null")){
+                                        order.name="";
+                                    }
+                                    adapter.notifyDataSetChanged();
+                                } catch (JSONException e) {
+                                    order.name="";
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            protected void onFailed() {
+                                super.onFailed();
+                                order.name="";
+                            }
+
+                            @Override
+                            public void dealUnexpectedError() {
+                                onFailed();
+                            }
+                        });
+                        order.carID="";
+                        if (object.getInt("carid")!=0){
+                            APIs.getCarInfo(object.getString("carid"), Account.getInstance(OrderListActivity.this), new NetworkCallback(OrderListActivity.this) {
+                                @Override
+                                protected void onSuccess(JSONObject data) {
+                                    try {
+                                        order.carID=data.getJSONObject("car").getString("carid");
+                                        adapter.notifyDataSetChanged();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                @Override
+                                public void dealUnexpectedError() {
+                                    onFailed();
+                                }
+                            });
+                        }
                         order.address = object.getString("address");
                         order.time = object.getString("ordertime");
                         order.appointmentTime = object.getString("time");
@@ -163,26 +208,21 @@ public class TakenOrderListActivity extends Activity {
                     statusText.setText("已取消");
                     break;
                 case 3:
-                    statusText.setText("已完成");
+                    statusText.setText("已结算");
                     break;
                 case 5:
                     statusText.setText("正在服务");
                     break;
-            }
-
-            int i = -1;
-            try {
-                i = Integer.parseInt(idText.getText().toString());
-            } catch (NumberFormatException e) {
-            }
-            if (i == order.orderID){
-                return convertView;
             }
             TextView itemText=(TextView) convertView.findViewById(R.id.item);
             TextView addressText=(TextView) convertView.findViewById(R.id.address);
             idText.setText(String.valueOf(order.orderID));
             itemText.setText(order.item);
             addressText.setText(order.address);
+            if (order.status==3){
+                itemText.setText(order.name+" "+order.carID);
+                addressText.setText(order.appointmentTime.split("\\s")[0]);
+            }
             return convertView;
         }
     }

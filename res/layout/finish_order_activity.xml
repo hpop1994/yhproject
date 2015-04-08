@@ -149,7 +149,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="保养项目"
+                            android:text="预约保养项目"
                             android:id="@+id/textView14" android:layout_centerVertical="true"
                             android:layout_alignParentLeft="true"/>
                 </RelativeLayout>
@@ -229,7 +229,7 @@
                             android:id="@+id/selectCarBtn" android:layout_alignParentTop="true"
                             android:layout_alignParentLeft="true" android:layout_alignParentBottom="true"
                             android:layout_toLeftOf="@+id/addCarBtn"
-                            android:background="@android:drawable/list_selector_background"/>
+                            android:background="@android:drawable/list_selector_background" android:gravity="left|center_vertical"/>
                     <ImageButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -252,7 +252,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="里程数(公里)"
+                        android:text="行驶里程"
                         android:id="@+id/textView1115" android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"/>
             </RelativeLayout>

@@ -8,6 +8,7 @@ public class Order {
     public int uid;
     public String name;
     public String phone;
+    public String carID;
     public String address;
     public String time;
     public double lat;

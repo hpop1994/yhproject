@@ -51,9 +51,6 @@ public class AskingActivity extends Activity {
 //    @ViewInject(R.id.map)
 //    private MapView mapView;
 
-    @ViewInject(R.id.appointment_time)
-    private TextView appointmentTime;
-
     private double lat;
     private double lon;
 //    private AMap aMap;
@@ -101,8 +98,7 @@ public class AskingActivity extends Activity {
                     clientNameText.setText(data.getString("realname"));
                     clientPhoneText.setText(data.getString("phonenum"));
                     positionText.setText(data.getString("address"));
-                    timeText.setText(data.getString("ordertime"));
-                    appointmentTime.setText(data.getString("time"));
+                    timeText.setText(data.getString("ordertime").split("\\s")[0]);
                     itemsText.setText(data.getString("item"));
                     lat = data.getDouble("lat");
                     lon = data.getDouble("lon");

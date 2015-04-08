@@ -58,6 +58,12 @@ public class APIs {
     //23
     private static final String GET_VERSION = "Sget/version";
 
+    private static final String GET_USER_INFO = "Sverify/userinfo";
+    private static final String GET_CAR_CLASSNAME = "Sverify/getcarclassname";
+    private static final String GET_CAR_INFO = "Sverify/getusercarbyid";
+
+
+
     private static String getUrl(String subUrl) {
         return SERVER+subUrl;
     }
@@ -241,12 +247,33 @@ public class APIs {
 
     //22
     public static void getAllOrders(Account account, NetworkCallback callback){
-        Log.i("POST_BACK","USING 21 : getServingOrders()");
+        Log.i("POST_BACK","USING 22 : getAllorders()");
         Http.postLogined(getUrl(GET_ALL_ORDERS),account,callback);
     }
 
     //23
     public static void getVersion(NetworkCallback callback){
         Http.get(getUrl(GET_VERSION), callback);
+    }
+
+    public static void getUserInfo(String uid,Account account, NetworkCallback callback){
+        Log.i("POST_BACK", "USING 24 : getUserInfo()");
+        RequestParams params=new RequestParams();
+        params.addBodyParameter("uid",uid);
+        Http.postLogined(getUrl(GET_USER_INFO), params, account, callback);
+    }
+
+    public static void getCarClassName(String cid,Account account, NetworkCallback callback){
+        Log.i("POST_BACK", "USING 25 : getCarClassName()");
+        RequestParams params=new RequestParams();
+        params.addBodyParameter("cid",cid);
+        Http.postLogined(getUrl(GET_CAR_CLASSNAME),params, account, callback);
+    }
+
+    public static void getCarInfo(String cid,Account account, NetworkCallback callback){
+        Log.i("POST_BACK", "USING 26 : getCarInfo()");
+        RequestParams params=new RequestParams();
+        params.addBodyParameter("cid",cid);
+        Http.postLogined(getUrl(GET_CAR_INFO),params, account, callback);
     }
 }

@@ -90,11 +90,13 @@ public class FinishActivity extends Activity {
         int id;
         String carCode;
         String desc;
+        public String classid;
 
-        public Car(int id, String carCode, String desc) {
+        public Car(int id, String carCode, String desc,String classid) {
             this.id = id;
             this.carCode = carCode;
             this.desc = desc;
+            this.classid=classid;
         }
     }
 
@@ -254,7 +256,8 @@ public class FinishActivity extends Activity {
                                         cars.add(new Car(
                                                 object.getInt("id"),
                                                 object.getString("carid"),
-                                                object.getString("desc")
+                                                object.getString("desc"),
+                                                String.valueOf(item.getId())
                                         ));
                                     }
                                 } catch (JSONException e) {
@@ -340,7 +343,8 @@ public class FinishActivity extends Activity {
                         cars.add(new Car(
                                 object.getInt("id"),
                                 object.getString("carid"),
-                                object.getString("desc")
+                                object.getString("desc"),
+                                object.getString("class")
                         ));
                     }
                 } catch (JSONException e) {
@@ -443,7 +447,7 @@ public class FinishActivity extends Activity {
                 double num = Double.parseDouble(((EditText) listView.getChildAt(i).findViewById(R.id.number)).getText().toString().trim());
                 double discount = Double.parseDouble(((EditText) listView.getChildAt(i).findViewById(R.id.discount)).getText().toString().trim());
                 double price= ((JSONObject) itemListData.get(i).getBaseData()).getDouble("price");
-                sum+=price * discount/10.0 * num;
+                sum+=price * discount * num;
             }
             priceEditText.setText(""+(((int) (sum * 100))/100.0));
         } catch (NumberFormatException e) {
@@ -495,8 +499,27 @@ public class FinishActivity extends Activity {
         builder.setItems(carStirngs, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                final Car c=cars.get(which);
                 selectedcarid = cars.get(which).id;
-                selectCarBtn.setText(cars.get(which).carCode + " " + cars.get(which).desc);
+                final String carCode=cars.get(which).carCode;
+                selectCarBtn.setText("正在读取");
+                APIs.getCarClassName(c.classid, Account.getInstance(FinishActivity.this), new NetworkCallback(FinishActivity.this) {
+                    @Override
+                    protected void onSuccess(JSONObject data) {
+                        try {
+                            selectCarBtn.setText(carCode + "\n" + data.getString("carclass"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            selectCarBtn.setText(carCode);
+                        }
+                    }
+
+                    @Override
+                    protected void onFailed() {
+                        super.onFailed();
+                        selectCarBtn.setText(carCode);
+                    }
+                });
                 dialog.dismiss();
             }
         });

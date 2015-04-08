@@ -128,7 +128,7 @@ public class FinishedOrderActivity extends Activity  {
                         scarNameLayout.setVisibility(View.GONE);
                         positionText.setText(data.getString("address"));
                         serveTimeText.setText(data.getString("time"));
-                        finishTimeText.setText(data.getString("time"));
+                        finishTimeText.setText(data.getString("time").split("\\s")[0]);
                         carArea.setVisibility(View.GONE);
                         remarkText.setText(data.getString("remark"));
                     }
