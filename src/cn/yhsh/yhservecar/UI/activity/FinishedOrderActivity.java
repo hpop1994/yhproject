@@ -1,6 +1,8 @@
 package cn.yhsh.yhservecar.UI.activity;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,6 +15,7 @@ import cn.yhsh.yhservecar.Core.NetworkCallback;
 import cn.yhsh.yhservecar.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -150,6 +153,13 @@ public class FinishedOrderActivity extends Activity  {
             }
 
         });
+    }
+    @OnClick(R.id.client_phone)
+    private void phoneClciked(View v){
+        if (clientPhoneText.getText().length()==11){
+            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + clientPhoneText.getText()));
+            startActivity(intent);
+        }
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
