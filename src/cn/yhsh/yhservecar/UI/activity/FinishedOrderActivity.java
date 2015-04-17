@@ -94,7 +94,7 @@ public class FinishedOrderActivity extends Activity  {
                     int status = data.getInt("status");
                     LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
                     if (status == FINISHED) {
-                        orderStatus.setText("已完成");
+                        orderStatus.setText("结算完成");
                         clientNameText.setText(data.getString("client_name"));
                         clientPhoneText.setText(data.getString("client_phone"));
                         clientTypeText.setText(data.getString("client_type"));

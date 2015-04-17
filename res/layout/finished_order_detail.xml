@@ -136,7 +136,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="服务时间"
+                            android:text="结算时间"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true" />
                     <TextView
@@ -267,7 +267,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="保养车辆车型"
+                        android:text="车型"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true" />
                 <TextView
