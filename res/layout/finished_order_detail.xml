@@ -29,7 +29,8 @@
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                           android:textAppearance="?android:attr/textAppearanceMedium" android:text="正在读取"
                           android:id="@+id/status" android:textColor="@color/darkgray"
-                          android:layout_centerVertical="true" android:layout_alignParentRight="true"/>
+                          android:layout_centerVertical="true" android:layout_alignParentRight="true"
+                          android:layout_toRightOf="@+id/textView2" android:layout_marginLeft="30dp"/>
             </RelativeLayout>
             <LinearLayout
                     android:orientation="vertical"
@@ -48,7 +49,7 @@
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="客户姓名"
                             android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true"/>
+                            android:layout_centerVertical="true" android:id="@+id/textView19"/>
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -56,7 +57,8 @@
                             android:text="正在读取"
                             android:id="@+id/client_name"
                             android:textColor="@color/darkgray" android:layout_centerVertical="true"
-                            android:layout_alignParentRight="true"/>
+                            android:layout_alignParentRight="true" android:layout_toRightOf="@+id/textView19"
+                            android:layout_marginLeft="30dp"/>
                 </RelativeLayout>
                 <View android:layout_width="fill_parent" android:layout_height="1dp"
                       android:background="@color/lightgray"></View>
@@ -69,7 +71,7 @@
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="客户联系方式"
                             android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true" />
+                            android:layout_centerVertical="true" android:id="@+id/textView19"/>
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -77,7 +79,8 @@
                             android:text="正在读取"
                             android:id="@+id/client_phone"
                             android:textColor="@color/darkgray" android:layout_centerVertical="true"
-                            android:layout_alignParentRight="true"/>
+                            android:layout_alignParentRight="true" android:layout_toRightOf="@+id/textView19"
+                            android:layout_marginLeft="30dp"/>
                 </RelativeLayout>
                 <View android:layout_width="fill_parent" android:layout_height="1dp"
                       android:background="@color/lightgray"></View>
@@ -90,7 +93,7 @@
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="客户类型"
                             android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true" />
+                            android:layout_centerVertical="true" android:id="@+id/textView20"/>
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -98,7 +101,8 @@
                             android:text="正在读取"
                             android:id="@+id/client_type"
                             android:textColor="@color/darkgray" android:layout_centerVertical="true"
-                            android:layout_alignParentRight="true"/>
+                            android:layout_alignParentRight="true" android:layout_toRightOf="@+id/textView20"
+                            android:layout_marginLeft="30dp"/>
                 </RelativeLayout>
             </LinearLayout>
             <LinearLayout
@@ -117,7 +121,7 @@
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="下单时间"
                             android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true" />
+                            android:layout_centerVertical="true" android:id="@+id/textView21"/>
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -125,7 +129,8 @@
                             android:text="正在读取"
                             android:id="@+id/serve_time"
                             android:textColor="@color/darkgray" android:layout_centerVertical="true"
-                            android:layout_alignParentRight="true"/>
+                            android:layout_alignParentRight="true" android:layout_toRightOf="@+id/textView21"
+                            android:layout_marginLeft="30dp"/>
                 </RelativeLayout>
                 <View android:layout_width="fill_parent" android:layout_height="1dp"
                       android:background="@color/lightgray"></View>
@@ -138,7 +143,7 @@
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="结算时间"
                             android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true" />
+                            android:layout_centerVertical="true" android:id="@+id/textView22"/>
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -146,7 +151,8 @@
                             android:text="正在读取"
                             android:id="@+id/finish_time"
                             android:textColor="@color/darkgray" android:layout_centerVertical="true"
-                            android:layout_alignParentRight="true"/>
+                            android:layout_alignParentRight="true" android:layout_toRightOf="@+id/textView22"
+                            android:layout_marginLeft="30dp"/>
                 </RelativeLayout>
                 <View android:layout_width="fill_parent" android:layout_height="1dp"
                       android:background="@color/lightgray"></View>
@@ -169,7 +175,7 @@
                               android:textAppearance="?android:attr/textAppearanceMedium" android:text="正在读取"
                               android:id="@+id/position_text" android:textColor="@color/darkgray"
                               android:layout_centerVertical="true" android:layout_alignParentRight="true"
-                              android:layout_alignParentLeft="true" android:gravity="right"/>
+                              android:layout_alignParentLeft="true"/>
                 </RelativeLayout>
                 <View android:layout_width="fill_parent" android:layout_height="1dp"
                       android:background="@color/lightgray"></View>
@@ -192,7 +198,7 @@
                               android:textAppearance="?android:attr/textAppearanceMedium" android:text="正在读取"
                               android:id="@+id/remark" android:textColor="@color/darkgray"
                               android:layout_centerVertical="true" android:layout_alignParentRight="true"
-                              android:layout_alignParentLeft="true" android:gravity="right"/>
+                              android:layout_alignParentLeft="true"/>
                 </RelativeLayout>
             </LinearLayout>
             <LinearLayout
@@ -269,7 +275,7 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="车型"
                         android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true" />
+                        android:layout_centerVertical="true" android:id="@+id/textView23"/>
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -277,7 +283,8 @@
                         android:text="正在读取"
                         android:id="@+id/car_class"
                         android:textColor="@color/darkgray" android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"/>
+                        android:layout_alignParentRight="true" android:layout_toRightOf="@+id/textView23"
+                        android:layout_marginLeft="30dp"/>
             </RelativeLayout>
             <View android:layout_width="fill_parent" android:layout_height="1dp"
                   android:background="@color/lightgray"></View>
@@ -290,7 +297,7 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="保养车辆车牌号"
                         android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true" />
+                        android:layout_centerVertical="true" android:id="@+id/textView24"/>
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -298,7 +305,8 @@
                         android:text="正在读取"
                         android:id="@+id/car_id"
                         android:textColor="@color/darkgray" android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"/>
+                        android:layout_alignParentRight="true" android:layout_toRightOf="@+id/textView24"
+                        android:layout_marginLeft="30dp"/>
             </RelativeLayout>
             <View android:layout_width="fill_parent" android:layout_height="1dp"
                   android:background="@color/lightgray"></View>
@@ -311,7 +319,7 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="保养车辆里程"
                         android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true" />
+                        android:layout_centerVertical="true" android:id="@+id/textView25"/>
 
                 <TextView
                         android:layout_width="wrap_content"
@@ -320,7 +328,8 @@
                         android:text="正在读取"
                         android:id="@+id/car_km"
                         android:textColor="@color/darkgray" android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"/>
+                        android:layout_alignParentRight="true" android:layout_toRightOf="@+id/textView25"
+                        android:layout_marginLeft="30dp"/>
             </RelativeLayout>
             </LinearLayout>
         </LinearLayout>

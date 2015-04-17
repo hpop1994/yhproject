@@ -50,14 +50,16 @@
                                 android:textAppearance="?android:attr/textAppearanceMedium"
                                 android:text="用户姓名"
                                 android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true" />
+                                android:layout_centerVertical="true" android:id="@+id/textView28"/>
                         <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textAppearance="?android:attr/textAppearanceMedium"
                                 android:id="@+id/client_name"
-                                android:textColor="@color/darkgray" android:layout_centerVertical="true"
-                                android:layout_alignParentRight="true" android:text="正在获取"/>
+                                android:textColor="@color/darkgray"
+                                android:layout_alignParentRight="true" android:text="正在获取"
+                                android:layout_alignTop="@+id/textView28" android:layout_toRightOf="@+id/textView28"
+                                android:layout_marginLeft="30dp"/>
                     </RelativeLayout>
                     <View android:layout_width="fill_parent" android:layout_height="1dp"
                           android:background="@color/lightgray"></View>
@@ -70,7 +72,7 @@
                                 android:textAppearance="?android:attr/textAppearanceMedium"
                                 android:text="用户电话"
                                 android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true" />
+                                android:layout_centerVertical="true" android:id="@+id/textView29"/>
                         <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -78,7 +80,8 @@
                                 android:text="正在获取"
                                 android:id="@+id/client_phone"
                                 android:textColor="@color/blue" android:layout_centerVertical="true"
-                                android:layout_alignParentRight="true"/>
+                                android:layout_alignParentRight="true" android:layout_toRightOf="@+id/textView29"
+                                android:layout_marginLeft="30dp"/>
                     </RelativeLayout>
                 </LinearLayout>
                 <LinearLayout
@@ -106,7 +109,7 @@
                                 android:id="@+id/position_text"
                                 android:textColor="@color/darkgray" android:layout_centerVertical="true"
                                 android:layout_alignParentRight="true" android:layout_toRightOf="@+id/textView5"
-                                android:gravity="right" android:layout_marginLeft="20dp"/>
+                                android:layout_marginLeft="30dp"/>
                     </RelativeLayout>
                     <View android:layout_width="fill_parent" android:layout_height="1dp"
                           android:background="@color/lightgray"></View>
@@ -126,7 +129,8 @@
                                 android:textAppearance="?android:attr/textAppearanceMedium"
                                 android:text="正在获取"
                                 android:id="@+id/time" android:textColor="@color/darkgray"
-                                android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+                                android:layout_alignParentRight="true" android:layout_centerVertical="true"
+                                android:layout_toRightOf="@+id/textView3" android:layout_marginLeft="30dp"/>
                     </RelativeLayout>
                     <View android:layout_width="fill_parent" android:layout_height="1dp"
                           android:background="@color/lightgray"></View>
@@ -146,7 +150,8 @@
                                 android:textAppearance="?android:attr/textAppearanceMedium"
                                 android:text="正在获取"
                                 android:id="@+id/appointment_time" android:textColor="@color/blue"
-                                android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+                                android:layout_alignParentRight="true" android:layout_centerVertical="true"
+                                android:layout_toRightOf="@+id/textView11" android:layout_marginLeft="30dp"/>
                     </RelativeLayout>
                 </LinearLayout>
                 <LinearLayout

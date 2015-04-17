@@ -16,7 +16,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="0"
             android:id="@+id/price" android:layout_centerVertical="true"
-            android:layout_marginRight="23dp" android:textColor="#ff0080bd" android:layout_alignParentRight="true"/>
+            android:layout_marginRight="10dp" android:textColor="#ff0080bd" android:layout_alignParentRight="true"/>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
               android:textAppearance="?android:attr/textAppearanceMedium" android:text="￥" android:id="@+id/textView18"
               android:textColor="#ff0080bd" android:layout_centerVertical="true" android:layout_toLeftOf="@+id/price"/>
