@@ -2,13 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent" android:background="@color/lightgray">
-    <!--<com.amap.api.maps2d.MapView-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="fill_parent"-->
-            <!--android:id="@+id/map"-->
-            <!--android:layout_alignParentTop="true" android:layout_alignParentLeft="true" android:layout_weight="3"-->
-            <!--android:background="@drawable/card_back"/>-->
+              android:layout_height="match_parent">
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent" android:layout_gravity="center_horizontal" android:layout_weight="2">
@@ -19,7 +13,7 @@
                 android:text="已经接单"
                 android:id="@+id/order_status"
                 android:gravity="center"
-                android:background="@drawable/card_back"
+                android:background="@drawable/list_group_background"
                 android:layout_toRightOf="@+id/cancel"
                 android:layout_alignParentBottom="true" android:layout_alignTop="@+id/cancel"
                 android:layout_toLeftOf="@+id/serve_now_btn"/>
@@ -28,162 +22,98 @@
                 android:layout_height="fill_parent"
                 android:id="@+id/scrollView2" android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" android:layout_above="@+id/order_status"
+                style="@style/list_container"
                 android:fillViewport="false">
             <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" android:id="@+id/info_layout"
-                    >
+                    android:layout_height="wrap_content" android:id="@+id/info_layout">
                 <LinearLayout
                         android:orientation="vertical"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent" android:layout_marginTop="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:background="@drawable/card_back"
-                        >
+                        style="@style/list_group">
                     <RelativeLayout
-                            android:layout_width="fill_parent"
-                            android:layout_height="60dp" android:padding="4dp">
+                            style="@style/list_item">
                         <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?android:attr/textAppearanceMedium"
-                                android:text="用户姓名"
-                                android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true" android:id="@+id/textView28"/>
+                                style="@style/list_item_title"
+                                android:text="@string/client_name"
+                                android:id="@+id/textView28"/>
                         <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                style="@style/list_item_info.left.oneline"
                                 android:id="@+id/client_name"
-                                android:textColor="@color/darkgray"
-                                android:layout_alignParentRight="true" android:text="正在获取"
-                                android:layout_alignTop="@+id/textView28" android:layout_toRightOf="@+id/textView28"
-                                android:layout_marginLeft="30dp"/>
+                                android:text="@string/loading_text"
+                                android:layout_toRightOf="@+id/textView28"/>
                     </RelativeLayout>
-                    <View android:layout_width="fill_parent" android:layout_height="1dp"
-                          android:background="@color/lightgray"></View>
                     <RelativeLayout
-                            android:layout_width="fill_parent"
-                            android:layout_height="60dp" android:padding="4dp">
+                            style="@style/list_item">
                         <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?android:attr/textAppearanceMedium"
-                                android:text="用户电话"
-                                android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true" android:id="@+id/textView29"/>
+                                style="@style/list_item_title"
+                                android:text="@string/client_phone"
+                                android:id="@+id/textView29"/>
                         <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?android:attr/textAppearanceMedium"
-                                android:text="正在获取"
+                                style="@style/list_item_info.left.oneline"
+                                android:text="@string/loading_text"
                                 android:id="@+id/client_phone"
-                                android:textColor="@color/blue" android:layout_centerVertical="true"
-                                android:layout_alignParentRight="true" android:layout_toRightOf="@+id/textView29"
-                                android:layout_marginLeft="30dp"/>
+                                android:textColor="@color/info_blue"
+                                android:layout_toRightOf="@+id/textView29"/>
                     </RelativeLayout>
                 </LinearLayout>
                 <LinearLayout
                         android:orientation="vertical"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent" android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:background="@drawable/card_back"
-                        >
+                        style="@style/list_group">
                     <RelativeLayout
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content" android:padding="4dp" android:minHeight="60dp">
+                            style="@style/list_item">
                         <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?android:attr/textAppearanceMedium"
-                                android:text="位置"
-                                android:id="@+id/textView5" android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true"/>
+                                style="@style/list_item_title"
+                                android:text="@string/client_position_4w"
+                                android:id="@+id/textView5"/>
                         <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?android:attr/textAppearanceMedium"
-                                android:text="正在获取"
+                                style="@style/list_item_info.left.multiline"
+                                android:text="@string/loading_text"
                                 android:id="@+id/position_text"
-                                android:textColor="@color/darkgray" android:layout_centerVertical="true"
-                                android:layout_alignParentRight="true" android:layout_toRightOf="@+id/textView5"
-                                android:layout_marginLeft="30dp"/>
+                                android:layout_toRightOf="@+id/textView5"/>
                     </RelativeLayout>
-                    <View android:layout_width="fill_parent" android:layout_height="1dp"
-                          android:background="@color/lightgray"></View>
                     <RelativeLayout
-                            android:layout_width="fill_parent"
-                            android:layout_height="60dp" android:padding="4dp">
+                            style="@style/list_item">
                         <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?android:attr/textAppearanceMedium"
-                                android:text="下单时间"
-                                android:id="@+id/textView3" android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true"/>
+                                style="@style/list_item_title"
+                                android:text="@string/make_order_time"
+                                android:id="@+id/textView3"/>
                         <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?android:attr/textAppearanceMedium"
-                                android:text="正在获取"
-                                android:id="@+id/time" android:textColor="@color/darkgray"
-                                android:layout_alignParentRight="true" android:layout_centerVertical="true"
-                                android:layout_toRightOf="@+id/textView3" android:layout_marginLeft="30dp"/>
+                                style="@style/list_item_info.left.oneline"
+                                android:text="@string/loading_text"
+                                android:id="@+id/time"
+                                android:layout_toRightOf="@+id/textView3"/>
                     </RelativeLayout>
-                    <View android:layout_width="fill_parent" android:layout_height="1dp"
-                          android:background="@color/lightgray"></View>
                     <RelativeLayout
-                            android:layout_width="fill_parent"
-                            android:layout_height="60dp" android:padding="4dp">
+                            style="@style/list_item">
                         <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?android:attr/textAppearanceMedium"
-                                android:text="预约时间"
-                                android:id="@+id/textView11" android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true"/>
+                                style="@style/list_item_title"
+                                android:text="@string/appointment_care_time"
+                                android:id="@+id/textView11"/>
                         <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?android:attr/textAppearanceMedium"
-                                android:text="正在获取"
-                                android:id="@+id/appointment_time" android:textColor="@color/blue"
-                                android:layout_alignParentRight="true" android:layout_centerVertical="true"
-                                android:layout_toRightOf="@+id/textView11" android:layout_marginLeft="30dp"/>
+                                style="@style/list_item_info.left.oneline"
+                                android:text="@string/loading_text"
+                                android:id="@+id/appointment_time"
+                                android:layout_toRightOf="@+id/textView11"/>
                     </RelativeLayout>
                 </LinearLayout>
                 <LinearLayout
                         android:orientation="vertical"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent" android:background="@drawable/card_back"
-                        android:layout_marginTop="5dp" android:layout_marginBottom="10dp"
+                        style="@style/list_group"
                         >
                     <RelativeLayout
-                            android:layout_width="fill_parent"
-                            android:layout_height="60dp" android:padding="4dp">
+                            style="@style/list_item">
                         <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?android:attr/textAppearanceMedium"
-                                android:text="保养项目"
-                                android:id="@+id/textView14" android:layout_centerVertical="true"
-                                android:layout_alignParentLeft="true"/>
+                                style="@style/list_item_title"
+                                android:text="@string/actual_care_item"
+                                android:id="@+id/textView14"/>
                     </RelativeLayout>
-                    <View android:layout_width="fill_parent" android:layout_height="1dp"
-                          android:background="@color/lightgray"></View>
                     <RelativeLayout
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content" android:padding="4dp" android:minHeight="60dp">
+                            style="@style/list_item">
                         <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?android:attr/textAppearanceMedium"
-                                android:text="正在获取"
-                                android:id="@+id/items" android:layout_centerVertical="true"
-                                android:layout_alignParentLeft="true" android:textColor="#ff0080bd"
-                                android:layout_alignParentRight="true"/>
+                                style="@style/list_item_full_line_view.text.multiline"
+                                android:text="@string/loading_text"
+                                android:id="@+id/items"/>
                     </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -193,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:text="取消订单"
                 android:id="@+id/cancel"
-                android:textColor="@color/white" android:background="@drawable/btn_orange"
+                android:textColor="@color/white" android:background="@drawable/btn_green"
                 android:layout_alignParentBottom="true" android:layout_alignParentLeft="true" style="@style/btn"/>
         <Button
                 android:layout_width="wrap_content"

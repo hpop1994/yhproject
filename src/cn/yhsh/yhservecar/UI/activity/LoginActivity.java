@@ -1,7 +1,5 @@
 package cn.yhsh.yhservecar.UI.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -25,9 +23,6 @@ public class LoginActivity extends BindActivity {
     @ViewInject(R.id.password)
     private EditText passwordEditText;
 
-    @ViewInject(R.id.give_up)
-    private Button giveUpButton;
-
     @ViewInject(R.id.confirm)
     private Button confirmButton;
 
@@ -36,26 +31,6 @@ public class LoginActivity extends BindActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
         ViewUtils.inject(this);
-    }
-
-    @OnClick(R.id.give_up)
-    private void giveUpClicked(View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                finish();
-            }
-        });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.setTitle("您确认要退出应用么?");
-        builder.show();
     }
 
     @OnClick(R.id.confirm)

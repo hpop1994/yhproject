@@ -1,47 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="btn" >
-        <item name="android:textColor" >@color/white</item>
+    <style name="left_right_padding">
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+    </style>
+    <style name="btn">
+        <item name="android:textColor">@color/white</item>
         <item name="android:textAppearance">?android:textAppearanceMedium</item>
         <item name="android:paddingLeft">6dp</item>
+        <item name="android:background">@drawable/btn_green</item>
         <item name="android:paddingRight">6dp</item>
     </style>
-    <style name="card_item">
-        <item name="android:paddingLeft">10dp</item>
-        <item name="android:paddingRight">10dp</item>
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">60dp</item>
+    <style name="btn.wide">
+        <item name="android:minWidth">150dp</item>
     </style>
-    <style name="card" >
-        <item name="android:divider">@drawable/divider</item>
-        <item name="android:dividerPadding">4dp</item>
-        <item name="android:showDividers">middle</item>
-        <item name="android:background">@drawable/card_back</item>
-        <item name="android:layout_marginTop">5dp</item>
-        <item name="android:layout_marginBottom">5dp</item>
+    <style name="list_item" parent="left_right_padding">
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">60dp</item>
+    </style>
+    <style name="list_group" parent="with_divider">
+        <item name="android:background">@drawable/list_group_background</item>
+        <item name="android:layout_marginBottom">18dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="background" >
+    <style name="with_divider">
+        <item name="android:divider">@drawable/divider</item>
+        <item name="android:dividerPadding">12dp</item>
+        <item name="android:showDividers">middle</item>
+    </style>
+
+    <style name="list_group.one_item">
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">60dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+    </style>
+
+    <style name="list_container.one_group">
+        <item name="android:divider">@drawable/divider</item>
+        <item name="android:dividerPadding">12dp</item>
+        <item name="android:showDividers">middle</item>
+        <item name="android:background">@drawable/list_group_background</item>
+    </style>
+
+    <style name="background">
         <item name="android:background">@color/lightgray</item>
     </style>
-    <style name="card_list" parent="background">
+    <style name="list_container" parent="background">
     </style>
-    <style name="my_text_medium" parent="@android:style/TextAppearance">
+    <style name="list_item_left_view">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentLeft">true</item>
+    </style>
+    <style name="list_item_right_view">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+    </style>
+    <style name="list_item_full_line_view">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="list_item_full_line_view.text">
         <item name="android:textAppearance">?android:textAppearanceMedium</item>
-    </style>
-    <style name="title_text" parent="my_text_medium">
-        <item name="android:textColor">@android:color/black</item>
-    </style>
-    <style name="sub_text" parent="my_text_medium">
         <item name="android:textColor">@color/darkgray</item>
     </style>
-    <style name="blue_text" parent="my_text_medium">
-        <item name="android:textColor">@color/blue</item>
+    <style name="list_item_full_line_view.text.multiline">
+        <item name="android:singleLine">false</item>
     </style>
-    <style name="my_text_small" parent="@android:style/TextAppearance">
-        <item name="android:textAppearance">?android:textAppearanceSmall</item>
+    <style name="list_item_full_line_view.text.oneline">
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="list_item_title.grey">
         <item name="android:textColor">@color/darkgray</item>
     </style>
+    <style name="list_item_title" parent="list_item_left_view">
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="list_item_info" parent="list_item_right_view">
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+        <item name="android:textColor">@color/darkgray</item>
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="list_item_info.left">
+        <item name="android:gravity">left</item>
+    </style>
+
+    <style name="list_item_info.left.oneline">
+        <item name="android:singleLine">true</item>
+    </style>
+    <style name="list_item_info.left.multiline">
+        <item name="android:singleLine">false</item>
+    </style>
+    <style name="list_item_info.right">
+        <item name="android:gravity">right</item>
+    </style>
+    <style name="list_item_info.right.oneline">
+        <item name="android:singleLine">true</item>
+    </style>
+    <style name="list_item_info.right.multiline">
+        <item name="android:singleLine">false</item>
+    </style>
+
     <style name="stroke_btn">
         <item name="android:textColor">@color/logo_blue</item>
         <item name="android:background">@drawable/btn_stoke</item>
@@ -50,7 +125,7 @@
         <item name="android:inputType">textEmailAddress</item>
         <item name="android:singleLine">true</item>
     </style>
-    <style name="password_input" >
+    <style name="password_input">
         <item name="android:inputType">textPassword</item>
         <item name="android:singleLine">true</item>
     </style>
@@ -65,7 +140,7 @@
         <item name="android:titleTextStyle">@style/AcBar_titleStyle</item>
     </style>
 
-    <style name="AcBar_titleStyle" parent="android:TextAppearance.Holo.Medium" >
+    <style name="AcBar_titleStyle" parent="android:TextAppearance.Holo.Medium">
         <item name="android:textColor">@color/white</item>
     </style>
 </resources>

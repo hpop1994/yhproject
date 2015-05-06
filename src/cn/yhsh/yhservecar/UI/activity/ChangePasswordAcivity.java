@@ -40,11 +40,6 @@ public class ChangePasswordAcivity extends Activity {
         getActionBar().setTitle("更改密码");
     }
 
-    @OnClick(R.id.give_up)
-    private void giveUpClicked(View v){
-        finish();
-    }
-
     @OnClick(R.id.confirm)
     private void confirmClicked(View v){
         final Account accountInfo = Account.getInstance(this);

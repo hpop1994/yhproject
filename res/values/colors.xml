@@ -8,6 +8,8 @@
     <color name="green">#12c700</color>
     <color name="green_grayed">#ff108a00</color>
     <color name="blue">#ff00b2ff</color>
+    <color name="click_blue">#ff00b2ff</color>
+    <color name="info_blue">#ff0080db</color>
     <color name="blue_grayed">#ff006ea2</color>
     <color name="gray">#ff7294a2</color>
     <color name="gray_grayed">#ff2e3f4c</color>

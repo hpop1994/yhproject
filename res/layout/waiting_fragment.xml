@@ -7,7 +7,7 @@
             android:layout_width="fill_parent"
             android:layout_height="80dp" android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" android:id="@+id/relativeLayout2"
-            android:background="@drawable/card_back">
+            android:background="@drawable/list_group_background">
         <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -34,11 +34,11 @@
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" android:layout_alignParentTop="true"
-            android:background="@drawable/card_back"
+            android:background="@drawable/list_group_background"
             android:layout_above="@+id/relativeLayout2"
             >
         <RelativeLayout
-                style="@style/card_item"
+                style="@style/list_item"
                 android:id="@+id/relativeLayout" android:background="@color/blue" android:layout_width="fill_parent">
             <TextView
                     android:layout_width="wrap_content"

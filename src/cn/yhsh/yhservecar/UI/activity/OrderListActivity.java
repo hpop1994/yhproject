@@ -66,9 +66,6 @@ public class OrderListActivity extends Activity {
                     case 3:
                         intent=new Intent(OrderListActivity.this,FinishedOrderActivity.class);
                         break;
-                    case 5:
-                        intent=new Intent(OrderListActivity.this, ServingOrderDetailActivity.class);
-                        break;
                 }
                 if (intent!=null) {
                     intent.putExtra("orderID", list.get(position).orderID);
@@ -209,9 +206,6 @@ public class OrderListActivity extends Activity {
                     break;
                 case 3:
                     statusText.setText("已结算");
-                    break;
-                case 5:
-                    statusText.setText("正在服务");
                     break;
             }
             TextView itemText=(TextView) convertView.findViewById(R.id.item);

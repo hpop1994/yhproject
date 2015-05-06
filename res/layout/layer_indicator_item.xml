@@ -10,7 +10,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="node"
             android:id="@+id/name" android:layout_alignParentTop="true" android:layout_toRightOf="@+id/textView"
-            style="@style/blue_text" android:textSize="20dp"/>
+            android:textColor="@color/info_blue" android:textSize="20dp"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

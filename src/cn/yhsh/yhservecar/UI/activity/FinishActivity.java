@@ -526,10 +526,6 @@ public class FinishActivity extends Activity {
         builder.show();
     }
 
-    @OnClick(R.id.give_up)
-    private void giveUpClicked(View v) {
-        finish();
-    }
 
     @OnClick(R.id.confirm)
     private void confirmClicked(View v) {

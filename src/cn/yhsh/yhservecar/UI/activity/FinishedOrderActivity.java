@@ -85,7 +85,7 @@ public class FinishedOrderActivity extends Activity  {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.finished_order_detail);
+        setContentView(R.layout.finished_order_detail_activity);
         ViewUtils.inject(this);
 
         orderID = getIntent().getIntExtra("orderID", 0);

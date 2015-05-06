@@ -2,4 +2,31 @@
 <resources>
     <string name="app_name">领航服务车</string>
     <string name="actionbar_title">移动上门保养机构</string>
+    <string name="order_is_waiting">订单正在等待</string>
+    <string name="client_name">客户姓名</string>
+    <string name="loading_text">...</string>
+    <string name="client_phone">客户电话</string>
+    <string name="client_position_4w">位&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;置</string>
+    <string name="make_order_time">下单时间</string>
+    <string name="actual_care_item">保养详单</string>
+    <string name="appointment_care_item">预约项目</string>
+    <string name="refuse_order">拒绝订单</string>
+    <string name="take_order">接受订单</string>
+    <string name="hint_input_client_name">指定客户姓名</string>
+    <string name="hint_input_client_phone">指定客户联系方式</string>
+    <string name="client_type">客户类型</string>
+    <string name="hint_input_client_type">指定客户类型</string>
+    <string name="appointment_care_time">预约时间</string>
+    <string name="sum_price_4w">总&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;价</string>
+    <string name="hint_input_car_distance">输入已行驶里程(单位公里)</string>
+    <string name="car_distance">行驶里程</string>
+    <string name="hint_input_next_distance">输入下次保养间隔</string>
+    <string name="next_distance">下次保养里程</string>
+    <string name="hint_input_remark">输入备注</string>
+    <string name="remark_4w">备&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;注</string>
+    <string name="order_status">订单状态</string>
+    <string name="pay_money_time">结算时间</string>
+    <string name="serve_position">服务位置</string>
+    <string name="car_class">车辆类型</string>
+    <string name="car_number">车辆牌号</string>
 </resources>

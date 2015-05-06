@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="60dp" android:paddingLeft="10dp">
+                android:layout_height="wrap_content" style="@style/list_item" >
 
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="项目"
-            android:id="@+id/text" android:layout_centerVertical="true" android:layout_alignParentLeft="true"
-            android:textColor="@color/darkgray"/>
+            android:id="@+id/text"
+            style="@style/list_item_title.grey" android:layout_toLeftOf="@+id/discount"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="0"
             android:id="@+id/price" android:layout_centerVertical="true"
-            android:layout_marginRight="10dp" android:textColor="#ff0080bd" android:layout_alignParentRight="true"/>
+            android:textColor="@color/info_blue" android:layout_alignParentRight="true"/>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
               android:textAppearance="?android:attr/textAppearanceMedium" android:text="￥" android:id="@+id/textView18"
-              android:textColor="#ff0080bd" android:layout_centerVertical="true" android:layout_toLeftOf="@+id/price"/>
+              android:textColor="@color/info_blue" android:layout_centerVertical="true" android:layout_toLeftOf="@+id/price"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
