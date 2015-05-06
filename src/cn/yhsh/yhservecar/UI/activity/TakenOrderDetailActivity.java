@@ -103,6 +103,20 @@ public class TakenOrderDetailActivity extends BackActivity {
         lat = servingOrder.lat;
         lon = servingOrder.lon;
 
+
+        if (!(lat<1 && lon < 1)){
+            positionText.setTextColor(getResources().getColor(R.color.click_blue));
+            positionText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent mapIntent=new Intent(TakenOrderDetailActivity.this,MapActivity.class);
+                    mapIntent.putExtra("lat",lat);
+                    mapIntent.putExtra("lon",lon);
+                    startActivity(mapIntent);
+                }
+            });
+        }
+
 //        MarkerOptions markerOptions = new MarkerOptions();
 //        LatLng latLng = new LatLng(lat, lon);
 //        markerOptions.position(latLng);
