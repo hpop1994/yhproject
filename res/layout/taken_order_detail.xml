@@ -70,7 +70,7 @@
                                 style="@style/list_item_info.left.oneline"
                                 android:text="@string/loading_text"
                                 android:id="@+id/client_phone"
-                                android:textColor="@color/info_blue"
+                                android:textColor="@color/click_blue"
                                 android:layout_toRightOf="@+id/textView29"/>
                     </RelativeLayout>
                 </LinearLayout>
