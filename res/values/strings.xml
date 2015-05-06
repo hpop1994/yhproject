@@ -29,4 +29,7 @@
     <string name="serve_position">服务位置</string>
     <string name="car_class">车辆类型</string>
     <string name="car_number">车辆牌号</string>
+    <string name="order_taken">已接单</string>
+    <string name="order_finished">已结算</string>
+    <string name="order_canceld">已取消</string>
 </resources>

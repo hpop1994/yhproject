@@ -177,7 +177,7 @@ public class UpdateManager {
 
                         @Override
                         public void onFailure(HttpException error, String msg) {
-                            Toast.makeText(mContext, "下载失败", Toast.LENGTH_SHORT).show();
+                            MyToast.makeText(mContext, "下载失败", Toast.LENGTH_SHORT).show();
                             mHandler.sendEmptyMessage(FAILED);
                         }
                     });

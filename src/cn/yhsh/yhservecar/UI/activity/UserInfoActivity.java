@@ -8,10 +8,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-import cn.yhsh.yhservecar.Core.APIs;
-import cn.yhsh.yhservecar.Core.Account;
-import cn.yhsh.yhservecar.Core.NetworkCallback;
-import cn.yhsh.yhservecar.Core.StatusService;
+import cn.yhsh.yhservecar.Core.*;
 import cn.yhsh.yhservecar.R;
 import cn.yhsh.yhservecar.UI.component.LoadLocker;
 import com.lidroid.xutils.ViewUtils;
@@ -88,12 +85,12 @@ public class UserInfoActivity extends BindActivity {
         } else {
             final String newName = nameEdit.getText().toString().trim();
             if (newName.length() == 0) {
-                Toast.makeText(this, "不能为空", Toast.LENGTH_SHORT).show();
+                MyToast.makeText(this, "不能为空", Toast.LENGTH_SHORT).show();
                 return;
             }
             final String newPhone = phoneEdit.getText().toString().trim();
             if (newPhone.length() == 0) {
-                Toast.makeText(this, "电话不能为空", Toast.LENGTH_SHORT).show();
+                MyToast.makeText(this, "电话不能为空", Toast.LENGTH_SHORT).show();
                 return;
             }
             editButton.setImageResource(R.drawable.edit);
@@ -134,7 +131,7 @@ public class UserInfoActivity extends BindActivity {
             return;
         }
         if (!getService().getOrdersAsked().isEmpty()) {
-            Toast.makeText(this, "有尚未处理的订单", Toast.LENGTH_SHORT).show();
+            MyToast.makeText(this, "有尚未处理的订单", Toast.LENGTH_SHORT).show();
             return;
         }
 

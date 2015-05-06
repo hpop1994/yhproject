@@ -131,7 +131,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/loading_text"
                             android:id="@+id/items"
-                            style="@style/list_item_full_line_view.text"
+                            style="@style/list_item_full_line_view.text.multiline"
                             android:textColor="@color/info_blue"/>
                 </RelativeLayout>
             </LinearLayout>

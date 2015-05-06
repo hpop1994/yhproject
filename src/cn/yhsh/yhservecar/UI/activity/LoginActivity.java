@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import cn.yhsh.yhservecar.Core.MyToast;
 import cn.yhsh.yhservecar.Core.StatusService;
 import cn.yhsh.yhservecar.R;
 import cn.yhsh.yhservecar.UI.component.LoadLocker;
@@ -38,7 +39,7 @@ public class LoginActivity extends BindActivity {
         String name = nameEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
         if (password.length() < 6 || password.length() > 30) {
-            Toast.makeText(this, "密码长度应该在6到30位之间", Toast.LENGTH_SHORT).show();
+            MyToast.makeText(this, "密码长度应该在6到30位之间", Toast.LENGTH_SHORT).show();
             return;
         }
         if (!isBind()) {

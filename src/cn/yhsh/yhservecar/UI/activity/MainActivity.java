@@ -7,10 +7,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
-import cn.yhsh.yhservecar.Core.APIs;
-import cn.yhsh.yhservecar.Core.NetworkCallback;
-import cn.yhsh.yhservecar.Core.StatusService;
-import cn.yhsh.yhservecar.Core.UpdateManager;
+import cn.yhsh.yhservecar.Core.*;
 import cn.yhsh.yhservecar.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.event.OnClick;
@@ -103,7 +100,7 @@ public class MainActivity extends BindActivity implements StatusService.StatusLi
         Timer tExit = null;
         if (isExit == false) {
             isExit = true; // 准备退出
-            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            MyToast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
             tExit = new Timer();
             tExit.schedule(new TimerTask() {
                 @Override

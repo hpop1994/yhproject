@@ -30,6 +30,23 @@
                     android:layout_height="wrap_content" android:id="@+id/info_layout">
                 <LinearLayout
                         android:orientation="vertical"
+                        style="@style/list_group"
+                        >
+                    <RelativeLayout
+                            style="@style/list_item">
+                        <TextView
+                                style="@style/list_item_title"
+                                android:text="@string/order_status"
+                                android:id="@+id/textview12349"/>
+                        <TextView
+                                style="@style/list_item_info.left.oneline"
+                                android:layout_toRightOf="@id/textview12349"
+                                android:text="@string/order_taken"
+                                />
+                    </RelativeLayout>
+                </LinearLayout>
+                <LinearLayout
+                        android:orientation="vertical"
                         style="@style/list_group">
                     <RelativeLayout
                             style="@style/list_item">
@@ -105,7 +122,7 @@
                             style="@style/list_item">
                         <TextView
                                 style="@style/list_item_title"
-                                android:text="@string/actual_care_item"
+                                android:text="@string/appointment_care_item"
                                 android:id="@+id/textView14"/>
                     </RelativeLayout>
                     <RelativeLayout

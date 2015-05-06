@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import cn.yhsh.yhservecar.Core.MyToast;
 import cn.yhsh.yhservecar.Core.Order;
 import cn.yhsh.yhservecar.Core.StatusService;
 import cn.yhsh.yhservecar.R;
@@ -48,7 +49,7 @@ public class WaitingFragment extends Fragment implements ServiceFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (list.get(position).inTime>120){
-                    Toast.makeText(statusService, "已超时，无法接单",Toast.LENGTH_SHORT).show();
+                    MyToast.makeText(statusService, "已超时，无法接单", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 int orderID= list.get(position).orderID;

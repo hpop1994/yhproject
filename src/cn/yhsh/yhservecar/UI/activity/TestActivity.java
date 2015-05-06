@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.*;
 import cn.yhsh.yhservecar.Core.APIs;
 import cn.yhsh.yhservecar.Core.Account;
+import cn.yhsh.yhservecar.Core.MyToast;
 import cn.yhsh.yhservecar.Core.NetworkCallback;
 import cn.yhsh.yhservecar.R;
 import org.json.JSONException;
@@ -168,7 +169,7 @@ public class TestActivity extends Activity {
         acButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(TestActivity.this, "id:" + account.getId() + " name:" + account.getName() + " pwd:" + account.getPassword(), Toast.LENGTH_LONG).show();
+                MyToast.makeText(TestActivity.this, "id:" + account.getId() + " name:" + account.getName() + " pwd:" + account.getPassword(), Toast.LENGTH_LONG).show();
                 return true;
             }
         });

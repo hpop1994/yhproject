@@ -1,16 +1,10 @@
 package cn.yhsh.yhservecar.UI.activity;
 
-import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import cn.yhsh.yhservecar.Core.APIs;
 import cn.yhsh.yhservecar.Core.Account;
 import cn.yhsh.yhservecar.Core.NetworkCallback;
@@ -23,15 +17,10 @@ import com.lidroid.xutils.view.annotation.event.OnClick;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
 /**
  * Created by Xujc on 2015/3/6 006.
  */
-public class TakenOrderDetailActivity extends Activity {
+public class TakenOrderDetailActivity extends BackActivity {
     @ViewInject(R.id.client_name)
     private TextView clientNameText;
 
@@ -110,7 +99,7 @@ public class TakenOrderDetailActivity extends Activity {
         positionText.setText(servingOrder.address);
         timeText.setText(servingOrder.time);
         itemsText.setText(servingOrder.item);
-        appointmentText.setText(servingOrder.appointmentTime);
+        appointmentText.setText(servingOrder.appointmentTime.split("\\s")[0]);
         lat = servingOrder.lat;
         lon = servingOrder.lon;
 
@@ -143,101 +132,98 @@ public class TakenOrderDetailActivity extends Activity {
 
     @OnClick(R.id.serve_now_btn)
     private void serveClicked(View v) {
-        loadLocker.start("正在开始服务此订单");
-        APIs.serveOrder(orderID, Account.getInstance(this), new NetworkCallback(this) {
-            @Override
-            protected void onSuccess(JSONObject data) {
-                loadLocker.jobFinished();
-                finish();
-                makeText("操作成功，请到正在服务的订单中查看");
-            }
-
-            @Override
-            protected void onFailed() {
-                loadLocker.jobFinished();
-            }
-        });
+        Intent intent = new Intent(this, FinishActivity.class);
+        intent.putExtra("orderID", orderID);
+        startActivityForResult(intent, 1);
     }
 
-    @OnClick(R.id.appointment_time)
-    private void appointmentTimeClicked(View v) {
-        if (!infoDone) {
-            return;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==1 && resultCode==1){
+            finish();
         }
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        Date date = null;
-        int tYear;
-        int tMonth;
-        int tDay;
-        int tHour;
-        int tMinutes;
-        try {
-            date = format.parse(order.appointmentTime);
-            Calendar c = Calendar.getInstance();
-            c.setTime(date);
-            tYear = c.get(Calendar.YEAR);
-            tMonth = c.get(Calendar.MONTH);
-            tDay = c.get(Calendar.DAY_OF_MONTH);
-            tHour = c.get(Calendar.HOUR_OF_DAY);
-            tMinutes = c.get(Calendar.MINUTE);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            Calendar c = Calendar.getInstance();
-            tYear = c.get(Calendar.YEAR);
-            tMonth = c.get(Calendar.MONTH);
-            tDay = c.get(Calendar.DAY_OF_MONTH);
-            tHour = c.get(Calendar.HOUR_OF_DAY);
-            tMinutes = c.get(Calendar.MINUTE);
-        }
-        final int year=tYear;
-        final int month=tMonth;
-        final int day=tDay;
-        final int hour=tHour;
-        final int minutes=tMinutes;
-
-        dateStr=null;
-        newAppointmentStr=null;
-        DatePickerDialog datePicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                dateStr = "" + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
-            }
-        }, year, month, day);
-        datePicker.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                if (dateStr==null){
-                    return;
-                }
-                TimePickerDialog timePickerDialog = new TimePickerDialog(TakenOrderDetailActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        timeStr=""+hourOfDay+":"+minute;
-                        newAppointmentStr = dateStr + " " + timeStr;
-                        appointmentText.setText(newAppointmentStr);
-
-                    }
-                }, hour,minutes,true);
-                timePickerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        APIs.changeAppointmentTime(orderID, newAppointmentStr
-                                , Account.getInstance(TakenOrderDetailActivity.this)
-                                , new NetworkCallback(TakenOrderDetailActivity.this) {
-                            @Override
-                            protected void onSuccess(JSONObject data) {
-                                makeText("预约时间修改成功");
-                            }
-                        });
-                    }
-                });
-                timePickerDialog.setTitle("设定预约时间");
-                timePickerDialog.show();
-            }
-        });
-        datePicker.setTitle("设定预约时间");
-        datePicker.show();
     }
+
+//    @OnClick(R.id.appointment_time)
+//    private void appointmentTimeClicked(View v) {
+//        if (!infoDone) {
+//            return;
+//        }
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+//        Date date = null;
+//        int tYear;
+//        int tMonth;
+//        int tDay;
+//        int tHour;
+//        int tMinutes;
+//        try {
+//            date = format.parse(order.appointmentTime);
+//            Calendar c = Calendar.getInstance();
+//            c.setTime(date);
+//            tYear = c.get(Calendar.YEAR);
+//            tMonth = c.get(Calendar.MONTH);
+//            tDay = c.get(Calendar.DAY_OF_MONTH);
+//            tHour = c.get(Calendar.HOUR_OF_DAY);
+//            tMinutes = c.get(Calendar.MINUTE);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//            Calendar c = Calendar.getInstance();
+//            tYear = c.get(Calendar.YEAR);
+//            tMonth = c.get(Calendar.MONTH);
+//            tDay = c.get(Calendar.DAY_OF_MONTH);
+//            tHour = c.get(Calendar.HOUR_OF_DAY);
+//            tMinutes = c.get(Calendar.MINUTE);
+//        }
+//        final int year=tYear;
+//        final int month=tMonth;
+//        final int day=tDay;
+//        final int hour=tHour;
+//        final int minutes=tMinutes;
+//
+//        dateStr=null;
+//        newAppointmentStr=null;
+//        DatePickerDialog datePicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+//            @Override
+//            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+//                dateStr = "" + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+//            }
+//        }, year, month, day);
+//        datePicker.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//            @Override
+//            public void onDismiss(DialogInterface dialog) {
+//                if (dateStr==null){
+//                    return;
+//                }
+//                TimePickerDialog timePickerDialog = new TimePickerDialog(TakenOrderDetailActivity.this, new TimePickerDialog.OnTimeSetListener() {
+//                    @Override
+//                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//                        timeStr=""+hourOfDay+":"+minute;
+//                        newAppointmentStr = dateStr + " " + timeStr;
+//                        appointmentText.setText(newAppointmentStr);
+//
+//                    }
+//                }, hour,minutes,true);
+//                timePickerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//                    @Override
+//                    public void onDismiss(DialogInterface dialog) {
+//                        APIs.changeAppointmentTime(orderID, newAppointmentStr
+//                                , Account.getInstance(TakenOrderDetailActivity.this)
+//                                , new NetworkCallback(TakenOrderDetailActivity.this) {
+//                            @Override
+//                            protected void onSuccess(JSONObject data) {
+//                                makeText("预约时间修改成功");
+//                            }
+//                        });
+//                    }
+//                });
+//                timePickerDialog.setTitle("设定预约时间");
+//                timePickerDialog.show();
+//            }
+//        });
+//        datePicker.setTitle("设定预约时间");
+//        datePicker.show();
+//    }
 
     @OnClick(R.id.client_phone)
     private void phoneClicked(View v){

@@ -30,14 +30,16 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Small Text"
             android:id="@+id/item" android:layout_below="@+id/name" android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true" android:maxLines="1" android:textColor="@color/darkgray"/>
+            android:layout_alignParentRight="true" android:maxLines="1" android:textColor="@color/darkgray"
+            android:singleLine="true"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Small Text"
             android:id="@+id/address" android:layout_below="@+id/item" android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true" android:maxLines="1" android:textColor="@color/darkgray"/>
+            android:layout_alignParentRight="true" android:maxLines="1" android:textColor="@color/darkgray"
+            android:singleLine="true"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

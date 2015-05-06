@@ -1,6 +1,5 @@
 package cn.yhsh.yhservecar.UI.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Rect;
@@ -11,7 +10,6 @@ import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.*;
 import cn.yhsh.yhservecar.Core.*;
 import cn.yhsh.yhservecar.R;
@@ -30,15 +28,15 @@ import java.util.ArrayList;
 /**
  * Created by Xujc on 2015/1/23.
  */
-public class FinishActivity extends Activity {
+public class FinishActivity extends BackActivity {
     @ViewInject(R.id.client_name)
-    private TextView clientNameText;
+    private EditText clientNameText;
 
     @ViewInject(R.id.client_phone)
-    private TextView clientPhoneText;
+    private EditText clientPhoneText;
 
     @ViewInject(R.id.client_type)
-    private TextView clientTypeText;
+    private EditText clientTypeText;
 
     @ViewInject(R.id.position)
     private TextView positionText;
@@ -53,7 +51,7 @@ public class FinishActivity extends Activity {
     private TextView itemsText;
 
     @ViewInject(R.id.itemList)
-    private ListView listView;
+    private LinearLayout listView;
 
     @ViewInject(R.id.selectCarBtn)
     private Button selectCarBtn;
@@ -73,7 +71,7 @@ public class FinishActivity extends Activity {
     private View dialogView;
 
     private ArrayList<ListItem> itemListData = new ArrayList<ListItem>();
-    private MyAdapter adapter;
+//    private MyAdapter adapter;
 
     private LoadLocker loadLocker;
 
@@ -113,8 +111,8 @@ public class FinishActivity extends Activity {
         inflater = getLayoutInflater();
         loadLocker = new LoadLocker(this);
         loadLocker.setCancalable(false);
-        adapter = new MyAdapter();
-        listView.setAdapter(adapter);
+//        adapter = new MyAdapter();
+//        listView.setAdapter(adapter);
 
         itemSelector = new LayerSelectorView(this);
 
@@ -173,8 +171,9 @@ public class FinishActivity extends Activity {
             public void onSelectLeaf(ListItem item, ArrayList<ListItem> oldData, int position) {
                 popupWindow.dismiss();
                 itemListData.add(item);
-                adapter.notifyDataSetChanged();
-                setListViewHeightBasedOnChildren(listView);
+                addItem(item);
+//                adapter.notifyDataSetChanged();
+//                setListViewHeightBasedOnChildren(listView);
             }
         });
 
@@ -324,9 +323,80 @@ public class FinishActivity extends Activity {
         reSum();
     }
 
+    private void addItem(ListItem item) {
+        inflater.inflate(R.layout.item_selected_item, listView);
+        final View view = listView.getChildAt(listView.getChildCount() - 1);
+        view.setTag(item);
+        TextView nameText = (TextView) view.findViewById(R.id.name);
+        TextView unitText = (TextView) view.findViewById(R.id.unit);
+        TextView unitText2 = (TextView) view.findViewById(R.id.unit2);
+        TextView price = (TextView) view.findViewById(R.id.price);
+        EditText numEdit=(EditText) view.findViewById(R.id.number);
+        EditText discount=(EditText) view.findViewById(R.id.discount);
+        ImageButton deleteBtn = (ImageButton) view.findViewById(R.id.delete);
+        nameText.setText(item.getItemName());
+        try {
+            unitText.setText(((JSONObject) item.getBaseData()).getString("unit"));
+            unitText2.setText(((JSONObject) item.getBaseData()).getString("unit"));
+            price.setText(((JSONObject) item.getBaseData()).getString("price"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ListItem aItem=(ListItem) view.getTag();
+                listView.removeView(view);
+                itemListData.remove(aItem);
+                reSum();
+            }
+        });
+        numEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                reSum();
+            }
+        });
+        discount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                reSum();
+            }
+        });
+        reSum();
+    }
+
     private void setInfo(Order order) {
         clientNameText.setText(order.name);
+        if (order.name.length()>0){
+            clientNameText.setFocusable(false);
+        }
         clientPhoneText.setText(order.phone);
+        if (clientPhoneText.length()==11){
+            clientPhoneText.setFocusable(false);
+        }
+
+        //todo client type
         positionText.setText(order.address);
         timeText.setText(order.time);
         itemsText.setText(order.item);
@@ -350,6 +420,32 @@ public class FinishActivity extends Activity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                if (cars.size()!=0){
+                    final Car c=cars.get(0);
+                    selectedcarid = c.id;
+                    selectCarBtn.setText("正在读取");
+                    APIs.getCarClassName(c.classid, Account.getInstance(FinishActivity.this), new NetworkCallback(FinishActivity.this) {
+                        @Override
+                        protected void onSuccess(JSONObject data) {
+                            try {
+                                selectedcarid = c.id;
+                                selectCarBtn.setText(c.carCode + "\n" + data.getString("carclass"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                selectedcarid = c.id;
+                                selectCarBtn.setText(c.carCode);
+                            }
+                        }
+
+                        @Override
+                        protected void onFailed() {
+                            super.onFailed();
+                            selectCarBtn.setText(c.carCode);
+                        }
+                    });
+                } else {
+                    selectCarBtn.setText("没有车辆");
+                }
                 loadLocker.jobFinished();
             }
 
@@ -360,85 +456,6 @@ public class FinishActivity extends Activity {
         });
     }
 
-
-    class MyAdapter extends BaseAdapter {
-        @Override
-        public int getCount() {
-            return itemListData.size();
-        }
-
-        @Override
-        public ListItem getItem(int position) {
-            return itemListData.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            final int iposition=position;
-            View v=inflater.inflate(R.layout.item_selected_item, null);;
-            TextView nameText = (TextView) v.findViewById(R.id.name);
-            TextView unitText = (TextView) v.findViewById(R.id.unit);
-            TextView unitText2 = (TextView) v.findViewById(R.id.unit2);
-            TextView price = (TextView) v.findViewById(R.id.price);
-            EditText numEdit=(EditText) v.findViewById(R.id.number);
-            EditText discount=(EditText) v.findViewById(R.id.discount);
-            ImageButton deleteBtn = (ImageButton) v.findViewById(R.id.delete);
-            nameText.setText(getItem(position).getItemName());
-            try {
-                unitText.setText(((JSONObject) getItem(position).getBaseData()).getString("unit"));
-                unitText2.setText(((JSONObject) getItem(position).getBaseData()).getString("unit"));
-                price.setText(((JSONObject) getItem(position).getBaseData()).getString("price"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            deleteBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    itemListData.remove(iposition);
-                    notifyDataSetChanged();
-                    setListViewHeightBasedOnChildren(listView);
-                }
-            });
-            numEdit.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    reSum();
-                }
-            });
-            discount.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    reSum();
-                }
-            });
-            return v;
-        }
-    }
 
     private void reSum(){
         try {
@@ -499,9 +516,9 @@ public class FinishActivity extends Activity {
         builder.setItems(carStirngs, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                final Car c=cars.get(which);
+                final Car c = cars.get(which);
                 selectedcarid = cars.get(which).id;
-                final String carCode=cars.get(which).carCode;
+                final String carCode = cars.get(which).carCode;
                 selectCarBtn.setText("正在读取");
                 APIs.getCarClassName(c.classid, Account.getInstance(FinishActivity.this), new NetworkCallback(FinishActivity.this) {
                     @Override
@@ -531,28 +548,28 @@ public class FinishActivity extends Activity {
     private void confirmClicked(View v) {
         String s = priceEditText.getText().toString();
         if (s.length() == 0) {
-            Toast.makeText(this, "价格不能为空", Toast.LENGTH_SHORT).show();
+            MyToast.makeText(this, "价格不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
         double price = 0;
         try {
             price = Double.parseDouble(s);
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "价格不正确", Toast.LENGTH_SHORT).show();
+            MyToast.makeText(this, "价格不正确", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
             return;
         }
         if (price < 0) {
-            Toast.makeText(this, "价格不能为负", Toast.LENGTH_SHORT).show();
+            MyToast.makeText(this, "价格不能为负", Toast.LENGTH_SHORT).show();
             return;
         }
         if (selectedcarid==-1){
-            Toast.makeText(this, "请选择用户车辆", Toast.LENGTH_SHORT).show();
+            MyToast.makeText(this, "请选择用户车辆", Toast.LENGTH_SHORT).show();
             return;
         }
         String distanc=distanceEditText.getText().toString().trim();
         if (distanc.length()==0){
-            Toast.makeText(this, "里程数没有填写", Toast.LENGTH_SHORT).show();
+            MyToast.makeText(this, "里程数没有填写", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -562,7 +579,7 @@ public class FinishActivity extends Activity {
                 double num = Double.parseDouble(((EditText) listView.getChildAt(i).findViewById(R.id.number)).getText().toString().trim());
                 double discount = Double.parseDouble(((EditText) listView.getChildAt(i).findViewById(R.id.discount)).getText().toString().trim());
                 if(discount>10 || discount <=0){
-                    Toast.makeText(this, "项目价格不正确", Toast.LENGTH_SHORT).show();
+                    MyToast.makeText(this, "项目价格不正确", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 try {
@@ -575,22 +592,22 @@ public class FinishActivity extends Activity {
                 }
             }
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "项目价格不正确", Toast.LENGTH_SHORT).show();
+            MyToast.makeText(this, "项目价格不正确", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
             return;
         }
         loadLocker.start("正在完成");
 
         APIs.finishOrder(orderID, selectedcarid, goodsObj, price
-                ,clientNameText.getText().toString().trim()
-                ,clientPhoneText.getText().toString().trim()
-                ,clientTypeText.getText().toString().trim()
-                ,remarkText.getText().toString().trim()
-                ,distanc
+                , clientNameText.getText().toString().trim()
+                , clientPhoneText.getText().toString().trim()
+                , clientTypeText.getText().toString().trim()
+                , remarkText.getText().toString().trim()
+                , distanc
                 , Account.getInstance(this), new NetworkCallback(this) {
             @Override
             protected void onSuccess(JSONObject data) {
-                Toast.makeText(FinishActivity.this, "完成订单成功", Toast.LENGTH_SHORT).show();
+                MyToast.makeText(FinishActivity.this, "完成订单成功", Toast.LENGTH_SHORT).show();
                 loadLocker.jobFinished();
                 setResult(1);
                 finish();
@@ -601,26 +618,5 @@ public class FinishActivity extends Activity {
                 loadLocker.jobFinished();
             }
         });
-    }
-
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
-        if(listView == null) return;
-
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null) {
-            // pre-condition
-            return;
-        }
-
-        int totalHeight = 0;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            View listItem = listAdapter.getView(i, null, listView);
-            listItem.measure(0, 0);
-            totalHeight += listItem.getMeasuredHeight();
-        }
-
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
     }
 }

@@ -1,6 +1,5 @@
 package cn.yhsh.yhservecar.UI.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,7 +26,7 @@ import java.util.ArrayList;
 /**
  * Created by Xujc on 2015/3/6 006.
  */
-public class OrderListActivity extends Activity {
+public class OrderListActivity extends BackActivity {
     @ViewInject(R.id.list)
     private ListView listView;
 
@@ -194,28 +193,31 @@ public class OrderListActivity extends Activity {
             }
             TextView idText=(TextView) convertView.findViewById(R.id.order_id);
             TextView timeText=(TextView) convertView.findViewById(R.id.time);
+            timeText.setVisibility(View.GONE);
             TextView statusText=(TextView) convertView.findViewById(R.id.status);
             Order order = getItem(position);
             timeText.setText(order.time);
             switch (order.status){
                 case 1:
-                    statusText.setText("已接单");
+                    statusText.setText(getString(R.string.order_taken));
                     break;
                 case 2:
-                    statusText.setText("已取消");
+                    statusText.setText(getString(R.string.order_canceld));
                     break;
                 case 3:
-                    statusText.setText("已结算");
+                    statusText.setText(getString(R.string.order_finished));
                     break;
             }
             TextView itemText=(TextView) convertView.findViewById(R.id.item);
             TextView addressText=(TextView) convertView.findViewById(R.id.address);
             idText.setText(String.valueOf(order.orderID));
-            itemText.setText(order.item);
-            addressText.setText(order.address);
             if (order.status==3){
-                itemText.setText(order.name+" "+order.carID);
-                addressText.setText(order.appointmentTime.split("\\s")[0]);
+                addressText.setText(order.address);
+                itemText.setText("客户姓名:"+order.name+"    保养车辆:"+order.carID);
+                addressText.setText("保养位置:"+order.address);
+            }else{
+                itemText.setText("保养项目:"+order.item);
+                addressText.setText("预约时间:"+order.appointmentTime.split("\\s")[0]);
             }
             return convertView;
         }

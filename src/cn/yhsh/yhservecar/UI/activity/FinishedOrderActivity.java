@@ -1,6 +1,5 @@
 package cn.yhsh.yhservecar.UI.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,7 +22,7 @@ import org.json.JSONObject;
 /**
  * Created by Xujc on 2015/1/12.
  */
-public class FinishedOrderActivity extends Activity  {
+public class FinishedOrderActivity extends BackActivity  {
 
     @ViewInject(R.id.info_layout)
     private LinearLayout infoLayout;
@@ -97,7 +96,7 @@ public class FinishedOrderActivity extends Activity  {
                     int status = data.getInt("status");
                     LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
                     if (status == FINISHED) {
-                        orderStatus.setText("结算完成");
+                        orderStatus.setText(getString(R.string.order_finished));
                         clientNameText.setText(data.getString("client_name"));
                         clientPhoneText.setText(data.getString("client_phone"));
                         clientTypeText.setText(data.getString("client_type"));
@@ -127,7 +126,7 @@ public class FinishedOrderActivity extends Activity  {
                         carNameText.setText(data.getJSONObject("usercar").getString("name"));
                         carKmText.setText(data.getString("km"));
                     } else if (status == CANCELED) {
-                        orderStatus.setText("已取消");
+                        orderStatus.setText(getString(R.string.order_canceld));
                         scarNameLayout.setVisibility(View.GONE);
                         positionText.setText(data.getString("address"));
                         serveTimeText.setText(data.getString("time"));

@@ -578,7 +578,7 @@ public class StatusService extends Service implements AMapLocationListener {
 //            }
 //        }
 //        if (tmp == null) {
-//            Toast.makeText(this, "此单已过期", Toast.LENGTH_SHORT).show();
+//            MyToast.makeText(this, "此单已过期", Toast.LENGTH_SHORT).show();
 //            listener.jobFailed();
 //            return;
 //        }

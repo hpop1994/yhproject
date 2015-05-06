@@ -146,9 +146,8 @@
         <activity android:name=".UI.activity.ChangePasswordAcivity" android:label="变更密码"/>
         <activity android:name=".UI.activity.FinishActivity" android:label="订单信息"/>
         <activity android:name=".UI.activity.OrderListActivity" android:label="我的订单"/>
-        <activity android:name=".UI.activity.ServingOrders" android:label="我的订单"/>
         <activity android:name=".UI.activity.TakenOrderDetailActivity" android:label="订单信息"/>
-        <activity android:name=".UI.activity.ServingOrderDetailActivity" android:label="订单信息"/>
         <activity android:name=".UI.activity.FinishedOrderActivity" android:label="订单信息"/>
+        <activity android:name=".UI.activity.MapActivity" android:label="地理位置"/>
     </application>
 </manifest>

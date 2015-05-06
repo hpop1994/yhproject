@@ -26,22 +26,22 @@ public abstract class NetworkCallback {
     }
 
     public  void dealAccountError(){
-        Toast.makeText(context, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+        MyToast.makeText(context, "用户名或密码错误", Toast.LENGTH_SHORT).show();
         onFailed();
     }
 
     public  void dealClientFormatError(){
-        Toast.makeText(context, "客户端发送格式错误", Toast.LENGTH_SHORT).show();
+        MyToast.makeText(context, "客户端发送格式错误", Toast.LENGTH_SHORT).show();
         onFailed();
     }
 
     public  void dealServerFormatError(){
-        Toast.makeText(context, "服务器发送格式错误", Toast.LENGTH_SHORT).show();
+        MyToast.makeText(context, "服务器发送格式错误", Toast.LENGTH_SHORT).show();
         onFailed();
     }
 
     public  void dealNetworkError(){
-        Toast.makeText(context, "网络错误,无法连接到服务器",Toast.LENGTH_SHORT).show();
+        MyToast.makeText(context, "网络错误,无法连接到服务器",Toast.LENGTH_SHORT).show();
         onFailed();
     }
 
@@ -52,6 +52,6 @@ public abstract class NetworkCallback {
 
 
     protected final void makeText(String s){
-        Toast.makeText(context, s,Toast.LENGTH_SHORT).show();
+        MyToast.makeText(context, s,Toast.LENGTH_SHORT).show();
     }
 }
