@@ -33,6 +33,7 @@ public class MapActivity extends BackActivity {
         aMap=mapView.getMap();
         LatLng latLng = new LatLng(lat, lon);
         aMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
+        aMap.moveCamera(CameraUpdateFactory.zoomTo(25));
         MarkerOptions markerOptions=new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("¿Í»§Î»ÖÃ");
