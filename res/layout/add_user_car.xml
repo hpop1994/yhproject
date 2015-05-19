@@ -12,6 +12,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/desc"
-            android:hint="备    注" android:layout_below="@+id/carid" android:layout_alignParentLeft="true"
+            android:hint="备  注" android:layout_below="@+id/carid" android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"/>
 </RelativeLayout>
