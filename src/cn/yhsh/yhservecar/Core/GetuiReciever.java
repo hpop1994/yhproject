@@ -45,6 +45,27 @@ public class GetuiReciever extends BroadcastReceiver {
                      protected void onSuccess(JSONObject data) {
 
                      }
+
+                     @Override
+                     public void dealAccountError() {
+
+                     }
+
+                     @Override
+                     public void dealClientFormatError() {
+                     }
+
+                     @Override
+                     public void dealServerFormatError() {
+                     }
+
+                     @Override
+                     public void dealNetworkError() {
+                     }
+
+                     @Override
+                     public void dealUnexpectedError() {
+                     }
                  });
             default:
                 break;

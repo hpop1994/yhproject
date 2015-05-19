@@ -59,6 +59,9 @@ public class StatusService extends Service implements AMapLocationListener {
                         notifyOrderListChanged();
                         getAndNotifyOrders();
                     }
+                    if (o.inTime>140){
+                        ordersAsked.remove(i);
+                    }
                 }
                 notifyOrderListChanged();
                 if (!ordersAsked.isEmpty()) {
@@ -380,6 +383,31 @@ public class StatusService extends Service implements AMapLocationListener {
                 countdownHandler.removeMessages(COUNTDOWN);
                 notifyOrderListChanged();
             }
+
+            @Override
+            public void dealAccountError() {
+                onFailed();
+            }
+
+            @Override
+            public void dealClientFormatError() {
+                onFailed();
+            }
+
+            @Override
+            public void dealServerFormatError() {
+                onFailed();
+            }
+
+            @Override
+            public void dealNetworkError() {
+                onFailed();
+            }
+
+            @Override
+            public void dealUnexpectedError() {
+                onFailed();
+            }
         });
 
 
@@ -416,6 +444,32 @@ public class StatusService extends Service implements AMapLocationListener {
                 notifyStatusListener();
                 makeText("获取状态失败");
                 super.onFailed();
+            }
+
+            @Override
+            public void dealAccountError() {
+                onFailed();
+            }
+
+            @Override
+            public void dealClientFormatError() {
+                onFailed();
+
+            }
+
+            @Override
+            public void dealServerFormatError() {
+                onFailed();
+            }
+
+            @Override
+            public void dealNetworkError() {
+                onFailed();
+            }
+
+            @Override
+            public void dealUnexpectedError() {
+                onFailed();
             }
         });
     }
