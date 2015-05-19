@@ -1,27 +1,26 @@
 package cn.yhsh.yhservecar.UI.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import cn.yhsh.yhservecar.Core.*;
+import cn.yhsh.yhservecar.Core.Account;
+import cn.yhsh.yhservecar.Core.MyToast;
+import cn.yhsh.yhservecar.Core.NewAPI;
 import cn.yhsh.yhservecar.Core.entry.OrderDetail;
 import cn.yhsh.yhservecar.R;
 import cn.yhsh.yhservecar.UI.component.LoadLocker;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
-import org.json.JSONObject;
 
 /**
- * Created by Xujc on 2015/3/6 006.
+ * Created by Xujc on 2015/5/19 019.
  */
-public class TakenOrderDetailActivity extends BackActivity {
+public class CanceledActivity extends Activity {
     @ViewInject(R.id.client_name)
     private TextView clientNameText;
 
@@ -46,12 +45,15 @@ public class TakenOrderDetailActivity extends BackActivity {
     @ViewInject(R.id.appointment_time)
     private TextView appointmentText;
 
+    @ViewInject(R.id.cancel_reason)
+    private TextView cancelReason;
+
 //    @ViewInject(R.id.map)
 //    private MapView mapView;
 
     private double lat;
     private double lon;
-//    private AMap aMap;
+    //    private AMap aMap;
     private int orderID;
 
     private LoadLocker loadLocker;
@@ -65,7 +67,7 @@ public class TakenOrderDetailActivity extends BackActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.taken_order_detail);
+        setContentView(R.layout.canceled_order_detail);
         ViewUtils.inject(this);
 
         loadLocker = new LoadLocker(this);
@@ -80,13 +82,14 @@ public class TakenOrderDetailActivity extends BackActivity {
 
             @Override
             public void failed() {
-                MyToast.makeText(TakenOrderDetailActivity.this, "获取订单信息失败", Toast.LENGTH_SHORT).show();
+                MyToast.makeText(CanceledActivity.this, "获取订单信息失败", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
 
     private void setOrderInfoWith(OrderDetail servingOrder) {
+        cancelReason.setText(servingOrder.cancelReason);
         serialId.setText(servingOrder.serialId);
         clientNameText.setText(servingOrder.clientName);
         clientPhoneText.setText(servingOrder.clientPhone);
@@ -104,7 +107,7 @@ public class TakenOrderDetailActivity extends BackActivity {
             positionText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent mapIntent=new Intent(TakenOrderDetailActivity.this,MapActivity.class);
+                    Intent mapIntent=new Intent(CanceledActivity.this,MapActivity.class);
                     mapIntent.putExtra("lat",lat);
                     mapIntent.putExtra("lon",lon);
                     startActivity(mapIntent);
@@ -113,83 +116,6 @@ public class TakenOrderDetailActivity extends BackActivity {
         }
     }
 
-    @OnClick(R.id.cancel)
-    private void cancelClicked(View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final View inflate = View.inflate(this, R.layout.refuse_dialog, null);
-        EditText editText = (EditText) inflate.findViewById(R.id.reason);
-        editText.setHint("输入取消订单原因");
-        builder.setView(inflate);
-        builder.setTitle("取消订单原因");
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                EditText editText = (EditText) inflate.findViewById(R.id.reason);
-                String reasonText = editText.getText().toString().trim();
-                if (reasonText.length() == 0) {
-                    MyToast.makeText(TakenOrderDetailActivity.this,  "取消订单原因不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                dialog.dismiss();
-                loadLocker.start("正在取消订单");
-                APIs.cancelOrder(orderID, reasonText,
-                        Account.getInstance(TakenOrderDetailActivity.this), new NetworkCallback(TakenOrderDetailActivity.this) {
-                            @Override
-                            protected void onSuccess(JSONObject data) {
-                                loadLocker.jobFinished();
-                                MyToast.makeText(TakenOrderDetailActivity.this, "取消订单成功", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
-
-                            @Override
-                            protected void onFailed() {
-                                loadLocker.jobFinished();
-                                MyToast.makeText(TakenOrderDetailActivity.this, "取消订单失败", Toast.LENGTH_SHORT).show();
-//                                finish();
-                            }
-                        });
-
-            }
-        });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.show();
-
-
-//        loadLocker.start("正在取消订单");
-//        APIs.cancelOrder(orderID, Account.getInstance(this), new NetworkCallback(this) {
-//            @Override
-//            protected void onSuccess(JSONObject data) {
-//                loadLocker.jobFinished();
-//                finish();
-//                makeText("取消成功");
-//            }
-//
-//            @Override
-//            protected void onFailed() {
-//                loadLocker.jobFinished();
-//            }
-//        });
-    }
-
-    @OnClick(R.id.serve_now_btn)
-    private void serveClicked(View v) {
-        Intent intent = new Intent(this, FinishActivity.class);
-        intent.putExtra("orderID", orderID);
-        startActivityForResult(intent, 1);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==1 && resultCode==1){
-            finish();
-        }
-    }
 
 //    @OnClick(R.id.appointment_time)
 //    private void appointmentTimeClicked(View v) {
@@ -241,7 +167,7 @@ public class TakenOrderDetailActivity extends BackActivity {
 //                if (dateStr==null){
 //                    return;
 //                }
-//                TimePickerDialog timePickerDialog = new TimePickerDialog(TakenOrderDetailActivity.this, new TimePickerDialog.OnTimeSetListener() {
+//                TimePickerDialog timePickerDialog = new TimePickerDialog(CanceledActivity.this, new TimePickerDialog.OnTimeSetListener() {
 //                    @Override
 //                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 //                        timeStr=""+hourOfDay+":"+minute;
@@ -254,8 +180,8 @@ public class TakenOrderDetailActivity extends BackActivity {
 //                    @Override
 //                    public void onDismiss(DialogInterface dialog) {
 //                        APIs.changeAppointmentTime(orderID, newAppointmentStr
-//                                , Account.getInstance(TakenOrderDetailActivity.this)
-//                                , new NetworkCallback(TakenOrderDetailActivity.this) {
+//                                , Account.getInstance(CanceledActivity.this)
+//                                , new NetworkCallback(CanceledActivity.this) {
 //                            @Override
 //                            protected void onSuccess(JSONObject data) {
 //                                makeText("预约时间修改成功");

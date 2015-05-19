@@ -202,7 +202,7 @@ public class WaitingFragment extends Fragment implements ServiceFragment {
             }
             TextView itemText=(TextView) convertView.findViewById(R.id.item);
             TextView addressText=(TextView) convertView.findViewById(R.id.address);
-            idText.setText(String.valueOf(order.orderID));
+            idText.setText(order.iid);
             itemText.setText(order.item);
             addressText.setText(order.address);
             return convertView;

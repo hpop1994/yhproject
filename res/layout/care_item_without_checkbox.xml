@@ -1,34 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" style="@style/list_item" >
+                style="@style/list_item">
 
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Small Text"
+            android:id="@+id/dan_jia" android:layout_alignParentEnd="false" android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true" android:layout_below="@+id/text" android:gravity="bottom"
+            android:textColor="@color/info_blue" android:layout_marginTop="3dp"/>
+    <TextView
             android:text="项目"
             android:id="@+id/text"
-            style="@style/list_item_title.grey" android:layout_toLeftOf="@+id/discount"/>
+            android:layout_alignParentTop="true" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/darkgray"
+            android:layout_alignParentLeft="true" android:layout_toLeftOf="@+id/textView18"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="0"
-            android:id="@+id/price" android:layout_centerVertical="true"
+            android:id="@+id/price"
             android:textColor="@color/info_blue" android:layout_alignParentRight="true"/>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
               android:textAppearance="?android:attr/textAppearanceMedium" android:text="￥" android:id="@+id/textView18"
-              android:textColor="@color/info_blue" android:layout_centerVertical="true" android:layout_toLeftOf="@+id/price"/>
+              android:textColor="@color/info_blue" android:layout_toLeftOf="@+id/price"/>
+
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/number" android:layout_centerVertical="true" android:layout_toLeftOf="@+id/textView18"
-            android:layout_marginRight="10dp"/>
+            android:id="@+id/number"
+            android:layout_marginRight="10dp" android:layout_alignParentTop="false"
+            android:layout_alignParentLeft="false" android:layout_alignParentBottom="false"
+            android:layout_alignParentRight="false" android:singleLine="true" android:layout_toRightOf="@+id/tx1"
+            android:layout_alignBottom="@+id/tx1"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/discount" android:layout_centerVertical="true" android:layout_toLeftOf="@+id/number"
-            android:layout_marginRight="5dp"/>
+            android:id="@+id/tx1"
+            android:layout_marginRight="5dp"
+            android:layout_alignParentLeft="false" android:text="数量:"
+            android:layout_alignParentTop="false"
+            android:layout_toRightOf="@+id/dan_jia" android:layout_alignBottom="@+id/dan_jia"
+            android:layout_marginLeft="5dp"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/tx2"
+            android:layout_marginRight="5dp"
+            android:layout_alignParentLeft="false" android:text="折扣:" android:layout_alignParentBottom="false"
+            android:gravity="bottom|end" android:layout_alignBottom="@+id/dan_jia"
+            android:layout_toRightOf="@+id/number" android:layout_marginLeft="5dp"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/discount"
+            android:layout_marginRight="5dp"
+            android:layout_alignParentBottom="false" android:layout_alignParentRight="true"
+            android:singleLine="true" android:gravity="bottom" android:layout_toRightOf="@+id/tx2"
+            android:layout_alignBottom="@+id/tx2"/>
 </RelativeLayout>

@@ -337,7 +337,7 @@ public class TestActivity extends Activity {
                 APIs.getOrderDetail(Integer.parseInt(s1), account, getCallback());
                 break;
             case REPLY_ORDER_REQUEST:
-                APIs.replyOrderRequest(Integer.parseInt(s1), Boolean.parseBoolean(s2), account, getCallback());
+//                APIs.replyOrderRequest(Integer.parseInt(s1), Boolean.parseBoolean(s2), account, getCallback());
                 break;
             case GET_CAR_CLASS:
                 APIs.getCarClass(Integer.parseInt(s1), account, getCallback());
@@ -349,7 +349,7 @@ public class TestActivity extends Activity {
 //                APIs.finishOrder(Integer.parseInt(s1), Integer.parseInt(s2), new JSONObject(), Integer.parseInt(s3), account, getCallback());
                 break;
             case CANCEL_ORDER:
-                APIs.cancelOrder(Integer.parseInt(s1), account, getCallback());
+//                APIs.cancelOrder(Integer.parseInt(s1), account, getCallback());
                 break;
             case GET_USER_CARS:
                 APIs.getUserCars(Integer.parseInt(s1), account, getCallback());

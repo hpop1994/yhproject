@@ -19,7 +19,7 @@
                 android:ems="10"
                 android:id="@+id/number" android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/unit" android:minWidth="40dp" android:hint="数量"
-                android:numeric="decimal" android:inputType="numberDecimal"
+                android:numeric="decimal" android:inputType="number|numberDecimal"
                 android:background="@null" android:text="1" android:gravity="center"/>
         <ImageButton
                 android:layout_width="wrap_content"
@@ -44,7 +44,7 @@
                 android:ems="10"
                 android:id="@+id/discount" android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/textView12" android:hint="折扣" android:text="1" android:gravity="center"
-                android:inputType="numberSigned|numberDecimal" android:background="@null"
+                android:inputType="number|numberDecimal" android:background="@null"
                 android:textColor="@color/darkgray"/>
         <TextView
                 android:layout_width="wrap_content"
@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="/"
+                android:text="￥/"
                 android:id="@+id/textView16" android:layout_alignTop="@+id/price" android:layout_toRightOf="@+id/price"
                 android:textColor="@color/blue" android:layout_alignParentBottom="true" android:gravity="bottom"/>
         <TextView

@@ -8,8 +8,8 @@ import org.json.JSONObject;
  * Created by Xujc on 2015/1/19.
  */
 public class APIs {
-    private static final String SERVER = "http://app.lhkb.cn:88/index.php/Server/";
-//    private static final String SERVER = "http://192.168.1.99/www/index.php/Server/";
+//    private static final String SERVER = "http://app.lhkb.cn:88/index.php/Server/";
+    private static final String SERVER = "http://192.168.1.99/www/index.php/Server/";
 
     //01
     private static final String LOGIN = "Sget/login";
@@ -57,6 +57,8 @@ public class APIs {
     private static final String GET_ALL_ORDERS = "Sverify/allindent";
     //23
     private static final String GET_VERSION = "Sget/version";
+    //24
+    private static final String GET_USER_TYPE = "Sget/getuserclass";
 
     private static final String GET_USER_INFO = "Sverify/userinfo";
     private static final String GET_CAR_CLASSNAME = "Sverify/getcarclassname";
@@ -130,10 +132,11 @@ public class APIs {
     }
 
     //09
-    public static void replyOrderRequest(int orderID, boolean taken, Account account, NetworkCallback callback){
+    public static void replyOrderRequest(int orderID,String reason, boolean taken, Account account, NetworkCallback callback){
         Log.i("POST_BACK","USING 9 : replyOrderRequest()");
         RequestParams params=new RequestParams();
         params.addBodyParameter("order_id", String.valueOf(orderID));
+        params.addBodyParameter("refuse", reason);
         params.addBodyParameter("taken", String.valueOf(taken));
         Http.postLogined(getUrl(REPLY_ORDER_REQUEST),params,account, callback);
     }
@@ -158,7 +161,7 @@ public class APIs {
     public static void finishOrder(
             int orderID,int carID,JSONObject goods
             ,double price,String name,String phone
-            ,String type,String remark,String distance
+            ,String type,String remark,String distance,String nextDistance
             ,Account account,NetworkCallback callback){
         Log.i("POST_BACK","USING 12 : finishOrder()");
         RequestParams params=new RequestParams();
@@ -166,19 +169,21 @@ public class APIs {
         params.addBodyParameter("carid", String.valueOf(carID));
         params.addBodyParameter("goods",goods.toString());
         params.addBodyParameter("price", String.valueOf(price));
-        params.addBodyParameter("client_name",name);
-        params.addBodyParameter("client_phone",phone);
-        params.addBodyParameter("client_type",type);
-        params.addBodyParameter("remark", remark);
+        params.addBodyParameter("username",name);
+        params.addBodyParameter("userphonenum",phone);
+        params.addBodyParameter("userclass",type);
+        params.addBodyParameter("disc", remark);
         params.addBodyParameter("km",distance);
+        params.addBodyParameter("nextkm",nextDistance);
         Http.postLogined(getUrl(FINISH_ORDER),params,account,callback);
     }
 
     //13
-    public static void cancelOrder(int orderID,Account account,NetworkCallback callback) {
+    public static void cancelOrder(int orderID,String reason,Account account,NetworkCallback callback) {
         Log.i("POST_BACK", "USING 13 : cancelOrder()");
         RequestParams params = new RequestParams();
         params.addBodyParameter("order_id", String.valueOf(orderID));
+        params.addBodyParameter("refuse", reason);
         Http.postLogined(getUrl(CANCEL_ORDER),params, account, callback);
     }
 
@@ -275,5 +280,11 @@ public class APIs {
         RequestParams params=new RequestParams();
         params.addBodyParameter("cid",cid);
         Http.postLogined(getUrl(GET_CAR_INFO),params, account, callback);
+    }
+
+    public static void getUserCLass( NetworkCallback callback){
+        Log.i("POST_BACK", "USING 26 : getCarInfo()");
+
+        Http.get(getUrl(GET_USER_TYPE), callback);
     }
 }

@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
 import cn.yhsh.yhservecar.Core.*;
+import cn.yhsh.yhservecar.Core.entry.CarInfoList;
+import cn.yhsh.yhservecar.Core.entry.OrderDetail;
 import cn.yhsh.yhservecar.R;
 import cn.yhsh.yhservecar.UI.component.LayerSelectorView;
 import cn.yhsh.yhservecar.UI.component.ListItem;
@@ -36,7 +38,7 @@ public class FinishActivity extends BackActivity {
     private EditText clientPhoneText;
 
     @ViewInject(R.id.client_type)
-    private EditText clientTypeText;
+    private TextView clientTypeText;
 
     @ViewInject(R.id.position)
     private TextView positionText;
@@ -65,6 +67,9 @@ public class FinishActivity extends BackActivity {
     @ViewInject(R.id.distance)
     private EditText distanceEditText;
 
+    @ViewInject(R.id.next_distance)
+    private EditText nextDistenceText;
+
     private LayerSelectorView itemSelector;
     private LayerSelectorView carAdder;
     private PopupWindow popupWindow;
@@ -75,13 +80,18 @@ public class FinishActivity extends BackActivity {
 
     private LoadLocker loadLocker;
 
-    private ArrayList<Car> cars = new ArrayList<Car>();
+    private CarInfoList cars;
     private int selectedcarid = -1;
     private LayoutInflater inflater;
     private RelativeLayout layout;
 
     private int orderID;
-    private Order order;
+
+    private boolean typeok=false;
+    private String type;
+    private String[] mTypeList;
+    private boolean hasType=false;
+    private OrderDetail mOrderDetail;
 
 
     class Car {
@@ -90,11 +100,11 @@ public class FinishActivity extends BackActivity {
         String desc;
         public String classid;
 
-        public Car(int id, String carCode, String desc,String classid) {
+        public Car(int id, String carCode, String desc, String classid) {
             this.id = id;
             this.carCode = carCode;
             this.desc = desc;
-            this.classid=classid;
+            this.classid = classid;
         }
     }
 
@@ -104,7 +114,7 @@ public class FinishActivity extends BackActivity {
         setContentView(R.layout.finish_order_activity);
         ViewUtils.inject(this);
 
-        orderID=getIntent().getIntExtra("orderID",0);
+        orderID = getIntent().getIntExtra("orderID", 0);
 
         getActionBar().setTitle("完成订单");
         selectCarBtn.setText("选择用户车辆");
@@ -170,6 +180,12 @@ public class FinishActivity extends BackActivity {
             @Override
             public void onSelectLeaf(ListItem item, ArrayList<ListItem> oldData, int position) {
                 popupWindow.dismiss();
+                for (ListItem aItem:itemListData){
+                    if (aItem.getId() == item.getId()){
+                        MyToast.makeText(FinishActivity.this, "此商品已经添加过了",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
                 itemListData.add(item);
                 addItem(item);
 //                adapter.notifyDataSetChanged();
@@ -236,40 +252,40 @@ public class FinishActivity extends BackActivity {
                         loadLocker.start("添加车辆");
                         EditText caridText = (EditText) dialogView.findViewById(R.id.carid);
                         EditText descText = (EditText) dialogView.findViewById(R.id.desc);
-                        String carID = caridText.getText().toString().trim();
+                        final String carID = caridText.getText().toString().trim();
                         String desc = descText.getText().toString().trim();
-                        APIs.addUserCar(order.uid, item.getId(), carID, desc,Account.getInstance(FinishActivity.this ), new NetworkCallback(FinishActivity.this) {
+                        final String className = item.getItemName();
+                        APIs.addUserCar(Integer.parseInt(mOrderDetail.uid), item.getId(), carID, desc, Account.getInstance(FinishActivity.this), new NetworkCallback(FinishActivity.this) {
                             @Override
                             protected void onSuccess(JSONObject data) {
-
-                            }
-                        });
-                        APIs.getUserCars(order.uid, Account.getInstance(FinishActivity.this), new NetworkCallback(FinishActivity.this) {
-                            @Override
-                            protected void onSuccess(JSONObject data) {
-                                try {
-                                    JSONArray array = data.getJSONArray("cars");
-                                    cars.clear();
-                                    for (int i = 0; i < array.length(); i++) {
-                                        JSONObject object = array.getJSONObject(i);
-                                        cars.add(new Car(
-                                                object.getInt("id"),
-                                                object.getString("carid"),
-                                                object.getString("desc"),
-                                                String.valueOf(item.getId())
-                                        ));
+//                                String buttonString = "牌号:" + carID + "\n" + "车型:" + className;
+//                                selectCarBtn.setText(buttonString);
+                                NewAPI.getCarInforList(FinishActivity.this, Integer.parseInt(mOrderDetail.uid), Account.getInstance(FinishActivity.this)
+                                        , new NewAPI.InfoReceiver<CarInfoList>() {
+                                    @Override
+                                    public void success(CarInfoList carInfoList) {
+                                        cars = carInfoList;
+                                        for (int i = 0; i < cars.list.size(); i++) {
+                                            CarInfoList.Entry entry = cars.list.get(i);
+                                            if (entry.carSerialId.equals(carID)){
+                                                selectedcarid= Integer.parseInt(entry.id);
+                                                String buttonString = "牌号:" + entry.carSerialId + "\n" + "车型:" + entry.carClass;
+                                                selectCarBtn.setText(buttonString);
+                                                break;
+                                            }
+                                        }
+                                        loadLocker.jobFinished();
                                     }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                loadLocker.jobFinished();
-                            }
 
-                            @Override
-                            protected void onFailed() {
-                                loadLocker.jobFinished();
+                                    @Override
+                                    public void failed() {
+                                        loadLocker.jobFinished();
+
+                                    }
+                                });
                             }
                         });
+
                     }
                 });
                 builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -279,6 +295,7 @@ public class FinishActivity extends BackActivity {
                     }
                 });
                 builder.setView(dialogView);
+                builder.setCancelable(false);
                 builder.show();
             }
         });
@@ -290,37 +307,21 @@ public class FinishActivity extends BackActivity {
         popupWindow.setFocusable(true);
 
         loadLocker.start("正在加载");
-        APIs.getOrderDetail(orderID, Account.getInstance(this), new NetworkCallback(this) {
+
+        NewAPI.getOrderDetail(this, orderID, Account.getInstance(this), new NewAPI.InfoReceiver<OrderDetail>() {
             @Override
-            protected void onSuccess(JSONObject data) {
-                try {
-                    order = new Order();
-                    order.orderID = orderID;
-                    order.uid = data.getInt("uid");
-                    order.name = data.getString("realname");
-                    order.phone = data.getString("phonenum");
-                    order.address = data.getString("address");
-                    order.time = data.getString("ordertime");
-                    order.appointmentTime = data.getString("time");
-                    order.lat = data.getDouble("lat");
-                    order.lon = data.getDouble("lon");
-                    order.item = data.getString("item");
-                    setInfo(order);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                loadLocker.jobFinished();
-                makeText("加载成功");
+            public void success(OrderDetail orderDetail) {
+                mOrderDetail = orderDetail;
+                setInfo(mOrderDetail);
             }
 
             @Override
-            protected void onFailed() {
+            public void failed() {
                 loadLocker.jobFinished();
                 finish();
-                makeText("加载失败");
+                MyToast.makeText(FinishActivity.this, "获取订单信息失败", Toast.LENGTH_SHORT).show();
             }
         });
-        reSum();
     }
 
     private void addItem(ListItem item) {
@@ -331,8 +332,8 @@ public class FinishActivity extends BackActivity {
         TextView unitText = (TextView) view.findViewById(R.id.unit);
         TextView unitText2 = (TextView) view.findViewById(R.id.unit2);
         TextView price = (TextView) view.findViewById(R.id.price);
-        EditText numEdit=(EditText) view.findViewById(R.id.number);
-        EditText discount=(EditText) view.findViewById(R.id.discount);
+        EditText numEdit = (EditText) view.findViewById(R.id.number);
+        EditText discount = (EditText) view.findViewById(R.id.discount);
         ImageButton deleteBtn = (ImageButton) view.findViewById(R.id.delete);
         nameText.setText(item.getItemName());
         try {
@@ -345,7 +346,7 @@ public class FinishActivity extends BackActivity {
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ListItem aItem=(ListItem) view.getTag();
+                ListItem aItem = (ListItem) view.getTag();
                 listView.removeView(view);
                 itemListData.remove(aItem);
                 reSum();
@@ -386,87 +387,76 @@ public class FinishActivity extends BackActivity {
         reSum();
     }
 
-    private void setInfo(Order order) {
-        clientNameText.setText(order.name);
-        if (order.name.length()>0){
+    private void setInfo(OrderDetail order) {
+        clientNameText.setText(order.clientName);
+        if (order.clientName.length() > 0) {
             clientNameText.setFocusable(false);
         }
-        clientPhoneText.setText(order.phone);
-        if (clientPhoneText.length()==11){
+        clientPhoneText.setText(order.clientPhone);
+        if (clientPhoneText.length() == 11) {
             clientPhoneText.setFocusable(false);
         }
 
-        //todo client type
-        positionText.setText(order.address);
-        timeText.setText(order.time);
-        itemsText.setText(order.item);
-        appointmentText.setText(order.appointmentTime);
+        if (!order.clientType.equals("")) {
+            clientTypeText.setText(order.clientType);
+            type=order.clientType;
+            hasType=true;
+            clientTypeText.setTextColor(getResources().getColor(R.color.darkgray));
+        }
 
-        APIs.getUserCars(order.uid, Account.getInstance(this), new NetworkCallback(FinishActivity.this) {
-            @Override
-            protected void onSuccess(JSONObject data) {
-                try {
-                    JSONArray array = data.getJSONArray("cars");
-                    cars.clear();
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject object = array.getJSONObject(i);
-                        cars.add(new Car(
-                                object.getInt("id"),
-                                object.getString("carid"),
-                                object.getString("desc"),
-                                object.getString("class")
-                        ));
+        if (!hasType){
+            APIs.getUserCLass(new NetworkCallback(this) {
+                @Override
+                protected void onSuccess(JSONObject data) {
+                    try {
+                        String typelist=data.getJSONArray("userclass").getString(0);
+                        mTypeList = typelist.split("\\|");
+                        clientTypeText.setText(mTypeList[0]);
+                        type=mTypeList[0];
+                        typeok=true;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-                if (cars.size()!=0){
-                    final Car c=cars.get(0);
-                    selectedcarid = c.id;
-                    selectCarBtn.setText("正在读取");
-                    APIs.getCarClassName(c.classid, Account.getInstance(FinishActivity.this), new NetworkCallback(FinishActivity.this) {
-                        @Override
-                        protected void onSuccess(JSONObject data) {
-                            try {
-                                selectedcarid = c.id;
-                                selectCarBtn.setText(c.carCode + "\n" + data.getString("carclass"));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                selectedcarid = c.id;
-                                selectCarBtn.setText(c.carCode);
-                            }
-                        }
+            });
+        }
 
-                        @Override
-                        protected void onFailed() {
-                            super.onFailed();
-                            selectCarBtn.setText(c.carCode);
-                        }
-                    });
-                } else {
-                    selectCarBtn.setText("没有车辆");
+        positionText.setText(order.address);
+        timeText.setText(order.makeOrderTime.split("\\s")[0]);
+        itemsText.setText(order.appointmentItem);
+        appointmentText.setText(order.appointmentTime.split("\\s")[0]);
+        reSum();
+        NewAPI.getCarInforList(this, Integer.parseInt(order.uid), Account.getInstance(this), new NewAPI.InfoReceiver<CarInfoList>() {
+            @Override
+            public void success(CarInfoList carInfoList) {
+                cars = carInfoList;
+                if (carInfoList.list.size() > 0) {
+                    selectedcarid = Integer.parseInt(carInfoList.list.get(0).id);
+                    selectCarBtn.setText("牌号:" + cars.list.get(0).carSerialId + "\n车型:" + cars.list.get(0).carClass);
                 }
                 loadLocker.jobFinished();
             }
 
             @Override
-            protected void onFailed() {
+            public void failed() {
                 loadLocker.jobFinished();
+                MyToast.makeText(FinishActivity.this,"加载信息失败" ,Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
+
     }
 
-
-    private void reSum(){
+    private void reSum() {
         try {
-            double sum=0;
+            double sum = 0;
             for (int i = 0; i < itemListData.size(); i++) {
                 double num = Double.parseDouble(((EditText) listView.getChildAt(i).findViewById(R.id.number)).getText().toString().trim());
                 double discount = Double.parseDouble(((EditText) listView.getChildAt(i).findViewById(R.id.discount)).getText().toString().trim());
-                double price= ((JSONObject) itemListData.get(i).getBaseData()).getDouble("price");
-                sum+=price * discount * num;
+                double price = ((JSONObject) itemListData.get(i).getBaseData()).getDouble("price");
+                sum += price * discount * num;
             }
-            priceEditText.setText(""+(((int) (sum * 100))/100.0));
+            priceEditText.setText("" + (((int) (sum * 100)) / 100.0)+"￥");
         } catch (NumberFormatException e) {
             priceEditText.setText("");
             e.printStackTrace();
@@ -477,13 +467,53 @@ public class FinishActivity extends BackActivity {
         }
     }
 
+    @OnClick(R.id.client_type)
+    private void typeClicked(final View v){
+        if (hasType){
+            return;
+        }
+        if (!typeok){
+            APIs.getUserCLass(new NetworkCallback(this) {
+                @Override
+                protected void onSuccess(JSONObject data) {
+                    try {
+                        String typelist=data.getJSONArray("userclass").getString(0);
+                        mTypeList = typelist.split("\\|");
+//                    clientTypeText.setText(mTypeList[0]);
+//                    type= mTypeList[0];
+                        typeok=true;
+                        typeClicked(v);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("选择客户类型");
+            final String[] typelist = mTypeList;
+            builder.setItems(typelist, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    type=typelist[which];
+                    typeok=true;
+                    clientTypeText.setText(type);
+                    dialog.dismiss();
+                }
+            });
+            builder.show();
+        }
+
+
+    }
+
     @OnClick(R.id.addItemBtn)
     private void addItemBtnClicked(View v) {
         layout = (RelativeLayout) findViewById(R.id.finish_order_layout);
         Rect frame = new Rect();
         getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
         int statusBarHeight = frame.top;
-        int height=getWindowManager().getDefaultDisplay().getHeight()-statusBarHeight;
+        int height = getWindowManager().getDefaultDisplay().getHeight() - statusBarHeight;
         popupWindow.setHeight(height);
         popupWindow.setWidth(layout.getWidth());
         itemSelector.startWithRootLayer(new ListItem(true, 0, "root", null));
@@ -497,7 +527,7 @@ public class FinishActivity extends BackActivity {
         Rect frame = new Rect();
         getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
         int statusBarHeight = frame.top;
-        int height=getWindowManager().getDefaultDisplay().getHeight()-statusBarHeight;
+        int height = getWindowManager().getDefaultDisplay().getHeight() - statusBarHeight;
         popupWindow.setHeight(height);
         popupWindow.setWidth(layout.getWidth());
         carAdder.startWithRootLayer(new ListItem(true, 0, "root", null));
@@ -509,34 +539,17 @@ public class FinishActivity extends BackActivity {
     private void selectDarBtnClicked(View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("选择车辆");
-        final String[] carStirngs = new String[cars.size()];
-        for (int i = 0; i < cars.size(); i++) {
-            carStirngs[i] = cars.get(i).carCode + " " + cars.get(i).desc;
+        final String[] carStirngs = new String[cars.list.size()];
+        for (int i = 0; i < cars.list.size(); i++) {
+            carStirngs[i] = "牌号:" + cars.list.get(i).carSerialId + "\n车型:" + cars.list.get(i).carClass;
         }
         builder.setItems(carStirngs, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                final Car c = cars.get(which);
-                selectedcarid = cars.get(which).id;
-                final String carCode = cars.get(which).carCode;
-                selectCarBtn.setText("正在读取");
-                APIs.getCarClassName(c.classid, Account.getInstance(FinishActivity.this), new NetworkCallback(FinishActivity.this) {
-                    @Override
-                    protected void onSuccess(JSONObject data) {
-                        try {
-                            selectCarBtn.setText(carCode + "\n" + data.getString("carclass"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            selectCarBtn.setText(carCode);
-                        }
-                    }
-
-                    @Override
-                    protected void onFailed() {
-                        super.onFailed();
-                        selectCarBtn.setText(carCode);
-                    }
-                });
+                final CarInfoList.Entry c = cars.list.get(which);
+                selectedcarid = Integer.parseInt(cars.list.get(which).id);
+                final String carClass = cars.list.get(which).carClass;
+                selectCarBtn.setText(carStirngs[which]);
                 dialog.dismiss();
             }
         });
@@ -547,29 +560,35 @@ public class FinishActivity extends BackActivity {
     @OnClick(R.id.confirm)
     private void confirmClicked(View v) {
         String s = priceEditText.getText().toString();
+        s=s.substring(0,s.length()-1);
         if (s.length() == 0) {
-            MyToast.makeText(this, "价格不能为空", Toast.LENGTH_SHORT).show();
+            MyToast.makeText(this, "商品不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
         double price = 0;
         try {
             price = Double.parseDouble(s);
         } catch (NumberFormatException e) {
-            MyToast.makeText(this, "价格不正确", Toast.LENGTH_SHORT).show();
+            MyToast.makeText(this, "商品不能为空", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
             return;
         }
-        if (price < 0) {
-            MyToast.makeText(this, "价格不能为负", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (selectedcarid==-1){
+        if (selectedcarid == -1) {
             MyToast.makeText(this, "请选择用户车辆", Toast.LENGTH_SHORT).show();
             return;
         }
-        String distanc=distanceEditText.getText().toString().trim();
-        if (distanc.length()==0){
-            MyToast.makeText(this, "里程数没有填写", Toast.LENGTH_SHORT).show();
+        String distanc = distanceEditText.getText().toString().trim();
+        if (distanc.length() == 0) {
+            MyToast.makeText(this, "行驶里程没有填写", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String nextDistanc = nextDistenceText.getText().toString().trim();
+        if (nextDistanc.length() == 0) {
+            MyToast.makeText(this, "下次保养里程没有填写", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!hasType && !typeok){
+            MyToast.makeText(this, "客户类型没有选择", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -578,21 +597,21 @@ public class FinishActivity extends BackActivity {
             for (int i = 0; i < itemListData.size(); i++) {
                 double num = Double.parseDouble(((EditText) listView.getChildAt(i).findViewById(R.id.number)).getText().toString().trim());
                 double discount = Double.parseDouble(((EditText) listView.getChildAt(i).findViewById(R.id.discount)).getText().toString().trim());
-                if(discount>10 || discount <=0){
-                    MyToast.makeText(this, "项目价格不正确", Toast.LENGTH_SHORT).show();
+                if (discount > 10 || discount <= 0) {
+                    MyToast.makeText(this, "保养详单折扣不正确", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 try {
-                    JSONObject object=new JSONObject();
-                    object.put("num",num);
-                    object.put("discount",discount);
+                    JSONObject object = new JSONObject();
+                    object.put("num", num);
+                    object.put("discount", discount);
                     goodsObj.put(String.valueOf(itemListData.get(i).getId()), object);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         } catch (NumberFormatException e) {
-            MyToast.makeText(this, "项目价格不正确", Toast.LENGTH_SHORT).show();
+            MyToast.makeText(this, "保养详单价格不正确", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
             return;
         }
@@ -601,13 +620,13 @@ public class FinishActivity extends BackActivity {
         APIs.finishOrder(orderID, selectedcarid, goodsObj, price
                 , clientNameText.getText().toString().trim()
                 , clientPhoneText.getText().toString().trim()
-                , clientTypeText.getText().toString().trim()
+                , type
                 , remarkText.getText().toString().trim()
-                , distanc
+                , distanc,nextDistanc
                 , Account.getInstance(this), new NetworkCallback(this) {
             @Override
             protected void onSuccess(JSONObject data) {
-                MyToast.makeText(FinishActivity.this, "完成订单成功", Toast.LENGTH_SHORT).show();
+                MyToast.makeText(FinishActivity.this, "结算订单成功", Toast.LENGTH_SHORT).show();
                 loadLocker.jobFinished();
                 setResult(1);
                 finish();
@@ -615,6 +634,7 @@ public class FinishActivity extends BackActivity {
 
             @Override
             protected void onFailed() {
+                MyToast.makeText(FinishActivity.this, "结算订单失败", Toast.LENGTH_SHORT).show();
                 loadLocker.jobFinished();
             }
         });

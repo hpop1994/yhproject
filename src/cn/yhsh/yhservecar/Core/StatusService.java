@@ -50,7 +50,7 @@ public class StatusService extends Service implements AMapLocationListener {
                     Order o = ordersAsked.get(i);
                     o.inTime++;
                     if (o.inTime == 120 || o.inTime==130 || o.inTime == 140) {
-                        APIs.replyOrderRequest(o.orderID, false, account, new NetworkCallback(StatusService.this) {
+                        APIs.replyOrderRequest(o.orderID, "超时",false, account, new NetworkCallback(StatusService.this) {
                             @Override
                             protected void onSuccess(JSONObject data) {
                                 getAndNotifyOrders();
@@ -321,6 +321,7 @@ public class StatusService extends Service implements AMapLocationListener {
                         Order order = new Order();
                         order.orderID = object.getInt("id");
                         order.uid = object.getInt("uid");
+                        order.iid = object.getString("iid");
                         order.name = object.getString("realname");
                         order.phone = object.getString("phonenum");
                         order.address = object.getString("address");

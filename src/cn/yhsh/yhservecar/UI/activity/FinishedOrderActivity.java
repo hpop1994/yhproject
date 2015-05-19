@@ -4,25 +4,28 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import cn.yhsh.yhservecar.Core.APIs;
+import android.widget.Toast;
 import cn.yhsh.yhservecar.Core.Account;
-import cn.yhsh.yhservecar.Core.NetworkCallback;
+import cn.yhsh.yhservecar.Core.MyToast;
+import cn.yhsh.yhservecar.Core.NewAPI;
+import cn.yhsh.yhservecar.Core.entry.OrderDetail;
 import cn.yhsh.yhservecar.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by Xujc on 2015/1/12.
  */
 public class FinishedOrderActivity extends BackActivity  {
+
+    @ViewInject(R.id.order_serial_id)
+    private TextView serialId;
 
     @ViewInject(R.id.info_layout)
     private LinearLayout infoLayout;
@@ -69,6 +72,9 @@ public class FinishedOrderActivity extends BackActivity  {
     @ViewInject(R.id.car_km)
     private TextView carKmText;
 
+    @ViewInject(R.id.next_car_km)
+    private TextView carNextKmText;
+
     @ViewInject(R.id.car_class)
     private TextView carNameText;
 
@@ -89,69 +95,51 @@ public class FinishedOrderActivity extends BackActivity  {
 
         orderID = getIntent().getIntExtra("orderID", 0);
 
-        APIs.getOrderDetail(orderID, Account.getInstance(this), new NetworkCallback(this) {
+        NewAPI.getOrderDetail(this, orderID, Account.getInstance(this), new NewAPI.InfoReceiver<OrderDetail>() {
             @Override
-            protected void onSuccess(JSONObject data) {
-                try {
-                    int status = data.getInt("status");
-                    LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-                    if (status == FINISHED) {
-                        orderStatus.setText(getString(R.string.order_finished));
-                        clientNameText.setText(data.getString("client_name"));
-                        clientPhoneText.setText(data.getString("client_phone"));
-                        clientTypeText.setText(data.getString("client_type"));
-                        positionText.setText(data.getString("address"));
-                        remarkText.setText(data.getString("remark"));
+            public void success(OrderDetail orderDetail) {
+                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                serialId.setText(orderDetail.serialId);
+                orderStatus.setText(getString(R.string.order_finished));
+                clientNameText.setText(orderDetail.clientName);
+                clientPhoneText.setText(orderDetail.clientPhone);
+                clientTypeText.setText(orderDetail.clientType);
+                positionText.setText(orderDetail.address);
+                remarkText.setText(orderDetail.remark);
+                serveTimeText.setText(orderDetail.makeOrderTime.split("\\s")[0]);
+                finishTimeText.setText(orderDetail.appointmentTime.split("\\s")[0]);
 
-                        serveTimeText.setText(data.getString("ordertime"));
-                        finishTimeText.setText(data.getString("time"));
-
-                        JSONArray array = data.getJSONArray("good");
-                        int length = array.length();
-                        for (int i = 0; i < length; i++) {
-                            inflater.inflate(R.layout.care_item_without_checkbox, itemList);
-                            View view = itemList.getChildAt(i);
-                            JSONObject jsonObject = array.getJSONObject(i);
-                            ((TextView) view.findViewById(R.id.text)).setText(jsonObject.getString("name"));
-                            double aprice = jsonObject.getDouble("price");
-                            int number = jsonObject.getInt("num");
-                            int discount = jsonObject.getInt("discount");
-                            ((TextView) view.findViewById(R.id.number)).setText(String.valueOf(number) + " " + jsonObject.getString("unit"));
-                            ((TextView) view.findViewById(R.id.price)).setText(String.valueOf(aprice));
-                            ((TextView) view.findViewById(R.id.discount)).setText(String.valueOf(discount)+"折");
-                        }
-                        priceText.setText(String.valueOf(data.getDouble("price")));
-
-                        carIDText.setText(data.getJSONObject("usercar").getString("carid"));
-                        carNameText.setText(data.getJSONObject("usercar").getString("name"));
-                        carKmText.setText(data.getString("km"));
-                    } else if (status == CANCELED) {
-                        orderStatus.setText(getString(R.string.order_canceld));
-                        scarNameLayout.setVisibility(View.GONE);
-                        positionText.setText(data.getString("address"));
-                        serveTimeText.setText(data.getString("time"));
-                        finishTimeText.setText(data.getString("time").split("\\s")[0]);
-                        carArea.setVisibility(View.GONE);
-                        remarkText.setText(data.getString("remark"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                ArrayList<OrderDetail.ActualCareItemEntry> array = orderDetail.actualCareItemList;
+                int length = array.size();
+                for (int i = 0; i < length; i++) {
+                    inflater.inflate(R.layout.care_item_without_checkbox, itemList);
+                    View view = itemList.getChildAt(i);
+                    OrderDetail.ActualCareItemEntry aItme = array.get(i);
+                    ((TextView) view.findViewById(R.id.text)).setText(aItme.name);
+                    String aprice = aItme.price;
+                    String number = aItme.number;
+                    String discount = aItme.discount;
+                    float value = Float.parseFloat(aprice) * Float.parseFloat(discount) * Float.parseFloat(number);
+                    String acPrice=String.valueOf(((int)(value*100))/100.0);
+                    ((TextView) view.findViewById(R.id.number)).setText(number + " " + aItme.unit);
+                    ((TextView) view.findViewById(R.id.price)).setText(acPrice);
+                    ((TextView) view.findViewById(R.id.discount)).setText(discount + "折");
+                    ((TextView) view.findViewById(R.id.dan_jia)).setText(aItme.price+"￥/"+aItme.unit);
                 }
+                priceText.setText(orderDetail.actualPrice);
+                carIDText.setText(orderDetail.carSerialID);
+                carNameText.setText(orderDetail.carClass);
+                carKmText.setText(orderDetail.nowKm);
+                carNextKmText.setText(orderDetail.nextKm);
             }
-
-            private void addInfoItem(String title, String content, LayoutInflater inflater) throws JSONException {
-                View v = inflater.inflate(R.layout.info_item, infoLayout);
-                ((TextView) v.findViewById(R.id.title)).setText(title);
-                ((TextView) v.findViewById(R.id.info)).setText(content);
-            }
-
 
             @Override
-            protected void onFailed() {
-                makeText("获取信息失败");
+            public void failed() {
+                MyToast.makeText(FinishedOrderActivity.this, "获取信息失败", Toast.LENGTH_SHORT).show();
             }
-
         });
+
+
     }
     @OnClick(R.id.client_phone)
     private void phoneClciked(View v){
@@ -161,14 +149,5 @@ public class FinishedOrderActivity extends BackActivity  {
         }
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
 }

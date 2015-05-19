@@ -149,5 +149,6 @@
         <activity android:name=".UI.activity.TakenOrderDetailActivity" android:label="订单信息"/>
         <activity android:name=".UI.activity.FinishedOrderActivity" android:label="订单信息"/>
         <activity android:name=".UI.activity.MapActivity" android:label="地理位置"/>
+        <activity android:name=".UI.activity.CanceledActivity"/>
     </application>
 </manifest>

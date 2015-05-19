@@ -137,6 +137,7 @@
 
     <style name="my_actionbar_style" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:background">@color/logo_blue</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_view_back</item>
         <item name="android:titleTextStyle">@style/AcBar_titleStyle</item>
     </style>
 

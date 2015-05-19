@@ -6,6 +6,7 @@ package cn.yhsh.yhservecar.Core;
 public class Order {
     public int orderID;
     public int uid;
+    public String iid;
     public String name;
     public String phone;
     public String carID;

@@ -12,16 +12,31 @@
                 android:orientation="vertical"
                 android:id="@+id/info_layout"
                 android:layout_width="match_parent" android:layout_height="match_parent">
-            <RelativeLayout
-                    style="@style/list_group.one_item">
-                <TextView
-                        android:text="@string/order_status"
-                        android:id="@+id/textView2"
-                        style="@style/list_item_title"/>
-                <TextView android:text="@string/loading_text"
-                          android:id="@+id/status" style="@style/list_item_info.left.oneline"
-                          android:layout_toRightOf="@+id/textView2"/>
-            </RelativeLayout>
+
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    style="@style/list_group">
+                <RelativeLayout style="@style/list_item">
+                    <TextView
+                            android:text="@string/serial_id"
+                            android:id="@+id/textView233"
+                            style="@style/list_item_title"/>
+                    <TextView android:text="@string/loading_text"
+                              android:id="@+id/order_serial_id" style="@style/list_item_info.left.oneline"
+                              android:layout_toRightOf="@+id/textView233"/>
+                </RelativeLayout>
+                <RelativeLayout style="@style/list_item">
+                    <TextView
+                            android:text="@string/order_status"
+                            android:id="@+id/textView2"
+                            style="@style/list_item_title"/>
+                    <TextView android:text="@string/loading_text"
+                              android:id="@+id/status" style="@style/list_item_info.left.oneline"
+                              android:layout_toRightOf="@+id/textView2"/>
+                </RelativeLayout>
+
+            </LinearLayout>
             <LinearLayout
                     android:orientation="vertical"
                     style="@style/list_group"
@@ -197,6 +212,19 @@
                             android:text="@string/loading_text"
                             android:id="@+id/car_km"
                             android:layout_toRightOf="@+id/textView25"/>
+                </RelativeLayout>
+                <RelativeLayout
+                        style="@style/list_item">
+                    <TextView
+                            style="@style/list_item_title"
+                            android:text="@string/next_distance"
+                            android:id="@+id/textView252"/>
+
+                    <TextView
+                            style="@style/list_item_info.left.oneline"
+                            android:text="@string/loading_text"
+                            android:id="@+id/next_car_km"
+                            android:layout_toRightOf="@+id/textView252"/>
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>

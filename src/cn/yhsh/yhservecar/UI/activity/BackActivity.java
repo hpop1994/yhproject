@@ -14,6 +14,7 @@ public abstract class BackActivity extends Activity {
         super.onCreate(savedInstanceState);
         ActionBar actionBar = getActionBar();
         if (actionBar!=null){
+            actionBar.setDisplayShowHomeEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }

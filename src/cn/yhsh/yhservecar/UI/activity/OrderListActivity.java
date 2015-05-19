@@ -5,23 +5,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-import cn.yhsh.yhservecar.Core.APIs;
+import android.widget.*;
 import cn.yhsh.yhservecar.Core.Account;
-import cn.yhsh.yhservecar.Core.NetworkCallback;
-import cn.yhsh.yhservecar.Core.Order;
+import cn.yhsh.yhservecar.Core.MyToast;
+import cn.yhsh.yhservecar.Core.NewAPI;
+import cn.yhsh.yhservecar.Core.Status;
+import cn.yhsh.yhservecar.Core.entry.OrderList;
 import cn.yhsh.yhservecar.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.todddavies.components.progressbar.ProgressWheel;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 /**
  * Created by Xujc on 2015/3/6 006.
@@ -33,7 +26,7 @@ public class OrderListActivity extends BackActivity {
     @ViewInject(R.id.pw_spinner)
     private ProgressWheel progressWheel;
 
-    private ArrayList<Order> list;
+    private OrderList list;
     private LayoutInflater inflater;
     private MyOrderAdapter adapter;
 
@@ -45,29 +38,29 @@ public class OrderListActivity extends BackActivity {
 
         inflater=getLayoutInflater();
 
-        list=new ArrayList<Order>();
-
         adapter = new MyOrderAdapter();
-        listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Order order=adapter.getItem(position);
+                OrderList.Entry order=adapter.getItem(position);
                 Intent intent=null;
                 switch (order.status){
-                    case 1:
+                    case Status.CANCELED:
+                        intent=new Intent(OrderListActivity.this, CanceledActivity.class);
+                        break;
+                    case Status.TAKEN:
                         intent=new Intent(OrderListActivity.this, TakenOrderDetailActivity.class);
                         break;
-                    case 2:
+                    case Status.FINISHED:
                         intent=new Intent(OrderListActivity.this,FinishedOrderActivity.class);
                         break;
-                    case 3:
-                        intent=new Intent(OrderListActivity.this,FinishedOrderActivity.class);
-                        break;
+                    case Status.PRE_ORDER:
+                    case Status.NEED_TAKEN:
+                        intent=new Intent(OrderListActivity.this,AskingActivity.class);
                 }
                 if (intent!=null) {
-                    intent.putExtra("orderID", list.get(position).orderID);
+                    intent.putExtra("orderID", Integer.parseInt(list.list.get(list.list.size()-1-position).id));
                     startActivity(intent);
                 }
             }
@@ -82,88 +75,21 @@ public class OrderListActivity extends BackActivity {
     }
 
     private void refresh() {
-        list.clear();
         progressWheel.setVisibility(View.VISIBLE);
         progressWheel.spin();
-        APIs.getAllOrders(Account.getInstance(this), new NetworkCallback(this) {
+        NewAPI.getOrderList(this, Account.getInstance(this), new NewAPI.InfoReceiver<OrderList>() {
             @Override
-            protected void onSuccess(JSONObject data) {
-                try {
-                    JSONArray array = data.getJSONArray("indent");
-                    for (int i = array.length()-1; i >=0; i--) {
-                        JSONObject object = array.getJSONObject(i);
-                        if (object.getInt("status") == 0) {
-                            continue;
-                        }
-                        final Order order = new Order();
-                        order.orderID = object.getInt("id");
-                        order.uid = object.getInt("uid");
-                        APIs.getUserInfo(object.getString("uid"), Account.getInstance(OrderListActivity.this), new NetworkCallback(OrderListActivity.this) {
-                            @Override
-                            protected void onSuccess(JSONObject data) {
-                                try {
-                                    order.name=data.getJSONObject("user").getString("realname");
-                                    if (order.name.equals("null")){
-                                        order.name="";
-                                    }
-                                    adapter.notifyDataSetChanged();
-                                } catch (JSONException e) {
-                                    order.name="";
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            @Override
-                            protected void onFailed() {
-                                super.onFailed();
-                                order.name="";
-                            }
-
-                            @Override
-                            public void dealUnexpectedError() {
-                                onFailed();
-                            }
-                        });
-                        order.carID="";
-                        if (object.getInt("carid")!=0){
-                            APIs.getCarInfo(object.getString("carid"), Account.getInstance(OrderListActivity.this), new NetworkCallback(OrderListActivity.this) {
-                                @Override
-                                protected void onSuccess(JSONObject data) {
-                                    try {
-                                        order.carID=data.getJSONObject("car").getString("carid");
-                                        adapter.notifyDataSetChanged();
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-
-                                @Override
-                                public void dealUnexpectedError() {
-                                    onFailed();
-                                }
-                            });
-                        }
-                        order.address = object.getString("address");
-                        order.time = object.getString("ordertime");
-                        order.appointmentTime = object.getString("time");
-                        order.lat = object.getDouble("lat");
-                        order.lon = object.getDouble("lon");
-                        order.item = object.getString("item");
-                        order.status = object.getInt("status");
-                        list.add(order);
-                    }
-                    adapter.notifyDataSetChanged();
-                    progressWheel.stopSpinning();
-                    progressWheel.setVisibility(View.GONE);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    progressWheel.stopSpinning();
-                    progressWheel.setVisibility(View.GONE);
-                }
+            public void success(OrderList orderList) {
+                list = orderList;
+                listView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+                progressWheel.stopSpinning();
+                progressWheel.setVisibility(View.GONE);
             }
 
             @Override
-            protected void onFailed() {
+            public void failed() {
+                MyToast.makeText(OrderListActivity.this, "获取订单信息失败", Toast.LENGTH_SHORT).show();
                 progressWheel.stopSpinning();
                 progressWheel.setVisibility(View.GONE);
             }
@@ -173,17 +99,17 @@ public class OrderListActivity extends BackActivity {
     private class MyOrderAdapter extends BaseAdapter {
         @Override
         public int getCount() {
-            return list.size();
+            return list.list.size();
         }
 
         @Override
-        public Order getItem(int position) {
-            return list.get(position);
+        public OrderList.Entry getItem(int position) {
+            return list.list.get(list.list.size()-1-position);
         }
 
         @Override
         public long getItemId(int position) {
-            return getItem(position).orderID;
+            return Long.parseLong(getItem(position).id);
         }
 
         @Override
@@ -195,28 +121,16 @@ public class OrderListActivity extends BackActivity {
             TextView timeText=(TextView) convertView.findViewById(R.id.time);
             timeText.setVisibility(View.GONE);
             TextView statusText=(TextView) convertView.findViewById(R.id.status);
-            Order order = getItem(position);
-            timeText.setText(order.time);
-            switch (order.status){
-                case 1:
-                    statusText.setText(getString(R.string.order_taken));
-                    break;
-                case 2:
-                    statusText.setText(getString(R.string.order_canceld));
-                    break;
-                case 3:
-                    statusText.setText(getString(R.string.order_finished));
-                    break;
-            }
+            OrderList.Entry order = getItem(position);
+            statusText.setText(Status.toName(order.status));
             TextView itemText=(TextView) convertView.findViewById(R.id.item);
             TextView addressText=(TextView) convertView.findViewById(R.id.address);
-            idText.setText(String.valueOf(order.orderID));
-            if (order.status==3){
-                addressText.setText(order.address);
-                itemText.setText("客户姓名:"+order.name+"    保养车辆:"+order.carID);
+            idText.setText(String.valueOf(order.serialId));
+            if (order.status==Status.FINISHED){
+                itemText.setText("客户姓名:"+order.clientName+"    保养车辆:"+order.carSerialID);
                 addressText.setText("保养位置:"+order.address);
             }else{
-                itemText.setText("保养项目:"+order.item);
+                itemText.setText("保养项目:"+order.appointmentItem);
                 addressText.setText("预约时间:"+order.appointmentTime.split("\\s")[0]);
             }
             return convertView;
