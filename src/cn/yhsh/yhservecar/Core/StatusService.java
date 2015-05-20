@@ -442,7 +442,7 @@ public class StatusService extends Service implements AMapLocationListener {
             @Override
             protected void onFailed() {
                 notifyStatusListener();
-                makeText("获取状态失败");
+//                makeText("获取状态失败");
                 super.onFailed();
             }
 
@@ -504,7 +504,7 @@ public class StatusService extends Service implements AMapLocationListener {
             @Override
             protected void onFailed() {
                 backgroundJobListener.jobFailed();
-                makeText("获取状态失败");
+//                makeText("获取状态失败");
                 super.onFailed();
             }
         });
@@ -533,6 +533,27 @@ public class StatusService extends Service implements AMapLocationListener {
                         @Override
                         protected void onSuccess(JSONObject data) {
 
+                        }
+
+                        @Override
+                        public void dealAccountError() {
+
+                        }
+
+                        @Override
+                        public void dealClientFormatError() {
+                        }
+
+                        @Override
+                        public void dealServerFormatError() {
+                        }
+
+                        @Override
+                        public void dealNetworkError() {
+                        }
+
+                        @Override
+                        public void dealUnexpectedError() {
                         }
                     });
                     getNewestStatus();
@@ -709,6 +730,26 @@ public class StatusService extends Service implements AMapLocationListener {
                 @Override
                 protected void onSuccess(JSONObject data) {
 
+                }
+
+                @Override
+                public void dealAccountError() {
+                }
+
+                @Override
+                public void dealClientFormatError() {
+                }
+
+                @Override
+                public void dealServerFormatError() {
+                }
+
+                @Override
+                public void dealNetworkError() {
+                }
+
+                @Override
+                public void dealUnexpectedError() {
                 }
             });
         }

@@ -8,8 +8,8 @@ import org.json.JSONObject;
  * Created by Xujc on 2015/1/19.
  */
 public class APIs {
-//    private static final String SERVER = "http://app.lhkb.cn:88/index.php/Server/";
-    private static final String SERVER = "http://192.168.1.99/www/index.php/Server/";
+    private static final String SERVER = "http://app.lhkb.cn:88/index.php/Server/";
+//    private static final String SERVER = "http://192.168.1.99/www/index.php/Server/";
 
     //01
     private static final String LOGIN = "Sget/login";
